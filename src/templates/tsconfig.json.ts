@@ -7,6 +7,7 @@ export function getTSConfig({}: Preferences) {
 				lib: ["ESNext"],
 				module: "ESNext",
 				target: "ESNext",
+				moduleResolution: "Bundler",
 				esModuleInterop: true,
 				strict: true,
 				skipLibCheck: true,

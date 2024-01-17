@@ -16,14 +16,13 @@ export function getPackageJson({ dir, linter, packageManager }: Preferences) {
 	if (packageManager === "bun") sample.devDependencies["@types/bun"] = "^1.0.2";
 
 	if (linter === "Biome") {
-		sample.scripts.lint = `bunx @biomejs/biome check \"src/{**,}/*.ts\"`;
-		sample.scripts["lint:fix"] =
-			`bunx @biomejs/biome check \\"src/{**,}/*.ts\\" --apply`;
+		sample.scripts.lint = "bunx @biomejs/biome check src";
+		sample.scripts["lint:fix"] = "bun lint --apply";
 		sample.devDependencies["@biomejs/biome"] = "^1.5.2";
 	}
 	if (linter === "ESLint") {
-		sample.scripts.lint = `bunx eslint \"src/{**,}/*.ts\"`;
-		sample.scripts["lint:fix"] = `bunx eslint \"src/{**,}/*.ts\" --fix`;
+		sample.scripts.lint = `bunx eslint \"src/**/*.ts\"`;
+		sample.scripts["lint:fix"] = `bunx eslint \"src/**/*.ts\" --fix`;
 		sample.devDependencies.eslint = "^8.56.0";
 		sample.devDependencies["eslint-config-standard"] = "^17.1.0";
 		sample.devDependencies["eslint-plugin-promise"] = "^6.1.1";
