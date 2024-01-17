@@ -1,31 +1,30 @@
 #!/usr/bin/env node
+import child_process from "node:child_process";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { promisify } from "node:util";
 import { prompt } from "enquirer";
 import minimist from "minimist";
 import task from "tasuku";
 import {
+	getElysiaIndex,
 	getInstallCommands,
 	getPackageJson,
-	getElysiaIndex,
 } from "./templates";
-import { Preferences, detectPackageManager } from "./utils";
-import child_process from "node:child_process";
-import { promisify } from "node:util";
 import { getTSConfig } from "./templates/tsconfig.json";
+import { Preferences, createOrFindDir, detectPackageManager } from "./utils";
 const exec = promisify(child_process.exec);
 
 const preferences = new Preferences();
 
 const args = minimist(process.argv.slice(2));
-const cwd = path.dirname(require.main!.path) + "/";
 
 const packageManager = detectPackageManager();
 const dir = args._.at(0);
 if (!dir) throw Error("no dir");
-const projectDir = cwd + dir;
+const projectDir = path.resolve(process.cwd() + "/", dir);
 
-fs.mkdir(cwd + dir).then(async () => {
+createOrFindDir(projectDir).then(async () => {
 	preferences.dir = dir;
 	preferences.packageManager = packageManager;
 	const { linter } = await prompt<{ linter: "ESLint" | "Biome" | "None" }>({
