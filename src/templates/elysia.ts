@@ -1,6 +1,6 @@
 import { Preferences } from "../utils";
 
-export function getElysiaIndex(preferences: Preferences) {
+export function getElysiaIndex({}: Preferences) {
 	return [
 		`import { Elysia } from "elysia"`,
 		``,

@@ -3,10 +3,16 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { prompt } from "enquirer";
 import minimist from "minimist";
-import { getInstallCommands, getPackageJson, getElysiaIndex } from "./templates";
+import task from "tasuku";
+import {
+	getInstallCommands,
+	getPackageJson,
+	getElysiaIndex,
+} from "./templates";
 import { Preferences, detectPackageManager } from "./utils";
 import child_process from "node:child_process";
 import { promisify } from "node:util";
+import { getTSConfig } from "./templates/tsconfig.json";
 const exec = promisify(child_process.exec);
 
 const preferences = new Preferences();
@@ -19,7 +25,6 @@ const dir = args._.at(0);
 if (!dir) throw Error("no dir");
 const projectDir = cwd + dir;
 
-
 fs.mkdir(cwd + dir).then(async () => {
 	preferences.dir = dir;
 	preferences.packageManager = packageManager;
@@ -31,16 +36,23 @@ fs.mkdir(cwd + dir).then(async () => {
 	});
 	preferences.linter = linter;
 
+	if (linter === "ESLint")
+		await fs.writeFile(
+			projectDir + "/.eslintrc",
+			JSON.stringify({ extends: "standard" }, null, 2),
+		);
 	await fs.writeFile(projectDir + "/package.json", getPackageJson(preferences));
+	await fs.writeFile(projectDir + "/tsconfig.json", getTSConfig(preferences));
 	await fs.mkdir(projectDir + "/src");
 	await fs.writeFile(projectDir + "/src/index.ts", getElysiaIndex(preferences));
 
 	const commands = getInstallCommands(preferences);
 
 	for await (const command of commands) {
-        console.log(command)
-		await exec(command, {
-            cwd: projectDir
-        });
+		await task(command, async () => {
+			await exec(command, {
+				cwd: projectDir,
+			});
+		});
 	}
 });
