@@ -1,16 +1,16 @@
-import { PackageManager } from "../types";
 import { Preferences } from "../utils";
 
 export function getPackageJson({ dir, linter }: Preferences) {
 	const sample = {
 		name: dir,
-		description: "ElysiaJS project",
+		scripts: {},
 		dependencies: {
 			elysia: "^0.8.9",
 		},
 		devDependencies: {
 			typescript: "^5.3.3",
-		} as Record<string, string>,
+		},
+        //TODO: delete any
 	} as any;
 
 	if (linter === "Biome") {
@@ -21,10 +21,12 @@ export function getPackageJson({ dir, linter }: Preferences) {
 	}
 	if (linter === "ESLint") {
 		sample.scripts.lint = "bunx eslint src/{**,}/*.ts";
-		sample.scripts["lint:fix"] =
-			"bunx @biomejs/biome format src/{**,}/*.ts --write";
+		sample.scripts["lint:fix"] = "bunx eslint src/{**,}/*.ts --fix";
 		sample.devDependencies.eslint = "^8.56.0";
 	}
 
-	return sample;
+    // TODO: rewrite
+    if(!Object.keys(sample.scripts).length) delete sample.scripts;
+
+	return JSON.stringify(sample, null, 2);
 }

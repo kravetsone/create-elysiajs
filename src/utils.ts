@@ -5,7 +5,7 @@ export function detectPackageManager() {
 
 	if (!userAgent)
 		throw new Error(
-			`Package manager doesn't detected. Please specify template with "--template bun"`,
+			`Package manager was not detected. Please specify template with "--template bun"`,
 		);
 
 	return userAgent.split(" ")[0].split("/")[0] as PackageManager;
@@ -14,5 +14,5 @@ export function detectPackageManager() {
 export class Preferences {
 	dir = "";
 	packageManager: PackageManager = "bun";
-	linter?: "ESLint" | "Biome" | "None";
+	linter: "ESLint" | "Biome" | "None" = "None";
 }

@@ -6,8 +6,8 @@
         "create-elysiajs": "dist/index.js"
     },
     "scripts": {
-        "lint": "bunx @biomejs/biome format src/{**,}/*.ts",
-        "lint:fix": "bunx @biomejs/biome format src/{**,}/*.ts --write",
+        "lint": "bunx @biomejs/biome format src/{**,*,}/*.ts",
+        "lint:fix": "bunx @biomejs/biome format src/{**,*,}/*.ts --write",
         "prepare": "husky install"
     },
     "devDependencies": {
