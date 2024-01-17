@@ -1,17 +1,28 @@
 {
     "name": "create-elysiajs",
     "version": "0.0.1",
-    "description": "Scaffolding your Elysia project with easy!",
+    "description": "Scaffolding your Elysia project with the environment with easy!",
+    "keywords": [
+        "elysia",
+        "elysiajs",
+        "scaffolding",
+        "create",
+        "template",
+        "linters",
+        "eslint",
+        "biome"
+    ],
     "bin": {
         "create-elysiajs": "dist/index.js"
     },
     "scripts": {
-        "lint": "bunx @biomejs/biome format src/{**,*,}/*.ts",
-        "lint:fix": "bunx @biomejs/biome format src/{**,*,}/*.ts --write",
-        "prepare": "husky install"
+        "lint": "bunx @biomejs/biome check src",
+        "lint:fix": "bun lint --apply",
+        "prepare": "husky install",
+        "prepublishOnly": "tsc"
     },
     "devDependencies": {
-        "@biomejs/biome": "1.5.2",
+        "@biomejs/biome": "^1.5.2",
         "@types/bun": "^1.0.2",
         "@types/minimist": "^1.2.5",
         "husky": "^8.0.0"
