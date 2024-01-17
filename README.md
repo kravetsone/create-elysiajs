@@ -1,8 +1,8 @@
 # create-elysiajs
 
-## Scaffolding your Elysia project with the environment with easy!
+## Scaffolding your [Elysia](https://elysiajs.com/) project with the environment with easy!
 
-### With bun
+### With [bun](https://bun.sh/)
 
 ```bash
 bun create elysiajs

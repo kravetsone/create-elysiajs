@@ -6,7 +6,7 @@ export function getElysiaIndex({}: Preferences) {
 		"",
 		"const app = new Elysia()",
 		"            .listen(3000)",
-		"1",
+		"",
 		"console.log(`🦊 Server started at ${app.server?.url.origin}`)",
 	].join("\n");
 }
