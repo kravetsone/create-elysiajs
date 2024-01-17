@@ -1,6 +1,6 @@
 {
     "name": "create-elysiajs",
-    "version": "0.0.2",
+    "version": "0.0.4",
     "description": "Scaffolding your Elysia project with the environment with easy!",
     "author": "kravetsone",
     "repository": "https://github.com/kravetsone/create-elysiajs",
@@ -15,6 +15,9 @@
         "eslint",
         "biome"
     ],
+    "files": [
+        "dist"
+    ],
     "bin": {
         "create-elysiajs": "dist/index.js"
     },
@@ -22,20 +25,17 @@
         "lint": "bunx @biomejs/biome check src",
         "lint:fix": "bun lint --apply",
         "prepare": "husky install",
-        "prepublishOnly": "tsc"
+        "prepublishOnly": "bunx tsup"
     },
     "devDependencies": {
         "@biomejs/biome": "^1.5.2",
         "@types/bun": "^1.0.2",
         "@types/minimist": "^1.2.5",
-        "husky": "^8.0.0"
-    },
-    "peerDependencies": {
-        "typescript": "^5.0.0"
-    },
-    "dependencies": {
+        "husky": "^8.0.0",
+        "tsup": "^8.0.1",
         "enquirer": "^2.4.1",
         "minimist": "^1.2.8",
-        "tasuku": "^2.0.1"
+        "tasuku": "^2.0.1",
+        "typescript": "^5.3.3"
     }
 }
