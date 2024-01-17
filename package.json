@@ -1,26 +1,26 @@
 {
-  "name": "create-elysiajs",
-  "version": "0.0.1",
-  "description": "Scaffolding your Elysia project with easy!",
-  "bin": {
-    "create-elysiajs": "dist/index.js"
-  },
-  "scripts": {
-    "lint": "bunx @biomejs/biome format src/**.ts",
-    "lint:fix": "bunx @biomejs/biome format src/**.ts --write",
-    "prepare": "husky install"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "1.5.2",
-    "@types/bun": "latest",
-    "@types/minimist": "^1.2.5",
-    "husky": "^8.0.0"
-  },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
-  },
-  "dependencies": {
-    "enquirer": "^2.4.1",
-    "minimist": "^1.2.8"
-  }
+    "name": "create-elysiajs",
+    "version": "0.0.1",
+    "description": "Scaffolding your Elysia project with easy!",
+    "bin": {
+        "create-elysiajs": "dist/index.js"
+    },
+    "scripts": {
+        "lint": "bunx @biomejs/biome format src/{**,}/*.ts",
+        "lint:fix": "bunx @biomejs/biome format src/{**,}/*.ts --write",
+        "prepare": "husky install"
+    },
+    "devDependencies": {
+        "@biomejs/biome": "1.5.2",
+        "@types/bun": "latest",
+        "@types/minimist": "^1.2.5",
+        "husky": "^8.0.0"
+    },
+    "peerDependencies": {
+        "typescript": "^5.0.0"
+    },
+    "dependencies": {
+        "enquirer": "^2.4.1",
+        "minimist": "^1.2.8"
+    }
 }

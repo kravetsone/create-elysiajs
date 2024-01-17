@@ -6,6 +6,9 @@
     "linter": {
         "enabled": true,
         "rules": {
+            "style": {
+                "useTemplate": "off"
+            },
             "recommended": true
         }
     }
