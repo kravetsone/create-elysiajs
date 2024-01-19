@@ -35,11 +35,36 @@ createOrFindDir(projectDir).then(async () => {
 	});
 	preferences.linter = linter;
 
+	const { orm } = await prompt<{ orm: "Prisma" | "None" }>({
+		type: "select",
+		name: "orm",
+		message: "Select ORM/Query Builder:",
+		choices: ["None", "Prisma"],
+	});
+	preferences.orm = orm;
+	if (orm === "Prisma") {
+		const { database } = await prompt<{ database: string }>({
+			type: "select",
+			name: "database",
+			message: "Select DataBase for Prisma:",
+			choices: [
+				"PostgreSQL",
+				"MySQL",
+				"MongoDB",
+				"SQLite",
+				"SQLServer",
+				"CockroachDB",
+			],
+		});
+		preferences.database = database.toLowerCase();
+	}
+
 	if (linter === "ESLint")
 		await fs.writeFile(
 			projectDir + "/.eslintrc",
 			JSON.stringify({ extends: "standard" }, null, 2),
 		);
+
 	await fs.writeFile(projectDir + "/package.json", getPackageJson(preferences));
 	await fs.writeFile(projectDir + "/tsconfig.json", getTSConfig(preferences));
 	await fs.mkdir(projectDir + "/src");

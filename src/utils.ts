@@ -1,5 +1,5 @@
-import { PackageManager } from "./types";
 import fs from "node:fs/promises";
+import { PackageManager } from "./types";
 
 export function detectPackageManager() {
 	const userAgent = process.env.npm_config_user_agent;
@@ -13,11 +13,13 @@ export function detectPackageManager() {
 }
 
 export async function createOrFindDir(path: string) {
-    await fs.stat(path).catch(async () => fs.mkdir(path))
+	await fs.stat(path).catch(async () => fs.mkdir(path));
 }
 
 export class Preferences {
 	dir = "";
 	packageManager: PackageManager = "bun";
 	linter: "ESLint" | "Biome" | "None" = "None";
+	orm: "Prisma" | "None" = "None";
+	database = "postgresql";
 }
