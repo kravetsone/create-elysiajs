@@ -13,6 +13,8 @@ bun create elysiajs
 -   Linters
 -   -   [ESLint](https://eslint.org/)
 -   -   [Biome](https://biomejs.dev/)
+-   ORM
+-   - [Prisma](https://www.prisma.io/)
 -   And more soon...
 
 > Support for other package managers will appear later

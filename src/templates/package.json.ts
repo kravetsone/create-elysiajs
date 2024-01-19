@@ -1,6 +1,6 @@
 import { Preferences } from "../utils";
 
-export function getPackageJson({ dir, linter, packageManager }: Preferences) {
+export function getPackageJson({ dir, linter, packageManager, orm }: Preferences) {
 	const sample = {
 		name: dir,
 		scripts: {},
@@ -28,6 +28,11 @@ export function getPackageJson({ dir, linter, packageManager }: Preferences) {
 		sample.devDependencies["eslint-plugin-promise"] = "^6.1.1";
 		sample.devDependencies["eslint-plugin-import"] = "^2.29.1";
 		sample.devDependencies["eslint-plugin-n"] = "^16.6.2";
+	}
+
+	if(orm === "Prisma") {
+		sample.devDependencies.prisma = "^5.8.1";
+		sample.dependencies["@prisma/client"] = "^5.8.1";
 	}
 
 	// TODO: rewrite
