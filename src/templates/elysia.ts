@@ -5,12 +5,14 @@ const dbExportedMap = {
 	Drizzle: "client",
 };
 
-export function getElysiaIndex({ orm }: Preferences) {
+export function getElysiaIndex({ orm, driver }: Preferences) {
 	return [
 		`import { Elysia } from "elysia"`,
-		orm !== "None" ? `import { ${dbExportedMap[orm]} } from "./db"\n` : "",
+		orm !== "None" && driver !== "Postgres.JS"
+			? `import { ${dbExportedMap[orm]} } from "./db"\n`
+			: "",
 		"const app = new Elysia()",
-		...(orm !== "None"
+		...(orm !== "None" && driver !== "Postgres.JS"
 			? [
 					"",
 					orm === "Prisma"
@@ -19,7 +21,7 @@ export function getElysiaIndex({ orm }: Preferences) {
 					`console.log("🗄️ Database was connected!")`,
 					"",
 			  ]
-			: ""),
+			: "\n"),
 		"app.listen(3000, () => console.log(`🦊 Server started at ${app.server?.url.origin}`))",
 	].join("\n");
 }

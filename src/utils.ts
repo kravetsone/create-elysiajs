@@ -22,5 +22,5 @@ export class Preferences {
 	linter: "ESLint" | "Biome" | "None" = "None";
 	orm: "Prisma" | "Drizzle" | "None" = "None";
 	database = "postgresql";
-	driver: "node-postgres" | "None" = "None";
+	driver: "node-postgres" | "Postgres.JS" | "None" = "None";
 }

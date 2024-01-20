@@ -1,6 +1,6 @@
 import { Preferences } from "../utils";
 
-export function getTSConfig({}: Preferences) {
+export function getTSConfig() {
 	return JSON.stringify(
 		{
 			compilerOptions: {
@@ -15,6 +15,7 @@ export function getTSConfig({}: Preferences) {
 				rootDir: "./src",
 				noEmit: true,
 			},
+			include: ["src"],
 		},
 		null,
 		2,

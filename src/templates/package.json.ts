@@ -44,6 +44,12 @@ export function getPackageJson({
 			sample.devDependencies["@types/pg"] = "^8.10.9";
 			sample.scripts.generate = "bunx drizzle-kit generate:pg";
 		}
+		if (driver === "Postgres.JS") {
+			sample.dependencies.postgres = "^3.4.3";
+			sample.scripts["migration:generate"] = "bunx drizzle-kit generate:pg";
+			sample.scripts["migration:push"] = "bun src/db/migrate.ts";
+			sample.scripts.migrate = "bun migration:generate && bun migration:push";
+		}
 	}
 	// TODO: rewrite
 	// @ts-expect-error sample.scripts is non-optional

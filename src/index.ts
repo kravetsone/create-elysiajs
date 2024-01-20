@@ -8,6 +8,7 @@ import minimist from "minimist";
 import task from "tasuku";
 import {
 	getDBIndex,
+	getDBMigrate,
 	getElysiaIndex,
 	getInstallCommands,
 	getPackageJson,
@@ -76,7 +77,7 @@ createOrFindDir(projectDir).then(async () => {
 				type: "select",
 				name: "driver",
 				message: `Select driver for ${database}:`,
-				choices: ["node-postgres"],
+				choices: ["Postgres.JS", "node-postgres"],
 			},
 		);
 		preferences.database = database;
@@ -90,7 +91,7 @@ createOrFindDir(projectDir).then(async () => {
 		);
 
 	await fs.writeFile(projectDir + "/package.json", getPackageJson(preferences));
-	await fs.writeFile(projectDir + "/tsconfig.json", getTSConfig(preferences));
+	await fs.writeFile(projectDir + "/tsconfig.json", getTSConfig());
 	await fs.mkdir(projectDir + "/src");
 	await fs.writeFile(projectDir + "/src/index.ts", getElysiaIndex(preferences));
 
@@ -110,9 +111,16 @@ createOrFindDir(projectDir).then(async () => {
 					"export default {",
 					`  schema: "./src/db/schema.ts",`,
 					`  out: "./drizzle",`,
+					`  driver: "pg",`,
 					"} satisfies Config",
 				].join("\n"),
 			);
+		await fs.writeFile(
+			projectDir + "/src/db/schema.ts",
+			`// import { pgTable } from "drizzle-orm/pg-core"`,
+		);
+		if (preferences.driver === "Postgres.JS")
+			await fs.writeFile(projectDir + "/src/db/migrate.ts", getDBMigrate());
 	}
 
 	const commands = getInstallCommands(preferences);
