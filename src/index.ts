@@ -33,7 +33,7 @@ const projectDir = path.resolve(process.cwd() + "/", dir);
 createOrFindDir(projectDir).then(async () => {
 	preferences.dir = dir;
 	preferences.packageManager = packageManager;
-	const { linter } = await prompt<{ linter: "ESLint" | "Biome" | "None" }>({
+	const { linter } = await prompt<{ linter: (typeof preferences)["linter"] }>({
 		type: "select",
 		name: "linter",
 		message: "Select linters/formatters:",
@@ -41,11 +41,11 @@ createOrFindDir(projectDir).then(async () => {
 	});
 	preferences.linter = linter;
 
-	const { orm } = await prompt<{ orm: "Prisma" | "None" }>({
+	const { orm } = await prompt<{ orm: (typeof preferences)["orm"] }>({
 		type: "select",
 		name: "orm",
 		message: "Select ORM/Query Builder:",
-		choices: ["None", "Prisma"],
+		choices: ["None", "Prisma", "Drizzle"],
 	});
 	preferences.orm = orm;
 	if (orm === "Prisma") {

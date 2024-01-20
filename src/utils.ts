@@ -20,6 +20,6 @@ export class Preferences {
 	dir = "";
 	packageManager: PackageManager = "bun";
 	linter: "ESLint" | "Biome" | "None" = "None";
-	orm: "Prisma" | "None" = "None";
+	orm: "Prisma" | "Drizzle" | "None" = "None";
 	database = "postgresql";
 }
