@@ -22,8 +22,12 @@ const args = minimist(process.argv.slice(2));
 
 const packageManager = detectPackageManager();
 if (packageManager !== "bun") throw new Error("Now supported only bun");
+
 const dir = args._.at(0);
-if (!dir) throw Error("no dir");
+if (!dir)
+	throw new Error(
+		"Specify the folder like this - bun create elysiajs dir-name",
+	);
 const projectDir = path.resolve(process.cwd() + "/", dir);
 
 createOrFindDir(projectDir).then(async () => {

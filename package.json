@@ -23,6 +23,7 @@
         "create-elysiajs": "dist/index.js"
     },
     "scripts": {
+        "watch": "tsc -w",
         "lint": "bunx @biomejs/biome check src",
         "lint:fix": "bun lint --apply",
         "prepare": "husky install",
