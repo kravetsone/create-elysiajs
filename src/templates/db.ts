@@ -10,5 +10,14 @@ export function getDBIndex({ orm }: Preferences) {
 			`export * from "@prisma/client"`,
 		].join("\n");
 
-	return [].join("\n");
+	return [
+		`import { drizzle } from "drizzle-orm/node-postgres"`,
+		`import { Client } from "pg"`,
+		"",
+		"export const client = new Client({",
+		`  connectionString: "postgres://user:password@host:port/db",`,
+		"})",
+		"",
+		"export const db = drizzle(client)",
+	].join("\n");
 }

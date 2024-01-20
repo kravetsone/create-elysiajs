@@ -5,6 +5,7 @@ export function getPackageJson({
 	linter,
 	packageManager,
 	orm,
+	driver,
 }: Preferences) {
 	const sample = {
 		name: dir,
@@ -35,7 +36,15 @@ export function getPackageJson({
 	}
 
 	if (orm === "Prisma") sample.devDependencies.prisma = "^5.8.1";
-
+	if (orm === "Drizzle") {
+		sample.dependencies["drizzle-orm"] = "^0.29.3";
+		sample.devDependencies["drizzle-kit"] = "^0.20.13";
+		if (driver === "node-postgres") {
+			sample.dependencies.pg = "^8.11.3";
+			sample.devDependencies["@types/pg"] = "^8.10.9";
+			sample.scripts.generate = "bunx drizzle-kit generate:pg";
+		}
+	}
 	// TODO: rewrite
 	// @ts-expect-error sample.scripts is non-optional
 	if (!Object.keys(sample.scripts).length) delete sample.scripts;

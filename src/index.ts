@@ -64,6 +64,24 @@ createOrFindDir(projectDir).then(async () => {
 		});
 		preferences.database = database.toLowerCase();
 	}
+	if (orm === "Drizzle") {
+		const { database } = await prompt<{ database: string }>({
+			type: "select",
+			name: "database",
+			message: "Select DataBase for Drizzle:",
+			choices: ["PostgreSQL"],
+		});
+		const { driver } = await prompt<{ driver: (typeof preferences)["driver"] }>(
+			{
+				type: "select",
+				name: "driver",
+				message: `Select driver for ${database}:`,
+				choices: ["node-postgres"],
+			},
+		);
+		preferences.database = database;
+		preferences.driver = driver;
+	}
 
 	if (linter === "ESLint")
 		await fs.writeFile(
@@ -75,12 +93,26 @@ createOrFindDir(projectDir).then(async () => {
 	await fs.writeFile(projectDir + "/tsconfig.json", getTSConfig(preferences));
 	await fs.mkdir(projectDir + "/src");
 	await fs.writeFile(projectDir + "/src/index.ts", getElysiaIndex(preferences));
-	if (orm === "Prisma") {
+
+	if (orm !== "None") {
 		await fs.mkdir(projectDir + "/src/db");
 		await fs.writeFile(
 			projectDir + "/src/db/index.ts",
 			getDBIndex(preferences),
 		);
+
+		if (orm === "Drizzle")
+			await fs.writeFile(
+				projectDir + "/drizzle.config.ts",
+				[
+					`import type { Config } from "drizzle-kit"`,
+					"",
+					"export default {",
+					`  schema: "./src/db/schema.ts",`,
+					`  out: "./drizzle",`,
+					"} satisfies Config",
+				].join("\n"),
+			);
 	}
 
 	const commands = getInstallCommands(preferences);
