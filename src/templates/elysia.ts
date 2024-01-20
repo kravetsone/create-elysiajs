@@ -1,12 +1,19 @@
 import { Preferences } from "../utils";
 
-export function getElysiaIndex({}: Preferences) {
+export function getElysiaIndex({ orm }: Preferences) {
 	return [
 		`import { Elysia } from "elysia"`,
+		orm === "Prisma" ? `import { prisma } from "./db"` : "",
 		"",
 		"const app = new Elysia()",
-		"            .listen(3000)",
+		...(orm === "Prisma"
+			? [
+					"",
+					"await prisma.$connect()",
+					`console.log("🗄️ Database was connected!")`,
+			  ]
+			: ""),
 		"",
-		"console.log(`🦊 Server started at ${app.server?.url.origin}`)",
+		"app.listen(3000, () => console.log(`🦊 Server started at ${app.server?.url.origin}`))",
 	].join("\n");
 }

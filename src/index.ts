@@ -7,11 +7,12 @@ import { prompt } from "enquirer";
 import minimist from "minimist";
 import task from "tasuku";
 import {
+	getDBIndex,
 	getElysiaIndex,
 	getInstallCommands,
 	getPackageJson,
+	getTSConfig,
 } from "./templates";
-import { getTSConfig } from "./templates/tsconfig.json";
 import { Preferences, createOrFindDir, detectPackageManager } from "./utils";
 const exec = promisify(child_process.exec);
 
@@ -20,7 +21,7 @@ const preferences = new Preferences();
 const args = minimist(process.argv.slice(2));
 
 const packageManager = detectPackageManager();
-if(packageManager !== "bun") throw new Error("Now supported only bun");
+if (packageManager !== "bun") throw new Error("Now supported only bun");
 const dir = args._.at(0);
 if (!dir) throw Error("no dir");
 const projectDir = path.resolve(process.cwd() + "/", dir);
@@ -70,6 +71,13 @@ createOrFindDir(projectDir).then(async () => {
 	await fs.writeFile(projectDir + "/tsconfig.json", getTSConfig(preferences));
 	await fs.mkdir(projectDir + "/src");
 	await fs.writeFile(projectDir + "/src/index.ts", getElysiaIndex(preferences));
+	if (orm === "Prisma") {
+		await fs.mkdir(projectDir + "/src/db");
+		await fs.writeFile(
+			projectDir + "/src/db/index.ts",
+			getDBIndex(preferences),
+		);
+	}
 
 	const commands = getInstallCommands(preferences);
 
