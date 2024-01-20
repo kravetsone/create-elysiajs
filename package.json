@@ -1,6 +1,6 @@
 {
     "name": "create-elysiajs",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "description": "Scaffolding your Elysia project with the environment with easy!",
     "author": "kravetsone",
     "repository": "https://github.com/kravetsone/create-elysiajs",
@@ -11,10 +11,12 @@
         "scaffolding",
         "create",
         "template",
-        "linters",
+        "lint",
         "eslint",
         "biome",
-        "prisma"
+        "orm",
+        "prisma",
+        "drizzle"
     ],
     "files": [
         "dist"

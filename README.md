@@ -11,10 +11,11 @@ bun create elysiajs <dir>
 ## Supported environment
 
 -   Linters
--   -   [ESLint](https://eslint.org/)
 -   -   [Biome](https://biomejs.dev/)
+-   -   [ESLint](https://eslint.org/)
 -   ORM
 -   -   [Prisma](https://www.prisma.io/)
+-   -   [Drizzle](https://orm.drizzle.team/)
 -   And more soon...
 
 > Support for other package managers will appear later
