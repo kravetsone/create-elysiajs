@@ -13,9 +13,11 @@ bun create elysiajs <dir>
 -   Linters
 -   -   [Biome](https://biomejs.dev/)
 -   -   [ESLint](https://eslint.org/)
--   ORM
+-   ORM/Query builders
 -   -   [Prisma](https://www.prisma.io/)
 -   -   [Drizzle](https://orm.drizzle.team/)
+-   Others
+-   -   [Husky](https://typicode.github.io/husky/) (Git hooks)
 -   And more soon...
 
 > Support for other package managers will appear later
