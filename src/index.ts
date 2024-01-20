@@ -84,44 +84,62 @@ createOrFindDir(projectDir).then(async () => {
 		preferences.driver = driver;
 	}
 
-	if (linter === "ESLint")
-		await fs.writeFile(
-			projectDir + "/.eslintrc",
-			JSON.stringify({ extends: "standard" }, null, 2),
-		);
+	const { git } = await prompt<{ git: boolean }>({
+		type: "toggle",
+		name: "git",
+		initial: "yes",
+		message: "Create an empty Git repository?",
+	});
+	preferences.git = git;
 
-	await fs.writeFile(projectDir + "/package.json", getPackageJson(preferences));
-	await fs.writeFile(projectDir + "/tsconfig.json", getTSConfig());
-	await fs.mkdir(projectDir + "/src");
-	await fs.writeFile(projectDir + "/src/index.ts", getElysiaIndex(preferences));
-
-	if (orm !== "None") {
-		await fs.mkdir(projectDir + "/src/db");
-		await fs.writeFile(
-			projectDir + "/src/db/index.ts",
-			getDBIndex(preferences),
-		);
-
-		if (orm === "Drizzle")
+	await task("Generating a template...", async ({ setTitle }) => {
+		if (linter === "ESLint")
 			await fs.writeFile(
-				projectDir + "/drizzle.config.ts",
-				[
-					`import type { Config } from "drizzle-kit"`,
-					"",
-					"export default {",
-					`  schema: "./src/db/schema.ts",`,
-					`  out: "./drizzle",`,
-					`  driver: "pg",`,
-					"} satisfies Config",
-				].join("\n"),
+				projectDir + "/.eslintrc",
+				JSON.stringify({ extends: "standard" }, null, 2),
 			);
+
 		await fs.writeFile(
-			projectDir + "/src/db/schema.ts",
-			`// import { pgTable } from "drizzle-orm/pg-core"`,
+			projectDir + "/package.json",
+			getPackageJson(preferences),
 		);
-		if (preferences.driver === "Postgres.JS")
-			await fs.writeFile(projectDir + "/src/db/migrate.ts", getDBMigrate());
-	}
+		await fs.writeFile(projectDir + "/tsconfig.json", getTSConfig());
+		await fs.mkdir(projectDir + "/src");
+		await fs.writeFile(
+			projectDir + "/src/index.ts",
+			getElysiaIndex(preferences),
+		);
+
+		if (orm !== "None") {
+			await fs.mkdir(projectDir + "/src/db");
+			await fs.writeFile(
+				projectDir + "/src/db/index.ts",
+				getDBIndex(preferences),
+			);
+
+			if (orm === "Drizzle")
+				await fs.writeFile(
+					projectDir + "/drizzle.config.ts",
+					[
+						`import type { Config } from "drizzle-kit"`,
+						"",
+						"export default {",
+						`  schema: "./src/db/schema.ts",`,
+						`  out: "./drizzle",`,
+						`  driver: "pg",`,
+						"} satisfies Config",
+					].join("\n"),
+				);
+			await fs.writeFile(
+				projectDir + "/src/db/schema.ts",
+				`// import { pgTable } from "drizzle-orm/pg-core"`,
+			);
+			if (preferences.driver === "Postgres.JS")
+				await fs.writeFile(projectDir + "/src/db/migrate.ts", getDBMigrate());
+		}
+
+		setTitle("Template generation is complete!");
+	});
 
 	const commands = getInstallCommands(preferences);
 

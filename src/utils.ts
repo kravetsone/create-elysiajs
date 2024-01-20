@@ -23,4 +23,5 @@ export class Preferences {
 	orm: "Prisma" | "Drizzle" | "None" = "None";
 	database = "postgresql";
 	driver: "node-postgres" | "Postgres.JS" | "None" = "None";
+	git = true;
 }

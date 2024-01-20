@@ -1,8 +1,14 @@
 import { Preferences } from "../utils";
 
-export function getInstallCommands({ linter, orm, database }: Preferences) {
+export function getInstallCommands({
+	linter,
+	orm,
+	database,
+	git,
+}: Preferences) {
 	const commands: string[] = [];
 
+	if (git) commands.push("git init");
 	commands.push("bun install");
 	if (orm === "Prisma")
 		commands.push(`bunx prisma init --datasource-provider ${database}`);
