@@ -83,14 +83,23 @@ createOrFindDir(projectDir).then(async () => {
 		preferences.database = database;
 		preferences.driver = driver;
 	}
-
-	const { git } = await prompt<{ git: boolean }>({
-		type: "toggle",
-		name: "git",
-		initial: "yes",
-		message: "Create an empty Git repository?",
+	const { others } = await prompt<{ others: (typeof preferences)["others"] }>({
+		type: "multiselect",
+		name: "others",
+		message: "Select others tools: (Space to select, Enter to continue)",
+		choices: ["Husky"],
 	});
-	preferences.git = git;
+	preferences.others = others;
+
+	if (!others.includes("Husky")) {
+		const { git } = await prompt<{ git: boolean }>({
+			type: "toggle",
+			name: "git",
+			initial: "yes",
+			message: "Create an empty Git repository?",
+		});
+		preferences.git = git;
+	} else preferences.git = true;
 
 	await task("Generating a template...", async ({ setTitle }) => {
 		if (linter === "ESLint")

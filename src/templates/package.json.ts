@@ -6,6 +6,7 @@ export function getPackageJson({
 	packageManager,
 	orm,
 	driver,
+	others,
 }: Preferences) {
 	const sample = {
 		name: dir,
@@ -50,6 +51,11 @@ export function getPackageJson({
 			sample.scripts["migration:push"] = "bun src/db/migrate.ts";
 			sample.scripts.migrate = "bun migration:generate && bun migration:push";
 		}
+	}
+
+	if (others.includes("Husky")) {
+		sample.devDependencies.husky = "^8.0.3";
+		sample.scripts.prepare = "husky install";
 	}
 	// TODO: rewrite
 	// @ts-expect-error sample.scripts is non-optional
