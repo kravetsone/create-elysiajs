@@ -9,6 +9,9 @@
             "style": {
                 "useTemplate": "off"
             },
+            "performance": {
+                "noDelete": "off"
+            },
             "recommended": true
         }
     }

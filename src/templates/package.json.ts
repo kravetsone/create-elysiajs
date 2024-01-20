@@ -1,17 +1,21 @@
 import { Preferences } from "../utils";
 
-export function getPackageJson({ dir, linter, packageManager, orm }: Preferences) {
+export function getPackageJson({
+	dir,
+	linter,
+	packageManager,
+	orm,
+}: Preferences) {
 	const sample = {
 		name: dir,
-		scripts: {},
+		scripts: {} as Record<string, string>,
 		dependencies: {
 			elysia: "^0.8.9",
-		},
+		} as Record<string, string>,
 		devDependencies: {
 			typescript: "^5.3.3",
-		},
-		//TODO: delete any
-	} as any;
+		} as Record<string, string>,
+	};
 
 	if (packageManager === "bun") sample.devDependencies["@types/bun"] = "^1.0.2";
 
@@ -30,12 +34,10 @@ export function getPackageJson({ dir, linter, packageManager, orm }: Preferences
 		sample.devDependencies["eslint-plugin-n"] = "^16.6.2";
 	}
 
-	if(orm === "Prisma") {
-		sample.devDependencies.prisma = "^5.8.1";
-		sample.dependencies["@prisma/client"] = "^5.8.1";
-	}
+	if (orm === "Prisma") sample.devDependencies.prisma = "^5.8.1";
 
 	// TODO: rewrite
+	// @ts-expect-error sample.scripts is non-optional
 	if (!Object.keys(sample.scripts).length) delete sample.scripts;
 
 	return JSON.stringify(sample, null, 2);
