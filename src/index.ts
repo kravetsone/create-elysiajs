@@ -50,7 +50,9 @@ createOrFindDir(projectDir).then(async () => {
 	});
 	preferences.orm = orm;
 	if (orm === "Prisma") {
-		const { database } = await prompt<{ database: string }>({
+		const { database } = await prompt<{
+			database: (typeof preferences)["database"];
+		}>({
 			type: "select",
 			name: "database",
 			message: "Select DataBase for Prisma:",
@@ -63,21 +65,28 @@ createOrFindDir(projectDir).then(async () => {
 				"CockroachDB",
 			],
 		});
-		preferences.database = database.toLowerCase();
+		preferences.database = database;
 	}
 	if (orm === "Drizzle") {
-		const { database } = await prompt<{ database: string }>({
+		const { database } = await prompt<{
+			database: "PostgreSQL" | "MySQL";
+		}>({
 			type: "select",
 			name: "database",
 			message: "Select DataBase for Drizzle:",
-			choices: ["PostgreSQL"],
+			choices: ["PostgreSQL", "MySQL"],
 		});
+		const driversMap = {
+			PostgreSQL: ["Postgres.JS", "node-postgres"],
+			MySQL: ["MySQL 2"],
+		};
+
 		const { driver } = await prompt<{ driver: (typeof preferences)["driver"] }>(
 			{
 				type: "select",
 				name: "driver",
 				message: `Select driver for ${database}:`,
-				choices: ["Postgres.JS", "node-postgres"],
+				choices: driversMap[database],
 			},
 		);
 		preferences.database = database;
@@ -147,13 +156,17 @@ createOrFindDir(projectDir).then(async () => {
 						"export default {",
 						`  schema: "./src/db/schema.ts",`,
 						`  out: "./drizzle",`,
-						`  driver: "pg",`,
+						`  driver: "${
+							preferences.database === "PostgreSQL" ? "pg" : "mysql2"
+						}",`,
 						"} satisfies Config",
 					].join("\n"),
 				);
 				await fs.writeFile(
 					projectDir + "/src/db/schema.ts",
-					`// import { pgTable } from "drizzle-orm/pg-core"`,
+					preferences.database === "PostgreSQL"
+						? `// import { pgTable } from "drizzle-orm/pg-core"`
+						: `// import { mysqlTable } from 'drizzle-orm/mysql-core';`,
 				);
 				if (preferences.driver === "Postgres.JS")
 					await fs.writeFile(projectDir + "/src/db/migrate.ts", getDBMigrate());

@@ -36,11 +36,26 @@ export function getDBIndex({ orm, driver }: Preferences) {
 			"export const db = drizzle(client)",
 		].join("\n");
 
+	if (driver === "Postgres.JS")
+		return [
+			`import { drizzle } from "drizzle-orm/postgres-js"`,
+			`import postgres from "postgres"`,
+			"",
+			`const client = postgres("postgres://user:password@host:port/db")`,
+			"export const db = drizzle(client)",
+		].join("\n");
+
 	return [
-		`import { drizzle } from "drizzle-orm/postgres-js"`,
-		`import postgres from "postgres"`,
+		`import { drizzle } from "drizzle-orm/mysql2"`,
+		`import mysql from "mysql2/promise"`,
 		"",
-		`const client = postgres("postgres://user:password@host:port/db")`,
-		"export const db = drizzle(client)",
+		"const connection = await mysql.createConnection({",
+		`	host: "host",`,
+		`	user: "user",`,
+		`	database: "database",`,
+		"})",
+		`console.log("🗄️ Database was connected!")`,
+		"",
+		"export const db = drizzle(connection)",
 	].join("\n");
 }

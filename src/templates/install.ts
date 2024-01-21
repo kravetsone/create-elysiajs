@@ -14,7 +14,9 @@ export function getInstallCommands({
 	if (others.includes("Husky") && linter !== "None")
 		commands.push(`bunx husky set .husky/pre-commit "bun lint:fix"`);
 	if (orm === "Prisma")
-		commands.push(`bunx prisma init --datasource-provider ${database}`);
+		commands.push(
+			`bunx prisma init --datasource-provider ${database.toLowerCase()}`,
+		);
 	if (linter === "Biome") commands.push("bunx @biomejs/biome init");
 	if (linter !== "None") commands.push("bun lint:fix");
 

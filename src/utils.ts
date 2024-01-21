@@ -21,8 +21,14 @@ export class Preferences {
 	packageManager: PackageManager = "bun";
 	linter: "ESLint" | "Biome" | "None" = "None";
 	orm: "Prisma" | "Drizzle" | "None" = "None";
-	database = "postgresql";
-	driver: "node-postgres" | "Postgres.JS" | "None" = "None";
+	database:
+		| "PostgreSQL"
+		| "MySQL"
+		| "MongoDB"
+		| "SQLite"
+		| "SQLServer"
+		| "CockroachDB" = "PostgreSQL";
+	driver: "node-postgres" | "Postgres.JS" | "MySQL 2" | "None" = "None";
 	git = true;
 	others: "Husky"[] = [];
 }

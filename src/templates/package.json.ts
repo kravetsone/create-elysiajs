@@ -55,6 +55,10 @@ export function getPackageJson({
 			sample.scripts["migration:push"] = "bun src/db/migrate.ts";
 			sample.scripts.migrate = "bun migration:generate && bun migration:push";
 		}
+		if (driver === "MySQL 2") {
+			sample.dependencies.mysql2 = "^3.7.1";
+			sample.scripts.generate = "bunx drizzle-kit generate:mysql";
+		}
 	}
 
 	if (others.includes("Husky")) {
