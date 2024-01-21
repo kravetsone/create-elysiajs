@@ -24,6 +24,6 @@ bun create elysiajs <dir>
 
 > The environment can work together
 >
-> When you select ESLint and Drizzle, you get [eslint-plugin-drizzle](https://orm.drizzle.team/docs/eslint-plugin)
-> When you select Husky and one of the linters - the `pre-commit` hook will contain the command `lint:fix`
+> When you select [ESLint](https://eslint.org/) and [Drizzle](https://orm.drizzle.team/), you get [eslint-plugin-drizzle](https://orm.drizzle.team/docs/eslint-plugin)
+> When you select [Husky](https://typicode.github.io/husky/) and one of the [linters](#supported-environment) - the `pre-commit` hook will contain the command `lint:fix`
 
