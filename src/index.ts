@@ -126,7 +126,7 @@ createOrFindDir(projectDir).then(async () => {
 				getDBIndex(preferences),
 			);
 
-			if (orm === "Drizzle")
+			if (orm === "Drizzle") {
 				await fs.writeFile(
 					projectDir + "/drizzle.config.ts",
 					[
@@ -139,12 +139,13 @@ createOrFindDir(projectDir).then(async () => {
 						"} satisfies Config",
 					].join("\n"),
 				);
-			await fs.writeFile(
-				projectDir + "/src/db/schema.ts",
-				`// import { pgTable } from "drizzle-orm/pg-core"`,
-			);
-			if (preferences.driver === "Postgres.JS")
-				await fs.writeFile(projectDir + "/src/db/migrate.ts", getDBMigrate());
+				await fs.writeFile(
+					projectDir + "/src/db/schema.ts",
+					`// import { pgTable } from "drizzle-orm/pg-core"`,
+				);
+				if (preferences.driver === "Postgres.JS")
+					await fs.writeFile(projectDir + "/src/db/migrate.ts", getDBMigrate());
+			}
 		}
 
 		setTitle("Template generation is complete!");
