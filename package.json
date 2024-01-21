@@ -3,7 +3,10 @@
     "version": "0.0.9",
     "description": "Scaffolding your Elysia project with the environment with easy!",
     "author": "kravetsone",
-    "repository": "https://github.com/kravetsone/create-elysiajs",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/kravetsone/create-elysiajs.git"
+    },
     "readme": "https://github.com/kravetsone/create-elysiajs",
     "keywords": [
         "elysia",

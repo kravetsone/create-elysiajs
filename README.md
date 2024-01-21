@@ -24,6 +24,6 @@ bun create elysiajs <dir>
 
 > The environment can work together
 >
-> When you select ESLint and Drizzle, you get eslint-plugin-drizzle
+> When you select ESLint and Drizzle, you get [eslint-plugin-drizzle](https://orm.drizzle.team/docs/eslint-plugin)
 > When you select Husky and one of the linters - the `pre-commit` hook will contain the command `lint:fix`
 
