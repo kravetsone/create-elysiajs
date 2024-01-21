@@ -52,13 +52,13 @@ export function getPackageJson({
 		if (driver === "Postgres.JS") {
 			sample.dependencies.postgres = "^3.4.3";
 			sample.scripts["migration:generate"] = "bunx drizzle-kit generate:pg";
-			sample.scripts["migration:push"] = "bun src/db/migrate.ts";
-			sample.scripts.migrate = "bun migration:generate && bun migration:push";
 		}
 		if (driver === "MySQL 2") {
 			sample.dependencies.mysql2 = "^3.7.1";
-			sample.scripts.generate = "bunx drizzle-kit generate:mysql";
+			sample.scripts["migration:generate"] = "bunx drizzle-kit generate:mysql";
 		}
+		sample.scripts["migration:push"] = "bun src/db/migrate.ts";
+		sample.scripts.migrate = "bun migration:generate && bun migration:push";
 	}
 
 	if (others.includes("Husky")) {

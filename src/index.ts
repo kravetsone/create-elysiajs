@@ -168,8 +168,10 @@ createOrFindDir(projectDir).then(async () => {
 						? `// import { pgTable } from "drizzle-orm/pg-core"`
 						: `// import { mysqlTable } from 'drizzle-orm/mysql-core';`,
 				);
-				if (preferences.driver === "Postgres.JS")
-					await fs.writeFile(projectDir + "/src/db/migrate.ts", getDBMigrate());
+				await fs.writeFile(
+					projectDir + "/src/db/migrate.ts",
+					getDBMigrate(preferences),
+				);
 			}
 		}
 
