@@ -105,7 +105,19 @@ createOrFindDir(projectDir).then(async () => {
 		if (linter === "ESLint")
 			await fs.writeFile(
 				projectDir + "/.eslintrc",
-				JSON.stringify({ extends: "standard" }, null, 2),
+				JSON.stringify(
+					orm === "Drizzle"
+						? {
+								extends: [
+									"standard-with-typescript",
+									"plugin:drizzle/recommended",
+								],
+								plugins: ["drizzle"],
+						  }
+						: { extends: ["standard-with-typescript"] },
+					null,
+					2,
+				),
 			);
 
 		await fs.writeFile(

@@ -2,9 +2,9 @@ import { Preferences } from "../utils";
 
 export function getDBMigrate() {
 	return [
-		`import { drizzle } from 'drizzle-orm/postgres-js'`,
-		`import { migrate } from 'drizzle-orm/postgres-js/migrator'`,
-		`import postgres from 'postgres'`,
+		`import { drizzle } from "drizzle-orm/postgres-js"`,
+		`import { migrate } from "drizzle-orm/postgres-js/migrator"`,
+		`import postgres from "postgres"`,
 		"",
 		`const migrationClient = postgres("postgres://user:password@host:port/db", { max: 1 })`,
 		"",
@@ -19,7 +19,7 @@ export function getDBIndex({ orm, driver }: Preferences) {
 		return [
 			`import { PrismaClient } from "@prisma/client"`,
 			"",
-			"export const prisma = new PrismaClient();",
+			"export const prisma = new PrismaClient()",
 			"",
 			`export * from "@prisma/client"`,
 		].join("\n");

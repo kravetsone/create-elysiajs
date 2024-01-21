@@ -24,5 +24,5 @@ export class Preferences {
 	database = "postgresql";
 	driver: "node-postgres" | "Postgres.JS" | "None" = "None";
 	git = true;
-	others: ("Husky")[] = []
+	others: "Husky"[] = [];
 }

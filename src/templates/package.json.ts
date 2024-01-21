@@ -30,10 +30,14 @@ export function getPackageJson({
 		sample.scripts.lint = `bunx eslint \"src/**/*.ts\"`;
 		sample.scripts["lint:fix"] = `bunx eslint \"src/**/*.ts\" --fix`;
 		sample.devDependencies.eslint = "^8.56.0";
-		sample.devDependencies["eslint-config-standard"] = "^17.1.0";
+		sample.devDependencies["eslint-config-standard-with-typescript"] =
+			"^43.0.1";
 		sample.devDependencies["eslint-plugin-promise"] = "^6.1.1";
 		sample.devDependencies["eslint-plugin-import"] = "^2.29.1";
 		sample.devDependencies["eslint-plugin-n"] = "^16.6.2";
+		sample.devDependencies["@typescript-eslint/eslint-plugin"] = "^6.19.0";
+		if (orm === "Drizzle")
+			sample.devDependencies["eslint-plugin-drizzle"] = "^0.2.3";
 	}
 
 	if (orm === "Prisma") sample.devDependencies.prisma = "^5.8.1";
