@@ -8,6 +8,8 @@
 bun create elysiajs <dir>
 ```
 
+> Support for other package managers will appear later (Maybe, huh)
+
 ## Supported environment
 
 -   Linters
@@ -20,4 +22,8 @@ bun create elysiajs <dir>
 -   -   [Husky](https://typicode.github.io/husky/) (Git hooks)
 -   And more soon...
 
-> Support for other package managers will appear later
+> The environment can work together
+>
+> When you select ESLint and Drizzle, you get eslint-plugin-drizzle
+> When you select Husky and one of the linters - the `pre-commit` hook will contain the command `lint:fix`
+
