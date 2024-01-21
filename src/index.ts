@@ -69,16 +69,20 @@ createOrFindDir(projectDir).then(async () => {
 	}
 	if (orm === "Drizzle") {
 		const { database } = await prompt<{
-			database: "PostgreSQL" | "MySQL";
+			database: "PostgreSQL" | "MySQL" | "SQLite";
 		}>({
 			type: "select",
 			name: "database",
 			message: "Select DataBase for Drizzle:",
-			choices: ["PostgreSQL", "MySQL"],
+			choices: ["PostgreSQL", "MySQL", "SQLite"],
 		});
-		const driversMap = {
+		const driversMap: Record<
+			typeof database,
+			(typeof preferences)["driver"][]
+		> = {
 			PostgreSQL: ["Postgres.JS", "node-postgres"],
 			MySQL: ["MySQL 2"],
+			SQLite: ["Bun SQLite"],
 		};
 
 		const { driver } = await prompt<{ driver: (typeof preferences)["driver"] }>(
@@ -157,7 +161,11 @@ createOrFindDir(projectDir).then(async () => {
 						`  schema: "./src/db/schema.ts",`,
 						`  out: "./drizzle",`,
 						`  driver: "${
-							preferences.database === "PostgreSQL" ? "pg" : "mysql2"
+							preferences.database === "PostgreSQL"
+								? "pg"
+								: preferences.database === "MySQL"
+								  ? "mysql2"
+								  : "better-sqlite"
 						}",`,
 						"} satisfies Config",
 					].join("\n"),
@@ -166,12 +174,16 @@ createOrFindDir(projectDir).then(async () => {
 					projectDir + "/src/db/schema.ts",
 					preferences.database === "PostgreSQL"
 						? `// import { pgTable } from "drizzle-orm/pg-core"`
-						: `// import { mysqlTable } from 'drizzle-orm/mysql-core';`,
+						: preferences.database === "MySQL"
+						  ? `// import { mysqlTable } from "drizzle-orm/mysql-core"`
+						  : `// import { sqliteTable } from "drizzle-orm/sqlite-core"`,
 				);
 				await fs.writeFile(
 					projectDir + "/src/db/migrate.ts",
 					getDBMigrate(preferences),
 				);
+				if (preferences.database === "SQLite")
+					await fs.writeFile(projectDir + "/src/db/sqlite.db", "");
 			}
 		}
 

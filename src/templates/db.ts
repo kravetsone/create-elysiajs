@@ -26,14 +26,25 @@ export function getDBMigrate({ driver }: Preferences) {
 		].join("\n");
 	}
 
+	if (driver === "node-postgres")
+		return [
+			`import { migrate } from "drizzle-orm/node-postgres/migrator"`,
+			`import { client, db } from "./index"`,
+			"",
+			`console.log("🗄️ Migration started...")`,
+			"await client.connect()",
+			`await migrate(db, { migrationsFolder: "drizzle" })`,
+			"await client.end()",
+			`console.log("🗄️ Migration ended...")`,
+		].join("\n");
+
 	return [
-		`import { migrate } from "drizzle-orm/node-postgres/migrator"`,
-		`import { client, db } from "./index"`,
+		`import { migrate } from "drizzle-orm/bun-sqlite/migrator"`,
+		`import { sqlite, db } from "./index"`,
 		"",
 		`console.log("🗄️ Migration started...")`,
-		"await client.connect()",
-		`await migrate(db, { migrationsFolder: "drizzle" })`,
-		"await client.end()",
+		`migrate(db, { migrationsFolder: "drizzle" })`,
+		"sqlite.close()",
 		`console.log("🗄️ Migration ended...")`,
 	].join("\n");
 }
@@ -69,13 +80,22 @@ export function getDBIndex({ orm, driver }: Preferences) {
 			"export const db = drizzle(client)",
 		].join("\n");
 
+	if (driver === "MySQL 2")
+		return [
+			`import { drizzle } from "drizzle-orm/mysql2"`,
+			`import mysql from "mysql2/promise"`,
+			"",
+			`export const connection = await mysql.createConnection("mysql://USER:PASSWORD@HOST:PORT/DATABASE")`,
+			`console.log("🗄️ Database was connected!")`,
+			"",
+			"export const db = drizzle(connection)",
+		].join("\n");
+
 	return [
-		`import { drizzle } from "drizzle-orm/mysql2"`,
-		`import mysql from "mysql2/promise"`,
+		`import { drizzle } from "drizzle-orm/bun-sqlite"`,
+		`import { Database } from "bun:sqlite";`,
 		"",
-		`export const connection = await mysql.createConnection("mysql://USER:PASSWORD@HOST:PORT/DATABASE")`,
-		`console.log("🗄️ Database was connected!")`,
-		"",
-		"export const db = drizzle(connection)",
+		`export const sqlite = new Database("sqlite.db")`,
+		"export const db = drizzle(sqlite)",
 	].join("\n");
 }

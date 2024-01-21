@@ -57,6 +57,9 @@ export function getPackageJson({
 			sample.dependencies.mysql2 = "^3.7.1";
 			sample.scripts["migration:generate"] = "bunx drizzle-kit generate:mysql";
 		}
+		if (driver === "Bun SQLite")
+			sample.scripts["migration:generate"] = "bunx drizzle-kit generate:sqlite";
+
 		sample.scripts["migration:push"] = "bun src/db/migrate.ts";
 		sample.scripts.migrate = "bun migration:generate && bun migration:push";
 	}

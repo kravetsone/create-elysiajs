@@ -8,11 +8,17 @@ const dbExportedMap = {
 export function getElysiaIndex({ orm, driver }: Preferences) {
 	return [
 		`import { Elysia } from "elysia"`,
-		orm !== "None" && driver !== "Postgres.JS" && driver !== "MySQL 2"
+		orm !== "None" &&
+		driver !== "Postgres.JS" &&
+		driver !== "MySQL 2" &&
+		driver !== "Bun SQLite"
 			? `import { ${dbExportedMap[orm]} } from "./db"\n`
 			: "",
 		"const app = new Elysia()",
-		...(orm !== "None" && driver !== "Postgres.JS" && driver !== "MySQL 2"
+		...(orm !== "None" &&
+		driver !== "Postgres.JS" &&
+		driver !== "MySQL 2" &&
+		driver !== "Bun SQLite"
 			? [
 					"",
 					orm === "Prisma"

@@ -28,7 +28,8 @@ export class Preferences {
 		| "SQLite"
 		| "SQLServer"
 		| "CockroachDB" = "PostgreSQL";
-	driver: "node-postgres" | "Postgres.JS" | "MySQL 2" | "None" = "None";
+	driver: "node-postgres" | "Postgres.JS" | "MySQL 2" | "Bun SQLite" | "None" =
+		"None";
 	git = true;
 	others: "Husky"[] = [];
 }
