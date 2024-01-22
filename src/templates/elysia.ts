@@ -28,6 +28,6 @@ export function getElysiaIndex({ orm, driver }: Preferences) {
 					"",
 			  ]
 			: "\n"),
-		"app.listen(3000, () => console.log(`🦊 Server started at ${app.server?.url.origin}`))",
+		"app.listen(process.env.PORT as string, () => console.log(`🦊 Server started at ${app.server?.url.origin}`))",
 	].join("\n");
 }

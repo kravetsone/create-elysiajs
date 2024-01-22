@@ -10,6 +10,7 @@ import {
 	getDBIndex,
 	getDBMigrate,
 	getElysiaIndex,
+	getEnvFile,
 	getInstallCommands,
 	getPackageJson,
 	getTSConfig,
@@ -138,6 +139,7 @@ createOrFindDir(projectDir).then(async () => {
 			getPackageJson(preferences),
 		);
 		await fs.writeFile(projectDir + "/tsconfig.json", getTSConfig());
+		await fs.writeFile(projectDir + "/.env", getEnvFile(preferences));
 		await fs.mkdir(projectDir + "/src");
 		await fs.writeFile(
 			projectDir + "/src/index.ts",
@@ -167,6 +169,13 @@ createOrFindDir(projectDir).then(async () => {
 								  ? "mysql2"
 								  : "better-sqlite"
 						}",`,
+						"  dbCredentials: {",
+						preferences.database === "PostgreSQL"
+							? "    connectionString: process.env.DATABASE_URL as string"
+							: preferences.database === "MySQL"
+							  ? "    uri: process.env.DATABASE_URL as string"
+							  : `    uri: "./src/db/sqlite.db"`,
+						"  }",
 						"} satisfies Config",
 					].join("\n"),
 				);
