@@ -1,51 +1,50 @@
 {
-    "name": "create-elysiajs",
-    "version": "0.0.11",
-    "description": "Scaffolding your Elysia project with the environment with easy!",
-    "author": "kravetsone",
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/kravetsone/create-elysiajs.git"
-    },
-    "readme": "https://github.com/kravetsone/create-elysiajs",
-    "keywords": [
-        "elysia",
-        "elysiajs",
-        "scaffolding",
-        "create",
-        "template",
-        "lint",
-        "eslint",
-        "biome",
-        "orm",
-        "prisma",
-        "drizzle",
-        "husky"
-    ],
-    "files": [
-        "dist"
-    ],
-    "bin": {
-        "create-elysiajs": "dist/index.js"
-    },
-    "scripts": {
-        "watch": "tsc -w",
-        "lint": "bunx @biomejs/biome check src",
-        "lint:fix": "bun lint --apply",
-        "prepare": "husky install",
-        "prepublishOnly": "rm -rf dist && tsc"
-    },
-    "devDependencies": {
-        "@biomejs/biome": "^1.5.2",
-        "@types/bun": "^1.0.2",
-        "@types/minimist": "^1.2.5",
-        "husky": "^8.0.0",
-        "tsup": "^8.0.1",
-        "typescript": "^5.3.3"
-    },
-    "dependencies": {
-        "enquirer": "^2.4.1",
-        "minimist": "^1.2.8",
-        "tasuku": "^2.0.1"
-    }
+  "name": "create-elysiajs",
+  "version": "0.1.0",
+  "description": "Scaffolding your Elysia project with the environment with easy!",
+  "author": "kravetsone",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kravetsone/create-elysiajs.git"
+  },
+  "readme": "https://github.com/kravetsone/create-elysiajs",
+  "keywords": [
+    "elysia",
+    "elysiajs",
+    "scaffolding",
+    "create",
+    "template",
+    "lint",
+    "eslint",
+    "biome",
+    "orm",
+    "prisma",
+    "drizzle",
+    "husky"
+  ],
+  "files": [
+    "dist"
+  ],
+  "bin": {
+    "create-elysiajs": "dist/index.js"
+  },
+  "scripts": {
+    "watch": "tsc -w",
+    "lint": "bunx @biomejs/biome check src",
+    "lint:fix": "bun lint --apply",
+    "prepare": "husky install",
+    "prepublishOnly": "rm -rf dist && tsc"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.5.3",
+    "@types/bun": "^1.0.3",
+    "@types/minimist": "^1.2.5",
+    "husky": "^8.0.3",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "enquirer": "^2.4.1",
+    "minimist": "^1.2.8",
+    "tasuku": "^2.0.1"
+  }
 }
