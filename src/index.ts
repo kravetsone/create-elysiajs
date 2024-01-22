@@ -174,7 +174,7 @@ createOrFindDir(projectDir).then(async () => {
 							? "    connectionString: process.env.DATABASE_URL as string"
 							: preferences.database === "MySQL"
 							  ? "    uri: process.env.DATABASE_URL as string"
-							  : `    uri: "./src/db/sqlite.db"`,
+							  : `    url: "./src/db/sqlite.db"`,
 						"  }",
 						"} satisfies Config",
 					].join("\n"),
