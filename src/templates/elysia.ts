@@ -27,6 +27,16 @@ export function getElysiaIndex({ orm, driver, plugins }: Preferences) {
 			".use(jwt({ secret: process.env.JWT_SECRET as string }))",
 		);
 	}
+	if (plugins.includes("Server Timing")) {
+		elysiaImports.push(
+			`import { serverTiming } from "@elysiajs/server-timing"`,
+		);
+		elysiaPlugins.push(".use(serverTiming())");
+	}
+	if (plugins.includes("Static")) {
+		elysiaImports.push(`import { staticPlugin  } from "@elysiajs/static"`);
+		elysiaPlugins.push(".use(staticPlugin())");
+	}
 
 	if (
 		orm !== "None" &&

@@ -109,7 +109,9 @@ createOrFindDir(projectDir).then(async () => {
 			"CORS",
 			"JWT",
 			"HTML/JSX",
+			"Static",
 			"Bearer",
+			"Server Timing",
 		] as (typeof preferences)["plugins"],
 	});
 	preferences.plugins = plugins;
@@ -133,6 +135,8 @@ createOrFindDir(projectDir).then(async () => {
 	} else preferences.git = true;
 
 	await task("Generating a template...", async ({ setTitle }) => {
+		if (plugins.includes("Static")) await fs.mkdir(projectDir + "/public");
+
 		if (linter === "ESLint")
 			await fs.writeFile(
 				projectDir + "/.eslintrc",

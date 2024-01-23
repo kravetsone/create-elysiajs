@@ -79,6 +79,10 @@ export function getPackageJson({
 		sample.dependencies["@kitajs/ts-html-plugin"] = "^1.3.3";
 	}
 	if (plugins.includes("JWT")) sample.dependencies["@elysiajs/jwt"] = "^0.8.0";
+	if (plugins.includes("Server Timing"))
+		sample.dependencies["@elysiajs/server-timing"] = "^0.8.0";
+	if (plugins.includes("Static"))
+		sample.dependencies["@elysiajs/static"] = "^0.8.1";
 
 	// @ts-expect-error sample.scripts is non-optional
 	if (!Object.keys(sample.scripts).length) delete sample.scripts;
