@@ -18,6 +18,15 @@ bun create elysiajs <dir>
 -   ORM/Query builders
 -   -   [Prisma](https://www.prisma.io/)
 -   -   [Drizzle](https://orm.drizzle.team/)
+-   Plugins
+-   -   [CORS](https://elysiajs.com/plugins/cors.html)
+-   -   [Swagger](https://elysiajs.com/plugins/swagger.html)
+-   -   [JWT](https://elysiajs.com/plugins/jwt.html)
+-   -   [Autoload](https://github.com/kravetsone/elysia-autoload)
+-   -   [HTML/JSX](https://elysiajs.com/plugins/html.html)
+-   -   [Static](https://elysiajs.com/plugins/static.html)
+-   -   [Bearer](https://elysiajs.com/plugins/bearer.html)
+-   -   [Server Timing](https://elysiajs.com/plugins/server-timing.html)
 -   Others
 -   -   [Husky](https://typicode.github.io/husky/) (Git hooks)
 -   And more soon...
