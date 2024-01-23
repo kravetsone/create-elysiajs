@@ -107,6 +107,7 @@ createOrFindDir(projectDir).then(async () => {
 		message: "Select Elysia plugins: (Space to select, Enter to continue)",
 		choices: [
 			"CORS",
+			"Swagger",
 			"JWT",
 			"HTML/JSX",
 			"Static",

@@ -9,6 +9,10 @@ export function getElysiaIndex({ orm, driver, plugins }: Preferences) {
 	const elysiaPlugins: string[] = [];
 	const elysiaImports: string[] = [`import { Elysia } from "elysia"`];
 
+	if (plugins.includes("Swagger")) {
+		elysiaImports.push(`import { swagger } from "@elysiajs/swagger"`);
+		elysiaPlugins.push(".use(swagger())");
+	}
 	if (plugins.includes("Bearer")) {
 		elysiaImports.push(`import { bearer } from "@elysiajs/bearer"`);
 		elysiaPlugins.push(".use(bearer())");

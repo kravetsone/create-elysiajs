@@ -35,6 +35,7 @@ export class Preferences {
 	plugins: (
 		| "JWT"
 		| "CORS"
+		| "Swagger"
 		| "HTML/JSX"
 		| "Static"
 		| "Bearer"

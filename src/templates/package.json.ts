@@ -83,9 +83,12 @@ export function getPackageJson({
 		sample.dependencies["@elysiajs/server-timing"] = "^0.8.0";
 	if (plugins.includes("Static"))
 		sample.dependencies["@elysiajs/static"] = "^0.8.1";
+	if (plugins.includes("Swagger"))
+		sample.dependencies["@elysiajs/swagger"] = "^0.8.3";
 
-	// @ts-expect-error sample.scripts is non-optional
-	if (!Object.keys(sample.scripts).length) delete sample.scripts;
+	if (!Object.keys(sample.scripts).length)
+		// @ts-expect-error sample.scripts is non-optional
+		delete sample.scripts;
 
 	return JSON.stringify(sample, null, 2);
 }
