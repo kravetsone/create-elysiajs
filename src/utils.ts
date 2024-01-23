@@ -36,6 +36,7 @@ export class Preferences {
 		| "JWT"
 		| "CORS"
 		| "Swagger"
+		| "Autoload"
 		| "HTML/JSX"
 		| "Static"
 		| "Bearer"

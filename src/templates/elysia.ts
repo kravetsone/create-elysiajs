@@ -38,8 +38,12 @@ export function getElysiaIndex({ orm, driver, plugins }: Preferences) {
 		elysiaPlugins.push(".use(serverTiming())");
 	}
 	if (plugins.includes("Static")) {
-		elysiaImports.push(`import { staticPlugin  } from "@elysiajs/static"`);
+		elysiaImports.push(`import { staticPlugin } from "@elysiajs/static"`);
 		elysiaPlugins.push(".use(staticPlugin())");
+	}
+	if (plugins.includes("Autoload")) {
+		elysiaImports.push(`import { autoload } from "elysia-autoload"`);
+		elysiaPlugins.push(".use(autoload())");
 	}
 
 	if (
@@ -69,5 +73,6 @@ export function getElysiaIndex({ orm, driver, plugins }: Preferences) {
 			  ]
 			: "\n"),
 		"app.listen(process.env.PORT as string, () => console.log(`🦊 Server started at ${app.server?.url.origin}`))",
+		plugins.includes("Autoload") ? "\nexport type ElysiaApp = typeof app" : "",
 	].join("\n");
 }

@@ -109,6 +109,7 @@ createOrFindDir(projectDir).then(async () => {
 			"CORS",
 			"Swagger",
 			"JWT",
+			"Autoload",
 			"HTML/JSX",
 			"Static",
 			"Bearer",
@@ -167,6 +168,8 @@ createOrFindDir(projectDir).then(async () => {
 			projectDir + "/src/index.ts",
 			getElysiaIndex(preferences),
 		);
+		if (plugins.includes("Autoload"))
+			await fs.mkdir(projectDir + "/src/routes");
 
 		if (orm !== "None") {
 			await fs.mkdir(projectDir + "/src/db");

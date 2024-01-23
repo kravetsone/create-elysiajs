@@ -85,6 +85,8 @@ export function getPackageJson({
 		sample.dependencies["@elysiajs/static"] = "^0.8.1";
 	if (plugins.includes("Swagger"))
 		sample.dependencies["@elysiajs/swagger"] = "^0.8.3";
+	if (plugins.includes("Autoload"))
+		sample.dependencies["elysia-autoload"] = "^0.1.2";
 
 	if (!Object.keys(sample.scripts).length)
 		// @ts-expect-error sample.scripts is non-optional
