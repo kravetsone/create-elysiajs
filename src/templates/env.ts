@@ -17,7 +17,7 @@ const connectionURLExamples: Record<
 
 export function getEnvFile({ database, orm }: Preferences) {
 	return [
-		...(database === "SQLite" && orm === "Drizzle"
+		...(!database || (database === "SQLite" && orm === "Drizzle")
 			? ""
 			: [`DATABASE_URL="${connectionURLExamples[database]}"`]),
 		"PORT=3000",
