@@ -7,6 +7,7 @@ export function getPackageJson({
 	orm,
 	driver,
 	others,
+	plugins,
 }: Preferences) {
 	const sample = {
 		name: dir,
@@ -68,7 +69,12 @@ export function getPackageJson({
 		sample.devDependencies.husky = "^8.0.3";
 		sample.scripts.prepare = "husky install";
 	}
-	// TODO: rewrite
+
+	if (plugins.includes("Bearer"))
+		sample.dependencies["@elysiajs/cors"] = "^0.8.0";
+	if (plugins.includes("CORS"))
+		sample.dependencies["@elysiajs/bearer"] = "^0.8.0";
+
 	// @ts-expect-error sample.scripts is non-optional
 	if (!Object.keys(sample.scripts).length) delete sample.scripts;
 

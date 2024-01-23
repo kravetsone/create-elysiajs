@@ -98,6 +98,17 @@ createOrFindDir(projectDir).then(async () => {
 		preferences.database = database;
 		preferences.driver = driver;
 	}
+
+	const { plugins } = await prompt<{
+		plugins: (typeof preferences)["plugins"];
+	}>({
+		type: "multiselect",
+		name: "plugins",
+		message: "Select Elysia plugins: (Space to select, Enter to continue)",
+		choices: ["Bearer", "CORS"] as (typeof preferences)["plugins"],
+	});
+	preferences.plugins = plugins;
+
 	const { others } = await prompt<{ others: (typeof preferences)["others"] }>({
 		type: "multiselect",
 		name: "others",

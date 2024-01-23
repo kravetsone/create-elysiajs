@@ -5,16 +5,32 @@ const dbExportedMap = {
 	Drizzle: "client",
 };
 
-export function getElysiaIndex({ orm, driver }: Preferences) {
-	return [
-		`import { Elysia } from "elysia"`,
+export function getElysiaIndex({ orm, driver, plugins }: Preferences) {
+	const elysiaPlugins: string[] = [];
+	const elysiaImports: string[] = [`import { Elysia } from "elysia"`];
+
+	if (plugins.includes("Bearer")) {
+		elysiaImports.push(`import { bearer } from "@elysiajs/bearer"`);
+		elysiaPlugins.push(".use(bearer())");
+	}
+	if (plugins.includes("CORS")) {
+		elysiaImports.push(`import { cors } from "@elysiajs/cors"`);
+		elysiaPlugins.push(".use(cors())");
+	}
+
+	if (
 		orm !== "None" &&
 		driver !== "Postgres.JS" &&
 		driver !== "MySQL 2" &&
 		driver !== "Bun SQLite"
-			? `import { ${dbExportedMap[orm]} } from "./db"\n`
-			: "",
+	)
+		elysiaImports.push(`import { ${dbExportedMap[orm]} } from "./db"`);
+
+	return [
+		...elysiaImports,
+		"",
 		"const app = new Elysia()",
+		...elysiaPlugins,
 		...(orm !== "None" &&
 		driver !== "Postgres.JS" &&
 		driver !== "MySQL 2" &&

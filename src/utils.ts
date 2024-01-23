@@ -32,4 +32,5 @@ export class Preferences {
 		"None";
 	git = true;
 	others: "Husky"[] = [];
+	plugins: ("Bearer" | "CORS")[] = [];
 }
