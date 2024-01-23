@@ -17,6 +17,10 @@ export function getElysiaIndex({ orm, driver, plugins }: Preferences) {
 		elysiaImports.push(`import { cors } from "@elysiajs/cors"`);
 		elysiaPlugins.push(".use(cors())");
 	}
+	if (plugins.includes("HTML/JSX")) {
+		elysiaImports.push(`import { html } from "@elysiajs/html"`);
+		elysiaPlugins.push(".use(html())");
+	}
 
 	if (
 		orm !== "None" &&

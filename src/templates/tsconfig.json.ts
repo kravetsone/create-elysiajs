@@ -1,6 +1,6 @@
 import { Preferences } from "../utils";
 
-export function getTSConfig() {
+export function getTSConfig({ plugins }: Preferences) {
 	return JSON.stringify(
 		{
 			compilerOptions: {
@@ -14,6 +14,14 @@ export function getTSConfig() {
 				allowSyntheticDefaultImports: true,
 				rootDir: "./src",
 				noEmit: true,
+				...(plugins.includes("HTML/JSX")
+					? {
+							jsx: "react",
+							jsxFactory: "Html.createElement",
+							jsxFragmentFactory: "Html.Fragment",
+							plugins: [{ name: "@kitajs/ts-html-plugin" }],
+					  }
+					: {}),
 			},
 			include: ["src"],
 		},

@@ -105,7 +105,7 @@ createOrFindDir(projectDir).then(async () => {
 		type: "multiselect",
 		name: "plugins",
 		message: "Select Elysia plugins: (Space to select, Enter to continue)",
-		choices: ["Bearer", "CORS"] as (typeof preferences)["plugins"],
+		choices: ["Bearer", "CORS", "HTML/JSX"] as (typeof preferences)["plugins"],
 	});
 	preferences.plugins = plugins;
 
@@ -150,7 +150,7 @@ createOrFindDir(projectDir).then(async () => {
 			projectDir + "/package.json",
 			getPackageJson(preferences),
 		);
-		await fs.writeFile(projectDir + "/tsconfig.json", getTSConfig());
+		await fs.writeFile(projectDir + "/tsconfig.json", getTSConfig(preferences));
 		await fs.writeFile(projectDir + "/.env", getEnvFile(preferences));
 		await fs.mkdir(projectDir + "/src");
 		await fs.writeFile(
