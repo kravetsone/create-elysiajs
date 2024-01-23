@@ -78,6 +78,7 @@ export function getPackageJson({
 		sample.dependencies["@elysiajs/html"] = "^0.8.0";
 		sample.dependencies["@kitajs/ts-html-plugin"] = "^1.3.3";
 	}
+	if (plugins.includes("JWT")) sample.dependencies["@elysiajs/jwt"] = "^0.8.0";
 
 	// @ts-expect-error sample.scripts is non-optional
 	if (!Object.keys(sample.scripts).length) delete sample.scripts;

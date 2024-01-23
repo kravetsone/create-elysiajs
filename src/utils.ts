@@ -32,5 +32,5 @@ export class Preferences {
 		"None";
 	git = true;
 	others: "Husky"[] = [];
-	plugins: ("Bearer" | "CORS" | "HTML/JSX")[] = [];
+	plugins: ("JWT" | "Bearer" | "CORS" | "HTML/JSX")[] = [];
 }

@@ -105,7 +105,12 @@ createOrFindDir(projectDir).then(async () => {
 		type: "multiselect",
 		name: "plugins",
 		message: "Select Elysia plugins: (Space to select, Enter to continue)",
-		choices: ["Bearer", "CORS", "HTML/JSX"] as (typeof preferences)["plugins"],
+		choices: [
+			"CORS",
+			"JWT",
+			"HTML/JSX",
+			"Bearer",
+		] as (typeof preferences)["plugins"],
 	});
 	preferences.plugins = plugins;
 

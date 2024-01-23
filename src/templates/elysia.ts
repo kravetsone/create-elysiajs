@@ -21,6 +21,12 @@ export function getElysiaIndex({ orm, driver, plugins }: Preferences) {
 		elysiaImports.push(`import { html } from "@elysiajs/html"`);
 		elysiaPlugins.push(".use(html())");
 	}
+	if (plugins.includes("JWT")) {
+		elysiaImports.push(`import { jwt } from "@elysiajs/jwt"`);
+		elysiaPlugins.push(
+			".use(jwt({ secret: process.env.JWT_SECRET as string }))",
+		);
+	}
 
 	if (
 		orm !== "None" &&

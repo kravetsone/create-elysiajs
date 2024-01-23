@@ -1,3 +1,4 @@
+import { randomBytes } from "node:crypto";
 import { Preferences } from "../utils";
 
 const connectionURLExamples: Record<
@@ -15,11 +16,15 @@ const connectionURLExamples: Record<
 	SQLite: "file:./src/db/sqlite.db",
 };
 
-export function getEnvFile({ database, orm }: Preferences) {
-	return [
-		...(orm === "None" || (database === "SQLite" && orm === "Drizzle")
-			? ""
-			: [`DATABASE_URL="${connectionURLExamples[database]}"`]),
-		"PORT=3000",
-	].join("\n");
+export function getEnvFile({ database, orm, plugins }: Preferences) {
+	const envs = [];
+
+	if (orm !== "None" && !(database === "SQLite" && orm === "Drizzle"))
+		envs.push(`DATABASE_URL="${connectionURLExamples[database]}"`);
+
+	if (plugins.includes("JWT"))
+		envs.push(`JWT_SECRET="${randomBytes(12).toString("hex")}"`);
+
+	envs.push("PORT=3000");
+	return envs.join("\n");
 }
