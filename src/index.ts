@@ -9,6 +9,7 @@ import task from "tasuku";
 import {
 	getDBIndex,
 	getDBMigrate,
+	getDrizzleConfig,
 	getElysiaIndex,
 	getEnvFile,
 	getInstallCommands,
@@ -156,28 +157,7 @@ createOrFindDir(projectDir).then(async () => {
 			if (orm === "Drizzle") {
 				await fs.writeFile(
 					projectDir + "/drizzle.config.ts",
-					[
-						`import type { Config } from "drizzle-kit"`,
-						"",
-						"export default {",
-						`  schema: "./src/db/schema.ts",`,
-						`  out: "./drizzle",`,
-						`  driver: "${
-							preferences.database === "PostgreSQL"
-								? "pg"
-								: preferences.database === "MySQL"
-								  ? "mysql2"
-								  : "better-sqlite"
-						}",`,
-						"  dbCredentials: {",
-						preferences.database === "PostgreSQL"
-							? "    connectionString: process.env.DATABASE_URL as string"
-							: preferences.database === "MySQL"
-							  ? "    uri: process.env.DATABASE_URL as string"
-							  : `    url: "./src/db/sqlite.db"`,
-						"  }",
-						"} satisfies Config",
-					].join("\n"),
+					getDrizzleConfig(preferences),
 				);
 				await fs.writeFile(
 					projectDir + "/src/db/schema.ts",

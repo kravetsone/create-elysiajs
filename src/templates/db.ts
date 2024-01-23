@@ -99,3 +99,28 @@ export function getDBIndex({ orm, driver }: Preferences) {
 		"export const db = drizzle(sqlite)",
 	].join("\n");
 }
+
+export function getDrizzleConfig({ database }: Preferences) {
+	return [
+		`import type { Config } from "drizzle-kit"`,
+		"",
+		"export default {",
+		`  schema: "./src/db/schema.ts",`,
+		`  out: "./drizzle",`,
+		`  driver: "${
+			database === "PostgreSQL"
+				? "pg"
+				: database === "MySQL"
+				  ? "mysql2"
+				  : "better-sqlite"
+		}",`,
+		"  dbCredentials: {",
+		database === "PostgreSQL"
+			? "    connectionString: process.env.DATABASE_URL as string"
+			: database === "MySQL"
+			  ? "    uri: process.env.DATABASE_URL as string"
+			  : `    url: "./src/db/sqlite.db"`,
+		"  }",
+		"} satisfies Config",
+	].join("\n");
+}
