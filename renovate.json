@@ -1,9 +1,14 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "extends": ["config:recommended", ":dependencyDashboard"],
+    "lockFileMaintenance": {
+        "enabled": true,
+        "automerge": true
+    },
     "customManagers": [{
         "fileMatch": ["deps.ts$"],
         "datasourceTemplate": "npm",
-        "matchStrings": ["// @renovate\n\t\"?(?<depName>.*?)\"?: \"(?<currentValue>.*?)\""]
+        "matchStrings": ["// @renovate\n\t\"?(?<depName>.*?)\"?: \"(?<currentValue>.*?)\""],
+        "autoReplaceStringTemplate": "// @renovate\n\t\"{{{depName}}}\": \"{{{newValue}}}\""
     }]
   }
