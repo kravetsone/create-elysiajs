@@ -6,7 +6,7 @@ export const dependencies = {
 	// @renovate
 	"@types/bun": "^1.0.2",
 	// @renovate
-	"@biomejs/biome": "^1.5.2",
+	"@biomejs/biome": "1.5.3",
 	// @renovate
 	eslint: "^8.56.0",
 	// @renovate
