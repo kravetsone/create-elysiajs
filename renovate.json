@@ -13,7 +13,7 @@
     "customManagers": [{
         "fileMatch": ["deps.ts$"],
         "datasourceTemplate": "npm",
-        "matchStrings": ["\"?(?<depName>.*?)\"?: \"\\^?(?<currentValue>.*?)\""],
-        "autoReplaceStringTemplate": "\"{{{depName}}}\": \"\\^{{{newValue}}}\""
+        "matchStrings": ["\t\"?(?<depName>.*?)\"?: \"\\^?(?<currentValue>.*?)\""],
+        "autoReplaceStringTemplate": "\t\"{{{depName}}}\": \"\\^{{{newValue}}}\""
     }]
   }
