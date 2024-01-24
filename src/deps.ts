@@ -1,6 +1,6 @@
 export const dependencies = {
 	// @renovate
-	elysia: "^0.8.9",
+	"elysia": "0.8.10",
 	// @renovate
 	typescript: "^5.3.3",
 	// @renovate
