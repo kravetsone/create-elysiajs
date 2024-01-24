@@ -18,7 +18,7 @@ export const dependencies = {
 	// @renovate
 	"eslint-plugin-n": "^16.6.2",
 	// @renovate
-	"@typescript-eslint/eslint-plugin": "^6.19.0",
+	"@typescript-eslint/eslint-plugin": "6.19.1",
 	// @renovate
 	"eslint-plugin-drizzle": "^0.2.3",
 	// @renovate
