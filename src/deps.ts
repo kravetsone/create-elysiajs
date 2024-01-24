@@ -34,7 +34,7 @@ export const dependencies = {
 	// @renovate
 	postgres: "^3.4.3",
 	// @renovate
-	mysql2: "^3.7.1",
+	"mysql2": "3.8.0",
 	// @renovate
 	husky: "^8.0.3",
 	// @renovate
