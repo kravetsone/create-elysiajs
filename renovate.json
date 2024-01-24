@@ -5,6 +5,7 @@
         "enabled": true,
         "automerge": true
     },
+    "bumpVersion": "patch",
     "customManagers": [{
         "fileMatch": ["deps.ts$"],
         "datasourceTemplate": "npm",
