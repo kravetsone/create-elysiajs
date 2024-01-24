@@ -10,6 +10,7 @@
         "automerge": true
     },
     "bumpVersion": "patch",
+    "labels": ["bump"],
     "customManagers": [{
         "fileMatch": ["deps.ts$"],
         "datasourceTemplate": "npm",
