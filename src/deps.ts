@@ -54,5 +54,5 @@ export const dependencies = {
 	// @renovate
 	"@elysiajs/swagger": "^0.8.3",
 	// @renovate
-	"elysia-autoload": "^0.1.2",
+	"elysia-autoload": "0.1.5",
 };
