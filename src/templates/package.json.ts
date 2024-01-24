@@ -1,35 +1,5 @@
+import { dependencies } from "../deps";
 import { Preferences } from "../utils";
-
-const dependencies = {
-	elysia: "^0.8.9",
-	typescript: "^5.3.3",
-	"@types/bun": "^1.0.2",
-	"@biomejs/biome": "^1.5.2",
-	eslint: "^8.56.0",
-	"eslint-config-standard-with-typescript": "^43.0.1",
-	"eslint-plugin-promise": "^6.1.1",
-	"eslint-plugin-import": "^2.29.1",
-	"eslint-plugin-n": "^16.6.2",
-	"@typescript-eslint/eslint-plugin": "^6.19.0",
-	"eslint-plugin-drizzle": "^0.2.3",
-	prisma: "^5.8.1",
-	"drizzle-orm": "^0.29.3",
-	"drizzle-kit": "^0.20.13",
-	pg: "^8.11.3",
-	"@types/pg": "^8.10.9",
-	postgres: "^3.4.3",
-	mysql2: "^3.7.1",
-	husky: "^8.0.3",
-	"@elysiajs/bearer": "^0.8.0",
-	"@elysiajs/cors": "^0.8.0",
-	"@elysiajs/html": "^0.8.0",
-	"@kitajs/ts-html-plugin": "^1.3.3",
-	"@elysiajs/jwt": "^0.8.0",
-	"@elysiajs/server-timing": "^0.8.0",
-	"@elysiajs/static": "^0.8.1",
-	"@elysiajs/swagger": "^0.8.3",
-	"elysia-autoload": "^0.1.2",
-};
 
 export function getPackageJson({
 	dir,

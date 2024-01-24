@@ -1,0 +1,11 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": [
+        "config:base"
+    ],
+    "customManagers": [{
+        "fileMatch": ["^src\\deps.ts$"],
+        "datasourceTemplate": "npm",
+        "matchStrings": ["// @renovate\n\t\"?(?<depName>.*?)\"?: \"(?<currentValue>.*?)\""]
+    }]
+  }
