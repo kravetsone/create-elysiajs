@@ -3,6 +3,7 @@
     "schedule": [
         "before 4am"
     ],
+    "automerge": true,
     "extends": ["config:recommended", ":dependencyDashboard"],
     "lockFileMaintenance": {
         "enabled": true,
@@ -12,7 +13,7 @@
     "customManagers": [{
         "fileMatch": ["deps.ts$"],
         "datasourceTemplate": "npm",
-        "matchStrings": ["// @renovate\n\t\"?(?<depName>.*?)\"?: \"\\^?(?<currentValue>.*?)\""],
-        "autoReplaceStringTemplate": "// @renovate\n\t\"{{{depName}}}\": \"{{{newValue}}}\""
+        "matchStrings": ["\"?(?<depName>.*?)\"?: \"\\^?(?<currentValue>.*?)\""],
+        "autoReplaceStringTemplate": "\"{{{depName}}}\": \"\\^{{{newValue}}}\""
     }]
   }
