@@ -52,7 +52,7 @@ export const dependencies = {
 	// @renovate
 	"@elysiajs/static": "^0.8.1",
 	// @renovate
-	"@elysiajs/swagger": "^0.8.3",
+	"@elysiajs/swagger": "0.8.5",
 	// @renovate
 	"elysia-autoload": "^0.1.2",
 };
