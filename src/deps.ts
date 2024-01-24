@@ -4,7 +4,7 @@ export const dependencies = {
 	// @renovate
 	typescript: "^5.3.3",
 	// @renovate
-	"@types/bun": "^1.0.2",
+	"@types/bun": "1.0.4",
 	// @renovate
 	"@biomejs/biome": "^1.5.2",
 	// @renovate
