@@ -43,3 +43,5 @@ export class Preferences {
 		| "Server Timing"
 	)[] = [];
 }
+
+export type PreferencesType = InstanceType<typeof Preferences>;
