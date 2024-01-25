@@ -14,7 +14,7 @@ export const dependencies = {
 	"drizzle-orm": "^0.29.3",
 	"drizzle-kit": "^0.20.13",
 	pg: "^8.11.3",
-	"@types/pg": "^8.10.9",
+	"@types/pg": "^8.11.0",
 	postgres: "^3.4.3",
 	mysql2: "^3.7.1",
 	"husky": "^9.0.1",
