@@ -73,7 +73,7 @@ export function getPackageJson({
 
 	if (others.includes("Husky")) {
 		sample.devDependencies.husky = dependencies.husky;
-		sample.scripts.prepare = "husky install";
+		sample.scripts.prepare = "husky";
 	}
 
 	if (plugins.includes("Bearer"))

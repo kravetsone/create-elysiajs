@@ -12,7 +12,7 @@ export function getInstallCommands({
 	if (git) commands.push("git init");
 	commands.push("bun install");
 	if (others.includes("Husky") && linter !== "None")
-		commands.push(`bunx husky set .husky/pre-commit "bun lint:fix"`);
+		commands.push(`echo "bun lint:fix" > .husky/pre-commit`);
 	if (orm === "Prisma")
 		commands.push(
 			`bunx prisma init --datasource-provider ${database.toLowerCase()}`,
