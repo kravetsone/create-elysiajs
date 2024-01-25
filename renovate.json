@@ -15,6 +15,6 @@
         "fileMatch": ["deps.ts$"],
         "datasourceTemplate": "npm",
         "matchStrings": ["\t\"?(?<depName>.*?)\"?: \"\\^?(?<currentValue>.*?)\""],
-        "autoReplaceStringTemplate": "\t\"{{{depName}}}\": \"\\^{{{newValue}}}\""
+        "autoReplaceStringTemplate": "\t\"{{{depName}}}\": \"^{{{newValue}}}\""
     }]
   }
