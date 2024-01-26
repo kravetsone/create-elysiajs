@@ -31,6 +31,8 @@ bun create elysiajs <dir>
 -   -   [Husky](https://typicode.github.io/husky/) (Git hooks)
 -   And more soon...
 
+> With renovate, we keep dependencies up to date
+
 > The environment can work `together`
 >
 > When you select [ESLint](https://eslint.org/) and [Drizzle](https://orm.drizzle.team/), you get [eslint-plugin-drizzle](https://orm.drizzle.team/docs/eslint-plugin)

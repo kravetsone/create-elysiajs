@@ -37,9 +37,9 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.5.3",
-    "@types/bun": "^1.0.3",
+    "@types/bun": "^1.0.4",
     "@types/minimist": "^1.2.5",
-    "husky": "^9.0.0",
+    "husky": "^9.0.6",
     "typescript": "^5.3.3"
   },
   "dependencies": {
