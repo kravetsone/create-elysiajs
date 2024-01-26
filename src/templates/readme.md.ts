@@ -6,7 +6,8 @@ const links: Record<
 		| PreferencesType["linter"]
 		| PreferencesType["orm"]
 		| PreferencesType["plugins"][0]
-		| PreferencesType["others"][0],
+		| PreferencesType["others"][0]
+		| PreferencesType["database"],
 		"None"
 	>,
 	string
@@ -26,6 +27,12 @@ const links: Record<
 	"Server Timing":
 		"[Server Timing](https://elysiajs.com/plugins/server-timing.html)",
 	Husky: "[Husky](https://typicode.github.io/husky/)",
+	PostgreSQL: "[PostgreSQL](https://www.postgresql.org/)",
+	MySQL: "[MySQL](https://www.mysql.com/)",
+	MongoDB: "[MongoDB](https://www.mongodb.com/)",
+	SQLite: "[SQLite](https://sqlite.org/)",
+	SQLServer: "[SQLServer](https://www.microsoft.com/sql-server)",
+	CockroachDB: "[CockroachDB](https://www.cockroachlabs.com/)",
 };
 
 export function getReadme({
@@ -40,7 +47,7 @@ export function getReadme({
 
 	stack.push(`- Web framework - ${links.ElysiaJS}`);
 	if (linter !== "None") stack.push(`- Linter - ${links[linter]}`);
-	if (orm !== "None") stack.push(`- ORM - ${links[orm]} (${database})`);
+	if (orm !== "None") stack.push(`- ORM - ${links[orm]} (${links[database]})`);
 	if (plugins.length)
 		stack.push(`- Elysia plugins - ${plugins.map((x) => links[x]).join(", ")}`);
 	if (others.length)
