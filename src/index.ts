@@ -1,8 +1,6 @@
 #!/usr/bin/env node
-import child_process from "node:child_process";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { promisify } from "node:util";
 import { prompt } from "enquirer";
 import minimist from "minimist";
 import task from "tasuku";
@@ -17,8 +15,13 @@ import {
 	getReadme,
 	getTSConfig,
 } from "./templates";
-import { Preferences, createOrFindDir, detectPackageManager } from "./utils";
-const exec = promisify(child_process.exec);
+import {
+	Preferences,
+	PreferencesType,
+	createOrFindDir,
+	detectPackageManager,
+	exec,
+} from "./utils";
 
 const preferences = new Preferences();
 
@@ -37,7 +40,7 @@ const projectDir = path.resolve(process.cwd() + "/", dir);
 createOrFindDir(projectDir).then(async () => {
 	preferences.dir = dir;
 	preferences.packageManager = packageManager;
-	const { linter } = await prompt<{ linter: (typeof preferences)["linter"] }>({
+	const { linter } = await prompt<{ linter: PreferencesType["linter"] }>({
 		type: "select",
 		name: "linter",
 		message: "Select linters/formatters:",
@@ -45,7 +48,7 @@ createOrFindDir(projectDir).then(async () => {
 	});
 	preferences.linter = linter;
 
-	const { orm } = await prompt<{ orm: (typeof preferences)["orm"] }>({
+	const { orm } = await prompt<{ orm: PreferencesType["orm"] }>({
 		type: "select",
 		name: "orm",
 		message: "Select ORM/Query Builder:",
@@ -54,7 +57,7 @@ createOrFindDir(projectDir).then(async () => {
 	preferences.orm = orm;
 	if (orm === "Prisma") {
 		const { database } = await prompt<{
-			database: (typeof preferences)["database"];
+			database: PreferencesType["database"];
 		}>({
 			type: "select",
 			name: "database",
@@ -79,29 +82,24 @@ createOrFindDir(projectDir).then(async () => {
 			message: "Select DataBase for Drizzle:",
 			choices: ["PostgreSQL", "MySQL", "SQLite"],
 		});
-		const driversMap: Record<
-			typeof database,
-			(typeof preferences)["driver"][]
-		> = {
+		const driversMap: Record<typeof database, PreferencesType["driver"][]> = {
 			PostgreSQL: ["Postgres.JS", "node-postgres"],
 			MySQL: ["MySQL 2"],
 			SQLite: ["Bun SQLite"],
 		};
 
-		const { driver } = await prompt<{ driver: (typeof preferences)["driver"] }>(
-			{
-				type: "select",
-				name: "driver",
-				message: `Select driver for ${database}:`,
-				choices: driversMap[database],
-			},
-		);
+		const { driver } = await prompt<{ driver: PreferencesType["driver"] }>({
+			type: "select",
+			name: "driver",
+			message: `Select driver for ${database}:`,
+			choices: driversMap[database],
+		});
 		preferences.database = database;
 		preferences.driver = driver;
 	}
 
 	const { plugins } = await prompt<{
-		plugins: (typeof preferences)["plugins"];
+		plugins: PreferencesType["plugins"];
 	}>({
 		type: "multiselect",
 		name: "plugins",
@@ -115,11 +113,11 @@ createOrFindDir(projectDir).then(async () => {
 			"Static",
 			"Bearer",
 			"Server Timing",
-		] as (typeof preferences)["plugins"],
+		] as PreferencesType["plugins"],
 	});
 	preferences.plugins = plugins;
 
-	const { others } = await prompt<{ others: (typeof preferences)["others"] }>({
+	const { others } = await prompt<{ others: PreferencesType["others"] }>({
 		type: "multiselect",
 		name: "others",
 		message: "Select others tools: (Space to select, Enter to continue)",

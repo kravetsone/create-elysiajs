@@ -1,4 +1,6 @@
+import child_process from "node:child_process";
 import fs from "node:fs/promises";
+import { promisify } from "node:util";
 import { PackageManager } from "./types";
 
 export function detectPackageManager() {
@@ -45,3 +47,5 @@ export class Preferences {
 }
 
 export type PreferencesType = InstanceType<typeof Preferences>;
+
+export const exec = promisify(child_process.exec);
