@@ -1,5 +1,5 @@
 export const dependencies = {
-	"elysia": "^0.8.14",
+	elysia: "^0.8.14",
 	typescript: "^5.3.3",
 	"@types/bun": "^1.0.4",
 	"@biomejs/biome": "^1.5.3",
@@ -16,7 +16,7 @@ export const dependencies = {
 	pg: "^8.11.3",
 	"@types/pg": "^8.11.0",
 	postgres: "^3.4.3",
-	"mysql2": "^3.9.0",
+	mysql2: "^3.9.0",
 	husky: "^9.0.6",
 	"@elysiajs/bearer": "^0.8.0",
 	"@elysiajs/cors": "^0.8.0",

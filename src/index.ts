@@ -163,6 +163,10 @@ createOrFindDir(projectDir).then(async () => {
 		await fs.writeFile(projectDir + "/tsconfig.json", getTSConfig(preferences));
 		await fs.writeFile(projectDir + "/.env", getEnvFile(preferences));
 		await fs.writeFile(projectDir + "/README.md", getReadme(preferences));
+		await fs.writeFile(
+			projectDir + "/.gitignore",
+			["dist", "node_modules", ".env"].join("\n"),
+		);
 		await fs.mkdir(projectDir + "/src");
 		await fs.writeFile(
 			projectDir + "/src/index.ts",
