@@ -39,6 +39,7 @@ export class Preferences {
 		| "CORS"
 		| "Swagger"
 		| "Autoload"
+		| "Logger"
 		| "HTML/JSX"
 		| "Static"
 		| "Bearer"

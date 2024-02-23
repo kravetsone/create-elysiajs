@@ -109,6 +109,7 @@ createOrFindDir(projectDir).then(async () => {
 			"Swagger",
 			"JWT",
 			"Autoload",
+			"Logger",
 			"HTML/JSX",
 			"Static",
 			"Bearer",

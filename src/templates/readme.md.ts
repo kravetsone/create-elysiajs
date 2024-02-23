@@ -21,6 +21,7 @@ const links: Record<
 	Swagger: "[Swagger](https://elysiajs.com/plugins/swagger.html)",
 	JWT: "[JWT](https://elysiajs.com/plugins/jwt.html)",
 	Autoload: "[Autoload](https://github.com/kravetsone/elysia-autoload)",
+	Logger: "[Logger](https://github.com/bogeychan/elysia-logger)",
 	"HTML/JSX": "[HTML/JSX](https://elysiajs.com/plugins/html.html)",
 	Static: "[Static](https://elysiajs.com/plugins/static.html)",
 	Bearer: "[Bearer](https://elysiajs.com/plugins/bearer.html)",

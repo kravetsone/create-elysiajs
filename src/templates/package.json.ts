@@ -99,6 +99,9 @@ export function getPackageJson({
 			dependencies["@elysiajs/swagger"];
 	if (plugins.includes("Autoload"))
 		sample.dependencies["elysia-autoload"] = dependencies["elysia-autoload"];
+	if (plugins.includes("Logger"))
+		sample.dependencies["@bogeychan/elysia-logger"] =
+			dependencies["@bogeychan/elysia-logger"];
 
 	if (!Object.keys(sample.scripts).length)
 		// @ts-expect-error sample.scripts is non-optional
