@@ -24,6 +24,7 @@ bun create elysiajs <dir>
 -   -   [JWT](https://elysiajs.com/plugins/jwt.html)
 -   -   [Autoload](https://github.com/kravetsone/elysia-autoload)
 -   -   [HTML/JSX](https://elysiajs.com/plugins/html.html)
+-   -   [Logger](https://github.com/bogeychan/elysia-logger)
 -   -   [Static](https://elysiajs.com/plugins/static.html)
 -   -   [Bearer](https://elysiajs.com/plugins/bearer.html)
 -   -   [Server Timing](https://elysiajs.com/plugins/server-timing.html)
