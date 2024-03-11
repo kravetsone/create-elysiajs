@@ -1,5 +1,5 @@
 import { dependencies } from "../deps";
-import { Preferences } from "../utils";
+import type { Preferences } from "../utils";
 
 export function getPackageJson({
 	dir,

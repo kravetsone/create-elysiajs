@@ -1,4 +1,4 @@
-import { Preferences } from "../utils";
+import type { Preferences } from "../utils";
 
 export function getTSConfig({ plugins }: Preferences) {
 	return JSON.stringify(

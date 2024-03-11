@@ -17,7 +17,7 @@ import {
 } from "./templates";
 import {
 	Preferences,
-	PreferencesType,
+	type PreferencesType,
 	createOrFindDir,
 	detectPackageManager,
 	exec,

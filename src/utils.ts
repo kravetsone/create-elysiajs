@@ -1,7 +1,7 @@
 import child_process from "node:child_process";
 import fs from "node:fs/promises";
 import { promisify } from "node:util";
-import { PackageManager } from "./types";
+import type { PackageManager } from "./types";
 
 export function detectPackageManager() {
 	const userAgent = process.env.npm_config_user_agent;

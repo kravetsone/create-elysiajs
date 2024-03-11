@@ -1,5 +1,5 @@
 import { randomBytes } from "node:crypto";
-import { Preferences } from "../utils";
+import type { Preferences } from "../utils";
 
 const connectionURLExamples: Record<
 	InstanceType<typeof Preferences>["database"],
