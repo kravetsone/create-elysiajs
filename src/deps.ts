@@ -19,7 +19,7 @@ export const dependencies = {
 	mysql2: "^3.9.2",
 	husky: "^9.0.11",
 	"@elysiajs/bearer": "^1.0.0",
-	"@elysiajs/cors": "^0.8.0",
+	"@elysiajs/cors": "^1.0.0",
 	"@elysiajs/html": "^1.0.0",
 	"@kitajs/ts-html-plugin": "^1.3.4",
 	"@elysiajs/jwt": "^0.8.0",
