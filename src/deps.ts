@@ -27,5 +27,5 @@ export const dependencies = {
 	"@elysiajs/static": "^1.0.0",
 	"@elysiajs/swagger": "^1.0.0",
 	"elysia-autoload": "^0.1.7",
-	"@bogeychan/elysia-logger": "^0.0.17",
+	"@bogeychan/elysia-logger": "^0.0.18",
 };
