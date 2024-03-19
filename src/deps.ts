@@ -20,7 +20,7 @@ export const dependencies = {
 	husky: "^9.0.11",
 	"@elysiajs/bearer": "^1.0.0",
 	"@elysiajs/cors": "^1.0.0",
-	"@elysiajs/html": "^1.0.0",
+	"@elysiajs/html": "^1.0.2",
 	"@kitajs/ts-html-plugin": "^1.3.4",
 	"@elysiajs/jwt": "^1.0.0",
 	"@elysiajs/server-timing": "^1.0.0",
