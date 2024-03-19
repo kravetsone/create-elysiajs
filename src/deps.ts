@@ -18,7 +18,7 @@ export const dependencies = {
 	postgres: "^3.4.3",
 	mysql2: "^3.9.2",
 	husky: "^9.0.11",
-	"@elysiajs/bearer": "^1.0.0",
+	"@elysiajs/bearer": "^1.0.2",
 	"@elysiajs/cors": "^1.0.0",
 	"@elysiajs/html": "^1.0.0",
 	"@kitajs/ts-html-plugin": "^1.3.4",
