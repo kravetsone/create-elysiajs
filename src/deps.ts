@@ -24,7 +24,7 @@ export const dependencies = {
 	"@kitajs/ts-html-plugin": "^1.3.4",
 	"@elysiajs/jwt": "^1.0.2",
 	"@elysiajs/server-timing": "^1.0.0",
-	"@elysiajs/static": "^1.0.0",
+	"@elysiajs/static": "^1.0.2",
 	"@elysiajs/swagger": "^1.0.0",
 	"elysia-autoload": "^0.1.7",
 	"@bogeychan/elysia-logger": "^0.0.18",
