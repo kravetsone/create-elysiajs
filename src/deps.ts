@@ -23,7 +23,7 @@ export const dependencies = {
 	"@elysiajs/html": "^1.0.2",
 	"@kitajs/ts-html-plugin": "^1.3.4",
 	"@elysiajs/jwt": "^1.0.2",
-	"@elysiajs/server-timing": "^1.0.0",
+	"@elysiajs/server-timing": "^1.0.2",
 	"@elysiajs/static": "^1.0.2",
 	"@elysiajs/swagger": "^1.0.2",
 	"elysia-autoload": "^0.1.9",
