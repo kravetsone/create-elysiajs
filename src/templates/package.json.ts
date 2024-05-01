@@ -17,10 +17,10 @@ export function getPackageJson({
 		} as Record<string, string>,
 		dependencies: {
 			elysia: dependencies.elysia,
-		} as Record<string, string>,
+		} as Record<keyof typeof dependencies, string>,
 		devDependencies: {
 			typescript: dependencies.typescript,
-		} as Record<string, string>,
+		} as Record<keyof typeof dependencies, string>,
 	};
 
 	if (packageManager === "bun")
@@ -102,10 +102,6 @@ export function getPackageJson({
 	if (plugins.includes("Logger"))
 		sample.dependencies["@bogeychan/elysia-logger"] =
 			dependencies["@bogeychan/elysia-logger"];
-
-	if (!Object.keys(sample.scripts).length)
-		// @ts-expect-error sample.scripts is non-optional
-		delete sample.scripts;
 
 	return JSON.stringify(sample, null, 2);
 }
