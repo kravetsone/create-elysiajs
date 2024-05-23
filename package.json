@@ -33,7 +33,7 @@
     "lint": "bunx @biomejs/biome check src",
     "lint:fix": "bun lint --apply",
     "prepare": "husky",
-    "prepublishOnly": "rm -rf dist && tsc"
+    "prepublishOnly": "tsc"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.6.0",

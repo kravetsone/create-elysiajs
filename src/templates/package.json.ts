@@ -13,7 +13,7 @@ export function getPackageJson({
 	const sample = {
 		name: dir,
 		scripts: {
-			dev: "bun src/index.ts --watch",
+			dev: "bun  --watch src/index.ts",
 		} as Record<string, string>,
 		dependencies: {
 			elysia: dependencies.elysia,
