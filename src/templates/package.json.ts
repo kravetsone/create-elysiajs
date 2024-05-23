@@ -53,24 +53,21 @@ export function getPackageJson({
 	if (orm === "Drizzle") {
 		sample.dependencies["drizzle-orm"] = dependencies["drizzle-orm"];
 		sample.devDependencies["drizzle-kit"] = dependencies["drizzle-kit"];
+
+		sample.scripts.generate = "bunx drizzle-kit generate";
+		sample.scripts["migration:push"] = "bunx drizzle-kit push";
+		sample.scripts.migrate = "bun migration:generate && bun migration:push";
+
 		if (driver === "node-postgres") {
 			sample.dependencies.pg = dependencies.pg;
 			sample.devDependencies["@types/pg"] = dependencies["@types/pg"];
-			sample.scripts.generate = "bunx drizzle-kit generate:pg";
 		}
 		if (driver === "Postgres.JS") {
 			sample.dependencies.postgres = dependencies.postgres;
-			sample.scripts["migration:generate"] = "bunx drizzle-kit generate:pg";
 		}
 		if (driver === "MySQL 2") {
 			sample.dependencies.mysql2 = dependencies.mysql2;
-			sample.scripts["migration:generate"] = "bunx drizzle-kit generate:mysql";
 		}
-		if (driver === "Bun SQLite")
-			sample.scripts["migration:generate"] = "bunx drizzle-kit generate:sqlite";
-
-		sample.scripts["migration:push"] = "bun src/db/migrate.ts";
-		sample.scripts.migrate = "bun migration:generate && bun migration:push";
 	}
 
 	if (others.includes("Husky")) {

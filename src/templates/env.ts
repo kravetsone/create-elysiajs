@@ -19,8 +19,11 @@ const connectionURLExamples: Record<
 export function getEnvFile({ database, orm, plugins }: Preferences) {
 	const envs = [];
 
-	if (orm !== "None" && !(database === "SQLite" && orm === "Drizzle"))
-		envs.push(`DATABASE_URL="${connectionURLExamples[database]}"`);
+	if (orm !== "None") {
+		if (database === "SQLite" && orm === "Drizzle")
+			envs.push(`DATABASE_URL="./src/db/sqlite.db"`);
+		else envs.push(`DATABASE_URL="${connectionURLExamples[database]}"`);
+	}
 
 	if (plugins.includes("JWT"))
 		envs.push(`JWT_SECRET="${randomBytes(12).toString("hex")}"`);

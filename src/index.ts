@@ -6,7 +6,6 @@ import minimist from "minimist";
 import task from "tasuku";
 import {
 	getDBIndex,
-	getDBMigrate,
 	getDrizzleConfig,
 	getElysiaIndex,
 	getEnvFile,
@@ -150,7 +149,7 @@ createOrFindDir(projectDir).then(async () => {
 									"plugin:drizzle/recommended",
 								],
 								plugins: ["drizzle"],
-						  }
+							}
 						: { extends: ["standard-with-typescript"] },
 					null,
 					2,
@@ -193,12 +192,8 @@ createOrFindDir(projectDir).then(async () => {
 					preferences.database === "PostgreSQL"
 						? `// import { pgTable } from "drizzle-orm/pg-core"`
 						: preferences.database === "MySQL"
-						  ? `// import { mysqlTable } from "drizzle-orm/mysql-core"`
-						  : `// import { sqliteTable } from "drizzle-orm/sqlite-core"`,
-				);
-				await fs.writeFile(
-					projectDir + "/src/db/migrate.ts",
-					getDBMigrate(preferences),
+							? `// import { mysqlTable } from "drizzle-orm/mysql-core"`
+							: `// import { sqliteTable } from "drizzle-orm/sqlite-core"`,
 				);
 				if (preferences.database === "SQLite")
 					await fs.writeFile(projectDir + "/src/db/sqlite.db", "");
