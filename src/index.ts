@@ -26,7 +26,7 @@ const preferences = new Preferences();
 
 const args = minimist(process.argv.slice(2));
 
-const packageManager = detectPackageManager();
+const packageManager = args.pm || detectPackageManager();
 if (packageManager !== "bun") throw new Error("Now supported only bun");
 
 const dir = args._.at(0);

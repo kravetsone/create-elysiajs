@@ -9,7 +9,7 @@ export function detectPackageManager() {
 
 	if (!userAgent)
 		throw new Error(
-			`Package manager was not detected. Please specify template with "--template bun"`,
+			`Package manager was not detected. Please specify template with "--pm bun"`,
 		);
 
 	return userAgent.split(" ")[0].split("/")[0] as PackageManager;
