@@ -35,8 +35,8 @@ export function getPackageJson({
 		sample.scripts.lint = `bunx eslint \"src/**/*.ts\"`;
 		sample.scripts["lint:fix"] = `bunx eslint \"src/**/*.ts\" --fix`;
 		sample.devDependencies.eslint = dependencies.eslint;
-		sample.devDependencies["eslint-config-standard-with-typescript"] =
-			dependencies["eslint-config-standard-with-typescript"];
+		sample.devDependencies["eslint-config-love"] =
+			dependencies["eslint-config-love"];
 		sample.devDependencies["eslint-plugin-promise"] =
 			dependencies["eslint-plugin-promise"];
 		sample.devDependencies["eslint-plugin-import"] =
