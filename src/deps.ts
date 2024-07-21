@@ -4,7 +4,7 @@ export const dependencies = {
 	"@types/bun": "^1.1.3",
 	"@biomejs/biome": "^1.7.3",
 	eslint: "^9.3.0",
-	"eslint-config-love": "^43.1.0",
+	"eslint-config-love": "^56.0.0",
 	"eslint-plugin-promise": "^6.1.1",
 	"eslint-plugin-import": "^2.29.1",
 	"eslint-plugin-n": "^17.7.0",
