@@ -13,16 +13,14 @@ const connectionURLExamples: Record<
 		"postgresql://root:mypassword@localhost:26257/mydb?schema=public",
 	MongoDB:
 		"mongodb+srv://root:mypassword@cluster0.ab1cd.mongodb.net/mydb?retryWrites=true&w=majority",
-	SQLite: "file:./src/db/sqlite.db",
+	SQLite: "file:./sqlite.db",
 };
 
 export function getEnvFile({ database, orm, plugins }: Preferences) {
 	const envs = [];
 
 	if (orm !== "None") {
-		if (database === "SQLite" && orm === "Drizzle")
-			envs.push(`DATABASE_URL="./src/db/sqlite.db"`);
-		else envs.push(`DATABASE_URL="${connectionURLExamples[database]}"`);
+		envs.push(`DATABASE_URL="${connectionURLExamples[database]}"`);
 	}
 
 	if (plugins.includes("JWT"))

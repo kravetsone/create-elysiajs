@@ -5,6 +5,7 @@ import { prompt } from "enquirer";
 import minimist from "minimist";
 import task from "tasuku";
 import {
+	generateEslintConfig,
 	getDBIndex,
 	getDrizzleConfig,
 	getElysiaIndex,
@@ -39,64 +40,65 @@ const projectDir = path.resolve(process.cwd() + "/", dir);
 createOrFindDir(projectDir).then(async () => {
 	preferences.dir = dir;
 	preferences.packageManager = packageManager;
-	const { linter } = await prompt<{ linter: PreferencesType["linter"] }>({
-		type: "select",
-		name: "linter",
-		message: "Select linters/formatters:",
-		choices: ["None", "ESLint", "Biome"],
-	});
-	preferences.linter = linter;
-
-	const { orm } = await prompt<{ orm: PreferencesType["orm"] }>({
-		type: "select",
-		name: "orm",
-		message: "Select ORM/Query Builder:",
-		choices: ["None", "Prisma", "Drizzle"],
-	});
-	preferences.orm = orm;
-	if (orm === "Prisma") {
-		const { database } = await prompt<{
-			database: PreferencesType["database"];
-		}>({
+	if (!args.monorepo) {
+		const { linter } = await prompt<{ linter: PreferencesType["linter"] }>({
 			type: "select",
-			name: "database",
-			message: "Select DataBase for Prisma:",
-			choices: [
-				"PostgreSQL",
-				"MySQL",
-				"MongoDB",
-				"SQLite",
-				"SQLServer",
-				"CockroachDB",
-			],
+			name: "linter",
+			message: "Select linters/formatters:",
+			choices: ["None", "ESLint", "Biome"],
 		});
-		preferences.database = database;
+		preferences.linter = linter;
+
+		const { orm } = await prompt<{ orm: PreferencesType["orm"] }>({
+			type: "select",
+			name: "orm",
+			message: "Select ORM/Query Builder:",
+			choices: ["None", "Prisma", "Drizzle"],
+		});
+		preferences.orm = orm;
+		if (orm === "Prisma") {
+			const { database } = await prompt<{
+				database: PreferencesType["database"];
+			}>({
+				type: "select",
+				name: "database",
+				message: "Select DataBase for Prisma:",
+				choices: [
+					"PostgreSQL",
+					"MySQL",
+					"MongoDB",
+					"SQLite",
+					"SQLServer",
+					"CockroachDB",
+				],
+			});
+			preferences.database = database;
+		}
+		if (orm === "Drizzle") {
+			const { database } = await prompt<{
+				database: "PostgreSQL" | "MySQL" | "SQLite";
+			}>({
+				type: "select",
+				name: "database",
+				message: "Select DataBase for Drizzle:",
+				choices: ["PostgreSQL", "MySQL", "SQLite"],
+			});
+			const driversMap: Record<typeof database, PreferencesType["driver"][]> = {
+				PostgreSQL: ["Postgres.JS", "node-postgres"],
+				MySQL: ["MySQL 2"],
+				SQLite: ["Bun SQLite"],
+			};
+
+			const { driver } = await prompt<{ driver: PreferencesType["driver"] }>({
+				type: "select",
+				name: "driver",
+				message: `Select driver for ${database}:`,
+				choices: driversMap[database],
+			});
+			preferences.database = database;
+			preferences.driver = driver;
+		}
 	}
-	if (orm === "Drizzle") {
-		const { database } = await prompt<{
-			database: "PostgreSQL" | "MySQL" | "SQLite";
-		}>({
-			type: "select",
-			name: "database",
-			message: "Select DataBase for Drizzle:",
-			choices: ["PostgreSQL", "MySQL", "SQLite"],
-		});
-		const driversMap: Record<typeof database, PreferencesType["driver"][]> = {
-			PostgreSQL: ["Postgres.JS", "node-postgres"],
-			MySQL: ["MySQL 2"],
-			SQLite: ["Bun SQLite"],
-		};
-
-		const { driver } = await prompt<{ driver: PreferencesType["driver"] }>({
-			type: "select",
-			name: "driver",
-			message: `Select driver for ${database}:`,
-			choices: driversMap[database],
-		});
-		preferences.database = database;
-		preferences.driver = driver;
-	}
-
 	const { plugins } = await prompt<{
 		plugins: PreferencesType["plugins"];
 	}>({
@@ -116,44 +118,33 @@ createOrFindDir(projectDir).then(async () => {
 		] as PreferencesType["plugins"],
 	});
 	preferences.plugins = plugins;
-
-	const { others } = await prompt<{ others: PreferencesType["others"] }>({
-		type: "multiselect",
-		name: "others",
-		message: "Select others tools: (Space to select, Enter to continue)",
-		choices: ["Husky"],
-	});
-	preferences.others = others;
-
-	if (!others.includes("Husky")) {
-		const { git } = await prompt<{ git: boolean }>({
-			type: "toggle",
-			name: "git",
-			initial: "yes",
-			message: "Create an empty Git repository?",
+	if (!args.monorepo) {
+		const { others } = await prompt<{ others: PreferencesType["others"] }>({
+			type: "multiselect",
+			name: "others",
+			message: "Select others tools: (Space to select, Enter to continue)",
+			choices: ["Husky"],
 		});
-		preferences.git = git;
-	} else preferences.git = true;
+		preferences.others = others;
+
+		if (!others.includes("Husky")) {
+			const { git } = await prompt<{ git: boolean }>({
+				type: "toggle",
+				name: "git",
+				initial: "yes",
+				message: "Create an empty Git repository?",
+			});
+			preferences.git = git;
+		} else preferences.git = true;
+	}
 
 	await task("Generating a template...", async ({ setTitle }) => {
 		if (plugins.includes("Static")) await fs.mkdir(projectDir + "/public");
 
-		if (linter === "ESLint")
+		if (preferences.linter === "ESLint")
 			await fs.writeFile(
-				projectDir + "/.eslintrc",
-				JSON.stringify(
-					orm === "Drizzle"
-						? {
-								extends: [
-									"standard-with-typescript",
-									"plugin:drizzle/recommended",
-								],
-								plugins: ["drizzle"],
-							}
-						: { extends: ["standard-with-typescript"] },
-					null,
-					2,
-				),
+				`${projectDir}/eslint.config.mjs`,
+				generateEslintConfig(preferences),
 			);
 
 		await fs.writeFile(
@@ -175,14 +166,14 @@ createOrFindDir(projectDir).then(async () => {
 		if (plugins.includes("Autoload"))
 			await fs.mkdir(projectDir + "/src/routes");
 
-		if (orm !== "None") {
+		if (preferences.orm !== "None") {
 			await fs.mkdir(projectDir + "/src/db");
 			await fs.writeFile(
 				projectDir + "/src/db/index.ts",
 				getDBIndex(preferences),
 			);
 
-			if (orm === "Drizzle") {
+			if (preferences.orm === "Drizzle") {
 				await fs.writeFile(
 					projectDir + "/drizzle.config.ts",
 					getDrizzleConfig(preferences),
@@ -196,7 +187,7 @@ createOrFindDir(projectDir).then(async () => {
 							: `// import { sqliteTable } from "drizzle-orm/sqlite-core"`,
 				);
 				if (preferences.database === "SQLite")
-					await fs.writeFile(projectDir + "/src/db/sqlite.db", "");
+					await fs.writeFile(projectDir + "/sqlite.db", "");
 			}
 		}
 
