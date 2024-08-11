@@ -25,7 +25,7 @@ export const dependencies = {
 	"@elysiajs/jwt": "^1.0.2",
 	"@elysiajs/server-timing": "^1.0.2",
 	"@elysiajs/static": "^1.1.0",
-	"@elysiajs/swagger": "^1.0.5",
+	"@elysiajs/swagger": "^1.1.0",
 	"elysia-autoload": "^1.1.0",
 	"@bogeychan/elysia-logger": "^0.1.1",
 };
