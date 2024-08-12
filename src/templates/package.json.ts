@@ -94,6 +94,11 @@ export function getPackageJson({
 		sample.dependencies["@bogeychan/elysia-logger"] =
 			dependencies["@bogeychan/elysia-logger"];
 
+	if (plugins.includes("Oauth 2.0")) {
+		sample.dependencies.artic = dependencies.artic;
+		sample.dependencies["elysia-oauth2"] = dependencies["elysia-oauth2"];
+	}
+
 	if (isMonorepo)
 		sample.dependencies["@gramio/init-data"] =
 			dependencies["@gramio/init-data"];

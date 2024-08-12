@@ -18,6 +18,10 @@ export function getElysiaIndex({ orm, driver, plugins }: Preferences) {
 		elysiaImports.push(`import { swagger } from "@elysiajs/swagger"`);
 		elysiaPlugins.push(".use(swagger())");
 	}
+	if (plugins.includes("Oauth 2.0")) {
+		elysiaImports.push(`import { oauth2 } from "elysia-oauth2"`);
+		elysiaPlugins.push(".use(oauth2())");
+	}
 	if (plugins.includes("Bearer")) {
 		elysiaImports.push(`import { bearer } from "@elysiajs/bearer"`);
 		elysiaPlugins.push(".use(bearer())");

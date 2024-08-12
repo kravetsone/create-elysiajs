@@ -25,4 +25,6 @@ export const dependencies = {
 	"@bogeychan/elysia-logger": "^0.1.1",
 	"@antfu/eslint-config": "^2.25.1",
 	"@gramio/init-data": "^0.0.1",
+	"elysia-oauth2": "^1.3.0",
+	artic: "^1.9.2",
 };

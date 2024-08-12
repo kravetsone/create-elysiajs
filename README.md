@@ -23,6 +23,7 @@ bun create elysiajs <dir>
 -   -   [Swagger](https://elysiajs.com/plugins/swagger.html)
 -   -   [JWT](https://elysiajs.com/plugins/jwt.html)
 -   -   [Autoload](https://github.com/kravetsone/elysia-autoload)
+-   -   [Oauth 2.0](https://github.com/kravetsone/elysia-oauth2)
 -   -   [HTML/JSX](https://elysiajs.com/plugins/html.html)
 -   -   [Logger](https://github.com/bogeychan/elysia-logger)
 -   -   [Static](https://elysiajs.com/plugins/static.html)
