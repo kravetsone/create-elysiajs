@@ -9,6 +9,7 @@ import {
 	getDBIndex,
 	getDrizzleConfig,
 	getElysiaIndex,
+	getElysiaMonorepo,
 	getEnvFile,
 	getInstallCommands,
 	getPackageJson,
@@ -40,6 +41,8 @@ const projectDir = path.resolve(process.cwd() + "/", dir);
 createOrFindDir(projectDir).then(async () => {
 	preferences.dir = dir;
 	preferences.packageManager = packageManager;
+	preferences.isMonorepo = !!args.monorepo;
+
 	if (!args.monorepo) {
 		const { linter } = await prompt<{ linter: PreferencesType["linter"] }>({
 			type: "select",
@@ -163,6 +166,9 @@ createOrFindDir(projectDir).then(async () => {
 			projectDir + "/src/index.ts",
 			getElysiaIndex(preferences),
 		);
+		if (preferences.isMonorepo)
+			await fs.writeFile(projectDir + "/src/services.ts", getElysiaMonorepo());
+
 		if (plugins.includes("Autoload"))
 			await fs.mkdir(projectDir + "/src/routes");
 

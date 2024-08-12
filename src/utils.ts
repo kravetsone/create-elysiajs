@@ -46,6 +46,8 @@ export class Preferences {
 		| "Bearer"
 		| "Server Timing"
 	)[] = [];
+	// integration with create-gramio
+	isMonorepo = false;
 }
 
 export type PreferencesType = InstanceType<typeof Preferences>;

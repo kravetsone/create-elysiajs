@@ -9,6 +9,7 @@ export function getPackageJson({
 	driver,
 	others,
 	plugins,
+	isMonorepo,
 }: Preferences) {
 	const sample = {
 		name: dir,
@@ -35,15 +36,8 @@ export function getPackageJson({
 		sample.scripts.lint = `bunx eslint \"src/**/*.ts\"`;
 		sample.scripts["lint:fix"] = `bunx eslint \"src/**/*.ts\" --fix`;
 		sample.devDependencies.eslint = dependencies.eslint;
-		sample.devDependencies["eslint-config-love"] =
-			dependencies["eslint-config-love"];
-		sample.devDependencies["eslint-plugin-promise"] =
-			dependencies["eslint-plugin-promise"];
-		sample.devDependencies["eslint-plugin-import"] =
-			dependencies["eslint-plugin-import"];
-		sample.devDependencies["eslint-plugin-n"] = dependencies["eslint-plugin-n"];
-		sample.devDependencies["@typescript-eslint/eslint-plugin"] =
-			dependencies["@typescript-eslint/eslint-plugin"];
+		sample.devDependencies["@antfu/eslint-config"] =
+			dependencies["@antfu/eslint-config"];
 		if (orm === "Drizzle")
 			sample.devDependencies["eslint-plugin-drizzle"] =
 				dependencies["eslint-plugin-drizzle"];
@@ -99,6 +93,10 @@ export function getPackageJson({
 	if (plugins.includes("Logger"))
 		sample.dependencies["@bogeychan/elysia-logger"] =
 			dependencies["@bogeychan/elysia-logger"];
+
+	if (isMonorepo)
+		sample.dependencies["@gramio/init-data"] =
+			dependencies["@gramio/init-data"];
 
 	return JSON.stringify(sample, null, 2);
 }

@@ -75,9 +75,31 @@ export function getElysiaIndex({ orm, driver, plugins }: Preferences) {
 						: "await client.connect()",
 					`console.log("🗄️ Database was connected!")`,
 					"",
-			  ]
+				]
 			: "\n"),
 		"app.listen(process.env.PORT as string, () => console.log(`🦊 Server started at ${app.server?.url.origin}`))",
 		plugins.includes("Autoload") ? "\nexport type ElysiaApp = typeof app" : "",
 	].join("\n");
+}
+
+export function getElysiaMonorepo() {
+	return `import { validateAndParseInitData } from "@gramio/init-data";
+import { Elysia } from "elysia";
+
+export const authElysia = new Elysia()
+    .derive(({ headers, error }) => {
+        const initData = headers["x-init-data"];
+        if (!initData) return error("Unauthorized");
+
+        const result = validateAndParseInitData(
+            initData,
+            process.env.TOKEN as string
+        );
+        if (!result || !result.user) return error("Unauthorized");
+
+        return {
+            user: result.user,
+        };
+    })
+    .as("plugin");`;
 }
