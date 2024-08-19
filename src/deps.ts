@@ -26,5 +26,5 @@ export const dependencies = {
 	"@antfu/eslint-config": "^2.25.1",
 	"@gramio/init-data": "^0.0.1",
 	"elysia-oauth2": "^1.3.0",
-	artic: "^1.9.2",
+	"artic": "^2.2.5",
 };
