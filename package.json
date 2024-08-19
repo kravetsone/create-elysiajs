@@ -1,6 +1,6 @@
 {
 	"name": "create-elysiajs",
-	"version": "1.4.0",
+	"version": "1.4.1",
 	"description": "Scaffolding your Elysia project with the environment with easy!",
 	"author": "kravetsone",
 	"repository": {

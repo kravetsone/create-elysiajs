@@ -10,12 +10,16 @@ export default antfu(
   },
   {
         files: ["**/*.js", "**/*.ts"],`,
-		orm === "Drizzle" &&
-			`plugins: {
+		orm === "Drizzle"
+			? `plugins: {
 			drizzle,
-		},
+		},`
+			: "",
+		`
 	},
 );
 `,
-	].join("\n");
+	]
+		.filter((x) => x)
+		.join("\n");
 }
