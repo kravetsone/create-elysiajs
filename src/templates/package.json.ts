@@ -48,7 +48,7 @@ export function getPackageJson({
 		sample.dependencies["drizzle-orm"] = dependencies["drizzle-orm"];
 		sample.devDependencies["drizzle-kit"] = dependencies["drizzle-kit"];
 
-		sample.scripts.generate = "bunx drizzle-kit generate";
+		sample.scripts.["migration:generate"] = "bunx drizzle-kit generate";
 		sample.scripts["migration:push"] = "bunx drizzle-kit push";
 		sample.scripts.migrate = "bun migration:generate && bun migration:push";
 
