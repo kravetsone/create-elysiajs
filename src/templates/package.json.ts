@@ -47,11 +47,6 @@ export function getPackageJson({
 	if (orm === "Drizzle") {
 		sample.dependencies["drizzle-orm"] = dependencies["drizzle-orm"];
 		sample.devDependencies["drizzle-kit"] = dependencies["drizzle-kit"];
-
-		sample.scripts.["migration:generate"] = "bunx drizzle-kit generate";
-		sample.scripts["migration:push"] = "bunx drizzle-kit push";
-		sample.scripts.migrate = "bun migration:generate && bun migration:push";
-
 		if (driver === "node-postgres") {
 			sample.dependencies.pg = dependencies.pg;
 			sample.devDependencies["@types/pg"] = dependencies["@types/pg"];
@@ -62,6 +57,10 @@ export function getPackageJson({
 		if (driver === "MySQL 2") {
 			sample.dependencies.mysql2 = dependencies.mysql2;
 		}
+		sample.scripts.generate = "bunx drizzle-kit generate";
+		sample.scripts.push = "bunx drizzle-kit push";
+		sample.scripts.migrate = "bunx drizzle-kit migrate";
+		sample.scripts.studio = "bunx drizzle-kit studio";
 	}
 
 	if (others.includes("Husky")) {
