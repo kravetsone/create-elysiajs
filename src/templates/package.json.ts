@@ -95,7 +95,7 @@ export function getPackageJson({
 			dependencies["@bogeychan/elysia-logger"];
 
 	if (plugins.includes("Oauth 2.0")) {
-		sample.dependencies.artic = dependencies.artic;
+		sample.dependencies.arctic = dependencies.arctic;
 		sample.dependencies["elysia-oauth2"] = dependencies["elysia-oauth2"];
 	}
 
