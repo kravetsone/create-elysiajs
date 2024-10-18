@@ -3,7 +3,7 @@ export const dependencies = {
 	typescript: "^5.5.4",
 	"@types/bun": "^1.1.6",
 	"@biomejs/biome": "^1.8.3",
-	eslint: "^9.9.0",
+	"eslint": "^9.13.0",
 	"eslint-plugin-drizzle": "^0.2.3",
 	prisma: "^5.18.0",
 	"drizzle-orm": "^0.33.0",
