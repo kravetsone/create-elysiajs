@@ -1,5 +1,12 @@
 # create-elysiajs
 
+<div align="center">
+
+[![npm](https://img.shields.io/npm/v/create-elysiajs?logo=npm&style=flat&labelColor=000&color=3b82f6)](https://www.npmjs.org/package/create-elysiajs)
+[![npm downloads](https://img.shields.io/npm/dw/create-elysiajs?logo=npm&style=flat&labelColor=000&color=3b82f6)](https://www.npmjs.org/package/create-elysiajs)
+
+</div>
+
 ## Scaffolding your [Elysia](https://elysiajs.com/) project with the environment with easy!
 
 ### With [bun](https://bun.sh/)
@@ -40,4 +47,3 @@ bun create elysiajs <dir>
 > When you select [ESLint](https://eslint.org/) and [Drizzle](https://orm.drizzle.team/), you get [eslint-plugin-drizzle](https://orm.drizzle.team/docs/eslint-plugin)
 >
 > When you select [Husky](https://typicode.github.io/husky/) and one of the [linters](#supported-environment) - the `pre-commit` hook will contain the command `lint:fix`
-
