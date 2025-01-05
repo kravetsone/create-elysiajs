@@ -4,6 +4,13 @@ import { promisify } from "node:util";
 
 export type PackageManager = "bun" | "npm" | "yarn" | "pnpm";
 
+const nodeMajorVersion = process?.versions?.node?.split(".")[0];
+
+if (nodeMajorVersion && Number(nodeMajorVersion) < 22)
+	console.warn(
+		`Node.js version ${process?.versions?.node} is not recommended for this template. Please upgrade to Node.js 22 or higher.`,
+	);
+
 export function detectPackageManager() {
 	const userAgent = process.env.npm_config_user_agent;
 

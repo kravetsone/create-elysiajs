@@ -21,7 +21,7 @@ export function getDockerfile({ packageManager, orm }: Preferences) {
 		return dedent /* Dockerfile */`
 # use the official Bun image
 # see all versions at https://hub.docker.com/r/oven/bun/tags
-FROM oven/bun:1.39 AS base
+FROM oven/bun:${process.versions.bun ?? "1.1.41"} AS base
 WORKDIR /usr/src/app
 
 # install dependencies into temp directory
@@ -60,7 +60,7 @@ ENTRYPOINT [ "bun", "start" ]`;
 	return dedent /* Dockerfile */`
 # Use the official Node.js 22 image.
 # See https://hub.docker.com/_/node for more information.
-FROM node:22 AS base
+FROM node:${process?.versions?.node ?? "22.12"} AS base
 
 # Create app directory
 WORKDIR /usr/src/app
