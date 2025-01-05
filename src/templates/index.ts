@@ -36,19 +36,19 @@ export function getIndex({ others, orm, driver }: PreferencesType) {
 	// gracefulShutdownTasks.push("await bot.stop()");
 
 	if (others.includes("Posthog")) {
-		imports.push(`import { posthog } from "./posthog.ts"`);
+		imports.push(`import { posthog } from "./services/posthog.ts"`);
 		gracefulShutdownTasks.push("await posthog.shutdown()");
 	}
 
 	if (isShouldConnectToDB) {
-		imports.push(`import { ${dbExportedMap[orm]} } from "./db/index.ts"}"`);
+		imports.push(`import { ${dbExportedMap[orm]} } from "./db/index.ts"`);
 		startUpTasks.push(dedent /* ts */`
             ${orm === "Prisma" ? "await prisma.$connect()" : "await client.connect()"}
             console.log("🗄️ Database was connected!")`);
 	}
 
 	startUpTasks.push(/*ts*/ `
-    app.listen(config.PORT as string, () => console.log(\`🦊 Server started at \${app.server?.url.origin}\`))
+    app.listen(config.PORT, () => console.log(\`🦊 Server started at \${app.server?.url.origin}\`))
     `);
 	// 	startUpTasks.push(dedent /* tss */`
 	//         if (config.NODE_ENV === "production")

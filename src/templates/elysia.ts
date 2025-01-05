@@ -4,7 +4,7 @@ export function getElysiaIndex({ orm, driver, plugins }: Preferences) {
 	const elysiaPlugins: string[] = [];
 	const elysiaImports: string[] = [
 		`import { Elysia } from "elysia"`,
-		`import { config } from "gramio"`,
+		`import { config } from "./config.ts"`,
 	];
 
 	if (plugins.includes("Logger")) {
@@ -34,7 +34,7 @@ export function getElysiaIndex({ orm, driver, plugins }: Preferences) {
 	}
 	if (plugins.includes("JWT")) {
 		elysiaImports.push(`import { jwt } from "@elysiajs/jwt"`);
-		elysiaPlugins.push(".use(jwt({ secret: config.JWT_SECRET as string }))");
+		elysiaPlugins.push(".use(jwt({ secret: config.JWT_SECRET }))");
 	}
 	if (plugins.includes("Server Timing")) {
 		elysiaImports.push(
@@ -54,7 +54,7 @@ export function getElysiaIndex({ orm, driver, plugins }: Preferences) {
 	return [
 		...elysiaImports,
 		"",
-		"const app = new Elysia()",
+		"export const app = new Elysia()",
 		...elysiaPlugins,
 		plugins.includes("Autoload") ? "\nexport type ElysiaApp = typeof app" : "",
 	].join("\n");
@@ -63,7 +63,7 @@ export function getElysiaIndex({ orm, driver, plugins }: Preferences) {
 export function getElysiaMonorepo() {
 	return `import { validateAndParseInitData } from "@gramio/init-data";
 import { Elysia } from "elysia";
-import { config } from "./config";
+import { config } from "./config.ts";
 
 export const authElysia = new Elysia()
     .derive(({ headers, error }) => {

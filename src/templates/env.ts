@@ -56,7 +56,13 @@ export function getEnvFile(
 	return envs.join("\n");
 }
 
-export function getConfigFile({ orm, redis, others }: PreferencesType) {
+export function getConfigFile({
+	orm,
+	redis,
+	others,
+	plugins,
+	locks,
+}: PreferencesType) {
 	const envs: string[] = [];
 
 	envs.push(`PORT: env.get("PORT").default(3000).asPortNumber()`);
@@ -82,6 +88,18 @@ export function getConfigFile({ orm, redis, others }: PreferencesType) {
 			`POSTHOG_HOST: env.get("POSTHOG_HOST").default("localhost").asString()`,
 		);
 	}
+
+	if (locks) {
+		const stores = ["memory"];
+		if (redis) stores.push("redis");
+
+		envs.push(
+			`LOCK_STORE: env.get("LOCK_STORE").default("${redis ? "redis" : "memory"}").asEnum(${JSON.stringify(stores)})`,
+		);
+	}
+
+	if (plugins.includes("JWT"))
+		envs.push(`JWT_SECRET: env.get("JWT_SECRET").required().asString()`);
 
 	return dedent /* ts */`
 	import env from "env-var";

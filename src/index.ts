@@ -23,7 +23,10 @@ import {
 	getDockerCompose,
 	getDockerfile,
 } from "./templates/docker";
-import { getPosthogIndex } from "./templates/posthog";
+import { getJobifyFile } from "./templates/services/jobify";
+import { getLocksFile } from "./templates/services/locks";
+import { getPosthogIndex } from "./templates/services/posthog";
+import { getRedisFile } from "./templates/services/redis";
 import { getVSCodeExtensions, getVSCodeSettings } from "./templates/vscode";
 import {
 	Preferences,
@@ -164,14 +167,27 @@ createOrFindDir(projectDir)
 				preferences.git = git;
 			} else preferences.git = true;
 
-			const { redis } = await prompt<{ redis: boolean }>({
+			const { locks } = await prompt<{ locks: boolean }>({
 				type: "toggle",
-				name: "redis",
+				name: "locks",
 				initial: "yes",
-				message: "Do you want to use Redis?",
+				message: "Do you want to use Locks to prevent race conditions?",
 			});
 
-			preferences.redis = redis;
+			preferences.locks = locks;
+
+			if (others.includes("Jobify")) {
+				preferences.redis = true;
+			} else {
+				const { redis } = await prompt<{ redis: boolean }>({
+					type: "toggle",
+					name: "redis",
+					initial: "yes",
+					message: "Do you want to use Redis?",
+				});
+
+				preferences.redis = redis;
+			}
 
 			const { docker } = await prompt<{ docker: boolean }>({
 				type: "toggle",
@@ -265,12 +281,35 @@ createOrFindDir(projectDir)
 				}
 			}
 
+			await fs.mkdir(projectDir + "/src/services");
+
 			if (preferences.others.includes("Posthog")) {
-				await fs.writeFile(`${projectDir}/src/posthog.ts`, getPosthogIndex());
+				await fs.writeFile(
+					`${projectDir}/src/services/posthog.ts`,
+					getPosthogIndex(),
+				);
 			}
 
 			if (preferences.others.includes("Jobify")) {
+				await fs.writeFile(
+					`${projectDir}/src/services/jobify.ts`,
+					getJobifyFile(),
+				);
 				await fs.mkdir(projectDir + "/src/jobs");
+			}
+
+			if (preferences.redis) {
+				await fs.writeFile(
+					`${projectDir}/src/services/redis.ts`,
+					getRedisFile(),
+				);
+			}
+
+			if (preferences.locks) {
+				await fs.writeFile(
+					`${projectDir}/src/services/locks.ts`,
+					getLocksFile(preferences),
+				);
 			}
 
 			if (preferences.docker) {

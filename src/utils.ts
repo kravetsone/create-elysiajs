@@ -61,6 +61,7 @@ export class Preferences {
 	docker = false;
 	vscode = false;
 	redis = false;
+	locks = false;
 }
 
 export type PreferencesType = InstanceType<typeof Preferences>;

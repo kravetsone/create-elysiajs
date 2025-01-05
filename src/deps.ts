@@ -32,4 +32,6 @@ export const dependencies = {
 	"posthog-node": "^4.3.2",
 	jobify: "^0.1.6",
 	ioredis: "^5.4.2",
+
+	"@verrou/core": "^0.5.1",
 };

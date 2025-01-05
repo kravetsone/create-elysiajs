@@ -11,6 +11,8 @@ export function getPackageJson({
 	others,
 	plugins,
 	isMonorepo,
+	locks,
+	redis,
 }: Preferences) {
 	const sample = {
 		name: projectName,
@@ -112,15 +114,18 @@ export function getPackageJson({
 		sample.dependencies["elysia-oauth2"] = dependencies["elysia-oauth2"];
 	}
 
-	// if (redis) sample.dependencies.ioredis = dependencies.ioredis;
+	if (redis) sample.dependencies.ioredis = dependencies.ioredis;
 
 	if (others.includes("Jobify")) {
-		sample.dependencies.ioredis = dependencies.ioredis;
 		sample.dependencies.jobify = dependencies.jobify;
 	}
 
 	if (others.includes("Posthog")) {
 		sample.dependencies["posthog-node"] = dependencies["posthog-node"];
+	}
+
+	if (locks) {
+		sample.dependencies["@verrou/core"] = dependencies["@verrou/core"];
 	}
 
 	if (isMonorepo)
