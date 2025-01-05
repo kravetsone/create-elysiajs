@@ -253,8 +253,9 @@ createOrFindDir(projectDir)
 					getElysiaMonorepo(),
 				);
 
-			if (plugins.includes("Autoload"))
-				await fs.mkdir(projectDir + "/src/routes");
+			// if (plugins.includes("Autoload"))
+			await fs.mkdir(projectDir + "/src/routes");
+			await fs.mkdir(projectDir + "/src/plugins");
 
 			if (preferences.orm !== "None") {
 				await fs.mkdir(projectDir + "/src/db");
