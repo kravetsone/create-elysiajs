@@ -1,8 +1,9 @@
 import { dependencies } from "../deps";
-import type { Preferences } from "../utils";
+import { type Preferences, pmExecuteMap, pmRunMap } from "../utils";
 
 export function getPackageJson({
 	dir,
+	projectName,
 	linter,
 	packageManager,
 	orm,
@@ -12,29 +13,39 @@ export function getPackageJson({
 	isMonorepo,
 }: Preferences) {
 	const sample = {
-		name: dir,
+		name: projectName,
+		type: "module",
 		scripts: {
-			dev: "bun  --watch src/index.ts",
+			dev:
+				packageManager === "bun"
+					? "bun --watch src/index.ts"
+					: `${pmExecuteMap[packageManager]} tsx watch --env-file .env src/index.ts`,
+			start:
+				packageManager === "bun"
+					? "NODE_ENV=production bun run ./src/index.ts"
+					: `NODE_ENV=production ${pmExecuteMap[packageManager]} tsx --env-file=.env --env-file=.env.production src/index.ts`,
 		} as Record<string, string>,
 		dependencies: {
 			elysia: dependencies.elysia,
+			"env-var": dependencies["env-var"],
 		} as Record<keyof typeof dependencies, string>,
 		devDependencies: {
 			typescript: dependencies.typescript,
 		} as Record<keyof typeof dependencies, string>,
 	};
 
-	if (packageManager === "bun")
-		sample.devDependencies["@types/bun"] = dependencies["@types/bun"];
+	// if (packageManager === "bun")
+	sample.devDependencies["@types/bun"] = dependencies["@types/bun"];
 
 	if (linter === "Biome") {
-		sample.scripts.lint = "bunx @biomejs/biome check src";
-		sample.scripts["lint:fix"] = "bun lint --apply";
+		sample.scripts.lint = `${pmExecuteMap[packageManager]} @biomejs/biome check src`;
+		sample.scripts["lint:fix"] = `${pmRunMap[packageManager]} lint --apply`;
 		sample.devDependencies["@biomejs/biome"] = dependencies["@biomejs/biome"];
 	}
 	if (linter === "ESLint") {
-		sample.scripts.lint = `bunx eslint \"src/**/*.ts\"`;
-		sample.scripts["lint:fix"] = `bunx eslint \"src/**/*.ts\" --fix`;
+		sample.scripts.lint = `${pmExecuteMap[packageManager]} eslint \"src/**/*.ts\"`;
+		sample.scripts["lint:fix"] =
+			`${pmExecuteMap[packageManager]} eslint \"src/**/*.ts\" --fix`;
 		sample.devDependencies.eslint = dependencies.eslint;
 		sample.devDependencies["@antfu/eslint-config"] =
 			dependencies["@antfu/eslint-config"];
@@ -43,7 +54,10 @@ export function getPackageJson({
 				dependencies["eslint-plugin-drizzle"];
 	}
 
-	if (orm === "Prisma") sample.devDependencies.prisma = dependencies.prisma;
+	if (orm === "Prisma") {
+		sample.devDependencies.prisma = dependencies.prisma;
+		sample.dependencies["@prisma/client"] = dependencies["@prisma/client"];
+	}
 	if (orm === "Drizzle") {
 		sample.dependencies["drizzle-orm"] = dependencies["drizzle-orm"];
 		sample.devDependencies["drizzle-kit"] = dependencies["drizzle-kit"];
@@ -57,10 +71,10 @@ export function getPackageJson({
 		if (driver === "MySQL 2") {
 			sample.dependencies.mysql2 = dependencies.mysql2;
 		}
-		sample.scripts.generate = "bunx drizzle-kit generate";
-		sample.scripts.push = "bunx drizzle-kit push";
-		sample.scripts.migrate = "bunx drizzle-kit migrate";
-		sample.scripts.studio = "bunx drizzle-kit studio";
+		sample.scripts.generate = `${pmExecuteMap[packageManager]} drizzle-kit generate`;
+		sample.scripts.push = `${pmExecuteMap[packageManager]} drizzle-kit push`;
+		sample.scripts.migrate = `${pmExecuteMap[packageManager]} drizzle-kit migrate`;
+		sample.scripts.studio = `${pmExecuteMap[packageManager]} drizzle-kit studio`;
 	}
 
 	if (others.includes("Husky")) {
@@ -96,6 +110,17 @@ export function getPackageJson({
 	if (plugins.includes("Oauth 2.0")) {
 		sample.dependencies.arctic = dependencies.arctic;
 		sample.dependencies["elysia-oauth2"] = dependencies["elysia-oauth2"];
+	}
+
+	// if (redis) sample.dependencies.ioredis = dependencies.ioredis;
+
+	if (others.includes("Jobify")) {
+		sample.dependencies.ioredis = dependencies.ioredis;
+		sample.dependencies.jobify = dependencies.jobify;
+	}
+
+	if (others.includes("Posthog")) {
+		sample.dependencies["posthog-node"] = dependencies["posthog-node"];
 	}
 
 	if (isMonorepo)

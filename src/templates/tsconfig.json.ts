@@ -14,13 +14,15 @@ export function getTSConfig({ plugins }: Preferences) {
 				allowSyntheticDefaultImports: true,
 				rootDir: "./src",
 				noEmit: true,
+				allowImportingTsExtensions: true,
+				noUncheckedIndexedAccess: true,
 				...(plugins.includes("HTML/JSX")
 					? {
 							jsx: "react",
 							jsxFactory: "Html.createElement",
 							jsxFragmentFactory: "Html.Fragment",
 							plugins: [{ name: "@kitajs/ts-html-plugin" }],
-					  }
+						}
 					: {}),
 			},
 			include: ["src"],

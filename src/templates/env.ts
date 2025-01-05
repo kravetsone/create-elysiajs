@@ -1,11 +1,12 @@
 import { randomBytes } from "node:crypto";
-import type { Preferences } from "../utils";
+import dedent from "ts-dedent";
+import type { Preferences, PreferencesType } from "../utils.js";
 
 const connectionURLExamples: Record<
 	InstanceType<typeof Preferences>["database"],
 	string
 > = {
-	PostgreSQL: "postgresql://root:mypassword@localhost:5432/mydb?schema=sample",
+	PostgreSQL: "postgresql://root:mypassword@localhost:5432/mydb",
 	MySQL: "mysql://root:mypassword@localhost:3306/mydb",
 	SQLServer:
 		"sqlserver://localhost:1433;database=mydb;user=root;password=mypassword;",
@@ -16,16 +17,82 @@ const connectionURLExamples: Record<
 	SQLite: "file:./sqlite.db",
 };
 
-export function getEnvFile({ database, orm, plugins }: Preferences) {
+const composeServiceNames: Record<
+	InstanceType<typeof Preferences>["database"],
+	string
+> = {
+	PostgreSQL: "postgres",
+	MySQL: "localhost",
+	SQLServer: "localhost",
+	CockroachDB: "localhost",
+	MongoDB: "localhost",
+	SQLite: "file:./sqlite.db",
+};
+
+export function getEnvFile(
+	{ database, orm, plugins, projectName, redis }: PreferencesType,
+	isComposed = false,
+) {
 	const envs = [];
 
 	if (orm !== "None") {
-		envs.push(`DATABASE_URL="${connectionURLExamples[database]}"`);
+		let url = connectionURLExamples[database]
+			.replace("mydb", projectName)
+			.replace("root", projectName);
+
+		// rename localhost to docker compose service name in network
+		if (isComposed)
+			url = url.replace("localhost", composeServiceNames[database]);
+
+		envs.push(`DATABASE_URL="${url}"`);
 	}
+
+	if (isComposed && redis) envs.push("REDIS_HOST=redis");
 
 	if (plugins.includes("JWT"))
 		envs.push(`JWT_SECRET="${randomBytes(12).toString("hex")}"`);
 
 	envs.push("PORT=3000");
 	return envs.join("\n");
+}
+
+export function getConfigFile({ orm, redis, others }: PreferencesType) {
+	const envs: string[] = [];
+
+	envs.push(`PORT: env.get("PORT").default(3000).asPortNumber()`);
+	// envs.push(`PUBLIC_DOMAIN: env.get("PUBLIC_DOMAIN").asString()`);
+	envs.push(
+		`API_URL: env.get("API_URL").default(\`https://\${env.get("PUBLIC_DOMAIN").asString()}\`).asString()`,
+	);
+
+	if (orm !== "None")
+		envs.push(`DATABASE_URL: env.get("DATABASE_URL").required().asString()`);
+
+	if (redis) {
+		envs.push(
+			`REDIS_HOST: env.get("REDIS_HOST").default("localhost").asString()`,
+		);
+	}
+
+	if (others.includes("Posthog")) {
+		envs.push(
+			`POSTHOG_API_KEY: env.get("POSTHOG_API_KEY").default("it's a secret").asString()`,
+		);
+		envs.push(
+			`POSTHOG_HOST: env.get("POSTHOG_HOST").default("localhost").asString()`,
+		);
+	}
+
+	return dedent /* ts */`
+	import env from "env-var";
+	
+	export const config = {
+		NODE_ENV: env
+		.get("NODE_ENV")
+		.default("development")
+		.asEnum(["production", "test", "development"]),
+		
+
+		${envs.join(",\n")}
+	}`;
 }

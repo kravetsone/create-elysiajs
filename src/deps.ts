@@ -5,7 +5,8 @@ export const dependencies = {
 	"@biomejs/biome": "^1.8.3",
 	eslint: "^9.9.0",
 	"eslint-plugin-drizzle": "^0.2.3",
-	prisma: "^5.18.0",
+	prisma: "^6.1.0",
+	"@prisma/client": "^6.1.0",
 	"drizzle-orm": "^0.33.0",
 	"drizzle-kit": "^0.24.0",
 	pg: "^8.12.0",
@@ -27,4 +28,8 @@ export const dependencies = {
 	"@gramio/init-data": "^0.0.1",
 	"elysia-oauth2": "^1.3.0",
 	arctic: "^1.9.2",
+	"env-var": "^7.5.0",
+	"posthog-node": "^4.3.2",
+	jobify: "^0.1.6",
+	ioredis: "^5.4.2",
 };

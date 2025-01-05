@@ -1,15 +1,17 @@
 import type { Preferences, PreferencesType } from "../utils";
 
 const links: Record<
-	Exclude<
-		| "ElysiaJS"
-		| PreferencesType["linter"]
-		| PreferencesType["orm"]
-		| PreferencesType["plugins"][0]
-		| PreferencesType["others"][0]
-		| PreferencesType["database"],
-		"None"
-	>,
+	| Exclude<
+			| "ElysiaJS"
+			| PreferencesType["linter"]
+			| PreferencesType["orm"]
+			| PreferencesType["plugins"][0]
+			| PreferencesType["others"][0]
+			| PreferencesType["database"],
+			"None"
+	  >
+	| "Jobify"
+	| "Docker",
 	string
 > = {
 	ElysiaJS: "[ElysiaJS](https://elysiajs.com/)",
@@ -21,6 +23,7 @@ const links: Record<
 	Swagger: "[Swagger](https://elysiajs.com/plugins/swagger.html)",
 	JWT: "[JWT](https://elysiajs.com/plugins/jwt.html)",
 	Autoload: "[Autoload](https://github.com/kravetsone/elysia-autoload)",
+	"Oauth 2.0": "[Oauth 2.0](https://github.com/kravetsone/elysia-oauth2)",
 	Logger: "[Logger](https://github.com/bogeychan/elysia-logger)",
 	"HTML/JSX": "[HTML/JSX](https://elysiajs.com/plugins/html.html)",
 	Static: "[Static](https://elysiajs.com/plugins/static.html)",
@@ -34,6 +37,9 @@ const links: Record<
 	SQLite: "[SQLite](https://sqlite.org/)",
 	SQLServer: "[SQLServer](https://www.microsoft.com/sql-server)",
 	CockroachDB: "[CockroachDB](https://www.cockroachlabs.com/)",
+	Jobify: "[Jobify](https://github.com/kravetsone/jobify)",
+	Docker: "[Docker](https://www.docker.com/)",
+	Posthog: "[Posthog](https://posthog.com/docs/libraries/node)",
 };
 
 export function getReadme({
@@ -43,6 +49,7 @@ export function getReadme({
 	database,
 	plugins,
 	others,
+	docker,
 }: Preferences) {
 	const stack = [];
 
@@ -52,7 +59,14 @@ export function getReadme({
 	if (plugins.length)
 		stack.push(`- Elysia plugins - ${plugins.map((x) => links[x]).join(", ")}`);
 	if (others.length)
-		stack.push(`- Others tools - ${others.map((x) => links[x]).join(", ")}`);
+		stack.push(
+			`- Others tools - ${[
+				docker ? links.Docker : undefined,
+				...others.map((x) => links[x]),
+			]
+				.filter(Boolean)
+				.join(", ")}}`,
+		);
 
 	return [
 		`# ${dir}`,

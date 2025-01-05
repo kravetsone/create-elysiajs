@@ -1,13 +1,11 @@
 import type { Preferences } from "../utils";
 
-const dbExportedMap = {
-	Prisma: "prisma",
-	Drizzle: "client",
-};
-
 export function getElysiaIndex({ orm, driver, plugins }: Preferences) {
 	const elysiaPlugins: string[] = [];
-	const elysiaImports: string[] = [`import { Elysia } from "elysia"`];
+	const elysiaImports: string[] = [
+		`import { Elysia } from "elysia"`,
+		`import { config } from "gramio"`,
+	];
 
 	if (plugins.includes("Logger")) {
 		elysiaImports.push(`import { logger } from "@bogeychan/elysia-logger"`);
@@ -20,7 +18,7 @@ export function getElysiaIndex({ orm, driver, plugins }: Preferences) {
 	}
 	if (plugins.includes("Oauth 2.0")) {
 		elysiaImports.push(`import { oauth2 } from "elysia-oauth2"`);
-		elysiaPlugins.push(".use(oauth2())");
+		elysiaPlugins.push(".use(oauth2({}))");
 	}
 	if (plugins.includes("Bearer")) {
 		elysiaImports.push(`import { bearer } from "@elysiajs/bearer"`);
@@ -36,9 +34,7 @@ export function getElysiaIndex({ orm, driver, plugins }: Preferences) {
 	}
 	if (plugins.includes("JWT")) {
 		elysiaImports.push(`import { jwt } from "@elysiajs/jwt"`);
-		elysiaPlugins.push(
-			".use(jwt({ secret: process.env.JWT_SECRET as string }))",
-		);
+		elysiaPlugins.push(".use(jwt({ secret: config.JWT_SECRET as string }))");
 	}
 	if (plugins.includes("Server Timing")) {
 		elysiaImports.push(
@@ -55,33 +51,11 @@ export function getElysiaIndex({ orm, driver, plugins }: Preferences) {
 		elysiaPlugins.push(".use(autoload())");
 	}
 
-	if (
-		orm !== "None" &&
-		driver !== "Postgres.JS" &&
-		driver !== "MySQL 2" &&
-		driver !== "Bun SQLite"
-	)
-		elysiaImports.push(`import { ${dbExportedMap[orm]} } from "./db"`);
-
 	return [
 		...elysiaImports,
 		"",
 		"const app = new Elysia()",
 		...elysiaPlugins,
-		...(orm !== "None" &&
-		driver !== "Postgres.JS" &&
-		driver !== "MySQL 2" &&
-		driver !== "Bun SQLite"
-			? [
-					"",
-					orm === "Prisma"
-						? "await prisma.$connect()"
-						: "await client.connect()",
-					`console.log("🗄️ Database was connected!")`,
-					"",
-				]
-			: "\n"),
-		"app.listen(process.env.PORT as string, () => console.log(`🦊 Server started at ${app.server?.url.origin}`))",
 		plugins.includes("Autoload") ? "\nexport type ElysiaApp = typeof app" : "",
 	].join("\n");
 }
@@ -89,6 +63,7 @@ export function getElysiaIndex({ orm, driver, plugins }: Preferences) {
 export function getElysiaMonorepo() {
 	return `import { validateAndParseInitData } from "@gramio/init-data";
 import { Elysia } from "elysia";
+import { config } from "./config";
 
 export const authElysia = new Elysia()
     .derive(({ headers, error }) => {
@@ -97,7 +72,7 @@ export const authElysia = new Elysia()
 
         const result = validateAndParseInitData(
             initData,
-            process.env.TOKEN as string
+            config.BOT_TOKEN
         );
         if (!result || !result.user) return error("Unauthorized");
 
