@@ -22,7 +22,7 @@ export const dependencies = {
 	"@elysiajs/server-timing": "^1.1.0",
 	"@elysiajs/static": "^1.1.0",
 	"@elysiajs/swagger": "^1.2.0",
-	"elysia-autoload": "^1.1.0",
+	"elysia-autoload": "^1.5.0",
 	"@bogeychan/elysia-logger": "^0.1.1",
 	"@antfu/eslint-config": "^2.25.1",
 	"@gramio/init-data": "^0.0.1",
