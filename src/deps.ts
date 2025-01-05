@@ -12,7 +12,7 @@ export const dependencies = {
 	"pg": "^8.13.1",
 	"@types/pg": "^8.11.10",
 	postgres: "^3.4.4",
-	mysql2: "^3.11.0",
+	"mysql2": "^3.12.0",
 	husky: "^9.1.4",
 	"@elysiajs/bearer": "^1.1.1",
 	"@elysiajs/cors": "^1.1.0",
