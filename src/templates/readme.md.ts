@@ -65,7 +65,7 @@ export function getReadme({
 				...others.map((x) => links[x]),
 			]
 				.filter(Boolean)
-				.join(", ")}}`,
+				.join(", ")}`,
 		);
 
 	return [

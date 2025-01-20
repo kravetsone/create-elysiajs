@@ -30,7 +30,6 @@
 		"watch": "bunx pkgroll -w",
 		"lint": "bunx @biomejs/biome check src",
 		"lint:fix": "bun lint --apply",
-		"prepare": "husky",
 		"prepublishOnly": "bunx pkgroll"
 	},
 	"devDependencies": {
