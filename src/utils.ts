@@ -1,4 +1,5 @@
 import child_process from "node:child_process";
+import { randomBytes } from "node:crypto";
 import fs from "node:fs/promises";
 import { promisify } from "node:util";
 
@@ -62,6 +63,11 @@ export class Preferences {
 	vscode = false;
 	redis = false;
 	locks = false;
+	meta: {
+		databasePassword: string;
+	} = {
+		databasePassword: randomBytes(12).toString("hex"),
+	};
 }
 
 export type PreferencesType = InstanceType<typeof Preferences>;

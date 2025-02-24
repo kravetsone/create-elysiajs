@@ -21,7 +21,7 @@ export function getDockerfile({ packageManager, orm }: Preferences) {
 		return dedent /* Dockerfile */`
 # use the official Bun image
 # see all versions at https://hub.docker.com/r/oven/bun/tags
-FROM oven/bun:${process.versions.bun ?? "1.1.41"} AS base
+FROM oven/bun:${process.versions.bun ?? "1.2.2"} AS base
 WORKDIR /usr/src/app
 
 # install dependencies into temp directory
@@ -53,6 +53,7 @@ COPY --from=prerelease /usr/src/app/.env.production .
 RUN mkdir -p /usr/src/app/src
 COPY --from=prerelease /usr/src/app/src ./src
 COPY --from=prerelease /usr/src/app/package.json .
+COPY --from=prerelease /usr/src/app/tsconfig.json .
 ${orm !== "None" ? ormDockerCopy[orm] : ""}
 
 ENTRYPOINT [ "bun", "start" ]`;
@@ -96,6 +97,7 @@ COPY --from=prerelease /usr/src/app/.env.production .
 RUN mkdir -p /usr/src/app/src
 COPY --from=prerelease /usr/src/app/src ./src
 COPY --from=prerelease /usr/src/app/package.json .
+COPY --from=prerelease /usr/src/app/tsconfig.json .
 ${orm !== "None" ? ormDockerCopy[orm] : ""}
 
 # TODO:// should be downloaded not at ENTRYPOINT
@@ -107,6 +109,7 @@ export function getDockerCompose({
 	database,
 	redis,
 	projectName,
+	meta,
 }: PreferencesType) {
 	const volumes: string[] = [];
 
@@ -131,7 +134,7 @@ services:
         restart: unless-stopped
         environment:
             - POSTGRES_USER=${projectName}
-            - POSTGRES_PASSWORD=Please-change-password
+            - POSTGRES_PASSWORD=${meta.databasePassword}
             - POSTGRES_DB=${projectName}
         volumes:
             - postgres_data:/var/lib/postgresql/data`
@@ -160,6 +163,7 @@ export function getDevelopmentDockerCompose({
 	database,
 	redis,
 	projectName,
+	meta,
 }: PreferencesType) {
 	const volumes: string[] = [];
 
@@ -176,7 +180,7 @@ services:
         restart: unless-stopped
         environment:
             - POSTGRES_USER=${projectName}
-            - POSTGRES_PASSWORD=Please-change-password
+            - POSTGRES_PASSWORD=${meta.databasePassword}
             - POSTGRES_DB=${projectName}
         ports:
             - 5432:5432

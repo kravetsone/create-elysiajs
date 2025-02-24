@@ -30,7 +30,7 @@ const composeServiceNames: Record<
 };
 
 export function getEnvFile(
-	{ database, orm, plugins, projectName, redis }: PreferencesType,
+	{ database, orm, plugins, projectName, redis, meta }: PreferencesType,
 	isComposed = false,
 ) {
 	const envs = [];
@@ -38,7 +38,8 @@ export function getEnvFile(
 	if (orm !== "None") {
 		let url = connectionURLExamples[database]
 			.replace("mydb", projectName)
-			.replace("root", projectName);
+			.replace("root", projectName)
+			.replace("mypassword", meta.databasePassword);
 
 		// rename localhost to docker compose service name in network
 		if (isComposed)
