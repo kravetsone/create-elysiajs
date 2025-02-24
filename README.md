@@ -21,7 +21,7 @@ bun create elysiajs <dir>
 
 -   Linters
 -   -   [Biome](https://biomejs.dev/)
--   -   [ESLint](https://eslint.org/) with some plugins
+-   -   [ESLint](https://eslint.org/) with [@antfu/eslint-config](https://eslint-config.antfu.me/rules)
 -   ORM/Query builders
 -   -   [Prisma](https://www.prisma.io/)
 -   -   [Drizzle](https://orm.drizzle.team/)
@@ -37,6 +37,12 @@ bun create elysiajs <dir>
 -   -   [Bearer](https://elysiajs.com/plugins/bearer.html)
 -   -   [Server Timing](https://elysiajs.com/plugins/server-timing.html)
 -   Others
+-   -   [Dockerfile](https://www.docker.com/) + [docker-compose.yml](https://docs.docker.com/compose/)
+-   -   [Jobify](https://github.com/kravetsone/jobify) ([Bullmq](https://docs.bullmq.io/) wrapper)
+-   -   [Posthog](https://posthog.com/docs/libraries/node)
+-   -   [Verrou](https://github.com/kravetsone/verrou) (Locks)
+-   -   [Env-var](https://github.com/wobsoriano/env-var) (Environment variables)
+-   -   [.vscode](https://code.visualstudio.com/) (VSCode settings)
 -   -   [Husky](https://typicode.github.io/husky/) (Git hooks)
 -   And more soon...
 

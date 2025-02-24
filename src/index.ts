@@ -153,7 +153,7 @@ createOrFindDir(projectDir)
 				type: "multiselect",
 				name: "others",
 				message: "Select others tools: (Space to select, Enter to continue)",
-				choices: ["Husky", "Posthog", "Jobify"],
+				choices: ["Posthog", "Jobify", "Husky"],
 			});
 			preferences.others = others;
 

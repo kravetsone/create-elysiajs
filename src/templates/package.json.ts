@@ -45,9 +45,11 @@ export function getPackageJson({
 		sample.devDependencies["@biomejs/biome"] = dependencies["@biomejs/biome"];
 	}
 	if (linter === "ESLint") {
-		sample.scripts.lint = `${pmExecuteMap[packageManager]} eslint \"src/**/*.ts\"`;
+		// \"src/**/*.ts\"
+		sample.scripts.lint = `${pmExecuteMap[packageManager]} eslint`;
+		// \"src/**/*.ts\"
 		sample.scripts["lint:fix"] =
-			`${pmExecuteMap[packageManager]} eslint \"src/**/*.ts\" --fix`;
+			`${pmExecuteMap[packageManager]} eslint --fix`;
 		sample.devDependencies.eslint = dependencies.eslint;
 		sample.devDependencies["@antfu/eslint-config"] =
 			dependencies["@antfu/eslint-config"];
