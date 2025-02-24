@@ -68,6 +68,70 @@ export function getReadme({
 				.join(", ")}`,
 		);
 
+	const instruction = [];
+
+	instruction.push("## Development\n");
+
+	if (docker) {
+		instruction.push(
+			"Start development services (DB, Redis etc):\n",
+			"```bash",
+			"docker compose -f docker-compose.dev.yml up",
+			"```\n",
+		);
+	}
+
+	instruction.push("Start the project:\n", "```bash", "bun dev", "```\n");
+
+	if (orm === "Drizzle") {
+		instruction.push(
+			"## Migrations\n",
+			"Push schema to Database:\n",
+			"```bash",
+			"bunx drizzle-kit push",
+			"```",
+			"Generate new migration:\n",
+			"```bash",
+			"bunx drizzle-kit generate",
+			"```",
+			"Apply migrations:\n",
+			"```bash",
+			"bunx drizzle-kit migrate",
+			"```\n",
+		);
+	}
+
+	if (orm === "Prisma") {
+		instruction.push(
+			"## Migrations\n",
+			"Generate new migration:\n",
+			"```bash",
+			"bunx prisma migrate dev",
+			"```",
+			"Apply migrations:\n",
+			"```bash",
+			"bunx prisma migrate deploy",
+			"```\n",
+		);
+	}
+
+	instruction.push("## Production\n");
+
+	if (docker) {
+		instruction.push(
+			"Run project in `production` mode:\n",
+			"```bash",
+			"docker compose up -d",
+			"```",
+		);
+	} else
+		instruction.push(
+			"Run project in `production` mode:\n",
+			"```bash",
+			"bun start",
+			"```",
+		);
+
 	return [
 		`# ${dir}`,
 		"",
@@ -75,5 +139,8 @@ export function getReadme({
 		"",
 		"### Stack",
 		...stack,
+		"",
+		// "### Instructions",
+		...instruction,
 	].join("\n");
 }
