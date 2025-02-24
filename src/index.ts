@@ -67,6 +67,7 @@ createOrFindDir(projectDir)
 		preferences.projectName = path.basename(projectDir);
 		preferences.packageManager = packageManager;
 		preferences.isMonorepo = !!args.monorepo;
+		preferences.runtime = packageManager === "bun" ? "Bun" : "Node.js";
 
 		if (!args.monorepo) {
 			const { linter } = await prompt<{ linter: PreferencesType["linter"] }>({
@@ -113,7 +114,13 @@ createOrFindDir(projectDir)
 				});
 				const driversMap: Record<typeof database, PreferencesType["driver"][]> =
 					{
-						PostgreSQL: ["Postgres.JS", "node-postgres"],
+						PostgreSQL: (
+							[
+								preferences.runtime === "Bun" ? "Bun.sql" : undefined,
+								"node-postgres",
+								"Postgres.JS",
+							] as const
+						).filter((x) => x !== undefined),
 						MySQL: ["MySQL 2"],
 						SQLite: ["Bun SQLite"],
 					};

@@ -31,6 +31,7 @@ export class Preferences {
 	projectName = "";
 	dir = "";
 	packageManager: PackageManager = "bun";
+	runtime: "Bun" | "Node.js" = "Bun";
 	linter: "ESLint" | "Biome" | "None" = "None";
 	orm: "Prisma" | "Drizzle" | "None" = "None";
 	database:
@@ -40,8 +41,13 @@ export class Preferences {
 		| "SQLite"
 		| "SQLServer"
 		| "CockroachDB" = "PostgreSQL";
-	driver: "node-postgres" | "Postgres.JS" | "MySQL 2" | "Bun SQLite" | "None" =
-		"None";
+	driver:
+		| "node-postgres"
+		| "Bun.sql"
+		| "Postgres.JS"
+		| "MySQL 2"
+		| "Bun SQLite"
+		| "None" = "None";
 	git = true;
 	others: ("Husky" | "Posthog" | "Jobify")[] = [];
 	plugins: (

@@ -20,7 +20,8 @@ export function getDBIndex({ orm, driver, packageManager }: Preferences) {
 			"  connectionString: config.DATABASE_URL,",
 			"})",
 			"",
-			"export const db = drizzle(client, {",
+			"export const db = drizzle({",
+			"  client,",
 			'  casing: "snake_case",',
 			"})",
 		].join("\n");
@@ -32,10 +33,25 @@ export function getDBIndex({ orm, driver, packageManager }: Preferences) {
 			`import { config } from "../config.ts"`,
 			"",
 			"const client = postgres(config.DATABASE_URL)",
-			"export const db = drizzle(client, {",
+			"export const db = drizzle({",
+			"  client,",
 			'  casing: "snake_case",',
 			"})",
 		].join("\n");
+
+	if (driver === "Bun.sql")
+		return [
+			`import { drizzle } from "drizzle-orm/bun-sql"`,
+			`import { config } from "../config.ts"`,
+			`import { SQL } from "bun"`,
+			"",
+			"export const sql = new SQL(config.DATABASE_URL)",
+			"",
+			"export const db = drizzle({",
+			"  client: sql,",
+			'  casing: "snake_case",',
+			"})",
+		];
 
 	if (driver === "MySQL 2")
 		return [
@@ -46,7 +62,8 @@ export function getDBIndex({ orm, driver, packageManager }: Preferences) {
 			"export const connection = await mysql.createConnection(config.DATABASE_URL)",
 			`console.log("🗄️ Database was connected!")`,
 			"",
-			"export const db = drizzle(connection, {",
+			"export const db = drizzle({",
+			"  client: connection,",
 			'  casing: "snake_case",',
 			"})",
 		].join("\n");
@@ -57,7 +74,8 @@ export function getDBIndex({ orm, driver, packageManager }: Preferences) {
 			`import { Database } from "bun:sqlite";`,
 			"",
 			`export const sqlite = new Database("sqlite.db")`,
-			"export const db = drizzle(sqlite, {",
+			"export const db = drizzle({",
+			"  client: sqlite,",
 			'  casing: "snake_case",',
 			"})",
 		].join("\n");
@@ -67,7 +85,8 @@ export function getDBIndex({ orm, driver, packageManager }: Preferences) {
 		`import { Database } from "better-sqlite3";`,
 		"",
 		`export const sqlite = new Database("sqlite.db")`,
-		"export const db = drizzle(sqlite, {",
+		"export const db = drizzle({",
+		"  client: sqlite,",
 		'  casing: "snake_case",',
 		"})",
 	].join("\n");
@@ -76,6 +95,9 @@ export function getDBIndex({ orm, driver, packageManager }: Preferences) {
 export function getDrizzleConfig({ database }: Preferences) {
 	return [
 		`import type { Config } from "drizzle-kit"`,
+		`import env from "env-var"`,
+		"",
+		'const DATABASE_URL = env.get("DATABASE_URL").required().asString()',
 		"",
 		"export default {",
 		`  schema: "./src/db/schema.ts",`,
@@ -83,7 +105,7 @@ export function getDrizzleConfig({ database }: Preferences) {
 		`  dialect: "${database.toLowerCase()}",`,
 		`  casing: "snake_case",`,
 		"  dbCredentials: {",
-		"    url: process.env.DATABASE_URL as string",
+		"    url: DATABASE_URL",
 		"  }",
 		"} satisfies Config",
 	].join("\n");
