@@ -41,7 +41,7 @@ bun create elysiajs <dir>
 -   -   [Jobify](https://github.com/kravetsone/jobify) ([Bullmq](https://docs.bullmq.io/) wrapper)
 -   -   [Posthog](https://posthog.com/docs/libraries/node)
 -   -   [Verrou](https://github.com/kravetsone/verrou) (Locks)
--   -   [Env-var](https://github.com/wobsoriano/env-var) (Environment variables)
+-   -   [Env-var](https://github.com/evanshortiss/env-var) (Environment variables)
 -   -   [.vscode](https://code.visualstudio.com/) (VSCode settings)
 -   -   [Husky](https://typicode.github.io/husky/) (Git hooks)
 -   And more soon...
