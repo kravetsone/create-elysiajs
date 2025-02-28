@@ -1,6 +1,6 @@
 export const dependencies = {
 	"elysia": "^1.2.22",
-	"typescript": "^5.7.3",
+	"typescript": "^5.8.2",
 	"@types/bun": "^1.2.3",
 	"@biomejs/biome": "^1.9.4",
 	"eslint": "^9.21.0",
