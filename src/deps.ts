@@ -8,7 +8,7 @@ export const dependencies = {
 	"prisma": "^6.4.1",
 	"@prisma/client": "^6.4.1",
 	"drizzle-orm": "^0.39.3",
-	"drizzle-kit": "^0.30.4",
+	"drizzle-kit": "^0.30.5",
 	"pg": "^8.13.3",
 	"@types/pg": "^8.11.11",
 	postgres: "^3.4.5",
