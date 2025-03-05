@@ -5,14 +5,13 @@ export function getTSConfig({ plugins }: Preferences) {
 		{
 			compilerOptions: {
 				lib: ["ESNext"],
-				module: "ESNext",
+				module: "NodeNext",
 				target: "ESNext",
-				moduleResolution: "Bundler",
+				moduleResolution: "NodeNext",
 				esModuleInterop: true,
 				strict: true,
 				skipLibCheck: true,
 				allowSyntheticDefaultImports: true,
-				rootDir: "./src",
 				noEmit: true,
 				allowImportingTsExtensions: true,
 				noUncheckedIndexedAccess: true,

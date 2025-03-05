@@ -51,7 +51,7 @@ export function getDBIndex({ orm, driver, packageManager }: Preferences) {
 			"  client: sql,",
 			'  casing: "snake_case",',
 			"})",
-		];
+		].join("\n");
 
 	if (driver === "MySQL 2")
 		return [
