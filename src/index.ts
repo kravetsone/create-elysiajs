@@ -51,6 +51,19 @@ if (!dir)
 const projectDir = path.resolve(`${process.cwd()}/`, dir);
 
 process.on("unhandledRejection", async (error) => {
+	const filesInTargetDirectory = await fs.readdir(projectDir);
+	if (filesInTargetDirectory.length) {
+		const { overwrite } = await prompt<{ overwrite: boolean }>({
+			type: "toggle",
+			name: "overwrite",
+			initial: "yes",
+			message: `You exit the process. Do you want to delete the directory ${path.basename(projectDir)}?`,
+		});
+		if (!overwrite) {
+			console.log("Cancelled...");
+			return process.exit(0);
+		}
+	}
 	console.log("Template deleted...");
 	console.error(error);
 	await fs.rm(projectDir, { recursive: true });
@@ -68,6 +81,22 @@ createOrFindDir(projectDir)
 		preferences.packageManager = packageManager;
 		preferences.isMonorepo = !!args.monorepo;
 		preferences.runtime = packageManager === "bun" ? "Bun" : "Node.js";
+
+		const filesInTargetDirectory = await fs.readdir(projectDir);
+		if (filesInTargetDirectory.length) {
+			const { overwrite } = await prompt<{ overwrite: boolean }>({
+				type: "toggle",
+				name: "overwrite",
+				initial: "yes",
+				message: `\n${filesInTargetDirectory.join(
+					"\n",
+				)}\n\nThe directory ${preferences.projectName} is not empty. Do you want to overwrite the files?`,
+			});
+			if (!overwrite) {
+				console.log("Cancelled...");
+				return process.exit(0);
+			}
+		}
 
 		if (!args.monorepo) {
 			const { linter } = await prompt<{ linter: PreferencesType["linter"] }>({
@@ -241,7 +270,7 @@ createOrFindDir(projectDir)
 			await fs.writeFile(projectDir + "/README.md", getReadme(preferences));
 			await fs.writeFile(
 				projectDir + "/.gitignore",
-				["dist", "node_modules", ".env"].join("\n"),
+				["dist", "node_modules", ".env", ".env.production"].join("\n"),
 			);
 			await fs.mkdir(projectDir + "/src");
 			await fs.writeFile(

@@ -41,15 +41,14 @@ export function getPackageJson({
 
 	if (linter === "Biome") {
 		sample.scripts.lint = `${pmExecuteMap[packageManager]} @biomejs/biome check src`;
-		sample.scripts["lint:fix"] = `${pmRunMap[packageManager]} lint --apply`;
+		sample.scripts["lint:fix"] = `${pmRunMap[packageManager]} lint --write`;
 		sample.devDependencies["@biomejs/biome"] = dependencies["@biomejs/biome"];
 	}
 	if (linter === "ESLint") {
 		// \"src/**/*.ts\"
 		sample.scripts.lint = `${pmExecuteMap[packageManager]} eslint`;
 		// \"src/**/*.ts\"
-		sample.scripts["lint:fix"] =
-			`${pmExecuteMap[packageManager]} eslint --fix`;
+		sample.scripts["lint:fix"] = `${pmExecuteMap[packageManager]} eslint --fix`;
 		sample.devDependencies.eslint = dependencies.eslint;
 		sample.devDependencies["@antfu/eslint-config"] =
 			dependencies["@antfu/eslint-config"];
