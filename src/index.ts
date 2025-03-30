@@ -83,6 +83,9 @@ createOrFindDir(projectDir)
 		preferences.isMonorepo = !!args.monorepo;
 		preferences.runtime = packageManager === "bun" ? "Bun" : "Node.js";
 
+		// biome-ignore lint/complexity/noExtraBooleanCast: <explanation>
+		preferences.noInstall = !Boolean(args.install ?? true);
+
 		const filesInTargetDirectory = await fs.readdir(projectDir);
 		if (filesInTargetDirectory.length) {
 			const { overwrite } = await prompt<{ overwrite: boolean }>({
