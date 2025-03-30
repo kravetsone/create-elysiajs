@@ -133,5 +133,9 @@ export function getPackageJson({
 		sample.dependencies["@gramio/init-data"] =
 			dependencies["@gramio/init-data"];
 
+	if (others.includes("S3")) {
+		sample.dependencies["@aws-sdk/client-s3"] = dependencies["@aws-sdk/client-s3"];
+	}
+
 	return JSON.stringify(sample, null, 2);
 }

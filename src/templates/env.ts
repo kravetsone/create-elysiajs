@@ -90,6 +90,18 @@ export function getConfigFile({
 		);
 	}
 
+	if (others.includes("S3")) {
+		envs.push(
+			`S3_ENDPOINT: env.get("S3_ENDPOINT").default("localhost").asString()`,
+		);
+		envs.push(
+			`S3_ACCESS_KEY_ID: env.get("S3_ACCESS_KEY_ID").default("minio").asString()`,
+		);
+		envs.push(
+			`S3_SECRET_ACCESS_KEY: env.get("S3_SECRET_ACCESS_KEY").default("minio").asString()`,
+		);
+	}
+
 	if (locks) {
 		const stores = ["memory"];
 		if (redis) stores.push("redis");

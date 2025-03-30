@@ -112,47 +112,69 @@ export function getDockerCompose({
 	redis,
 	projectName,
 	meta,
+	others,
 }: PreferencesType) {
 	const volumes: string[] = [];
 
 	if (database === "PostgreSQL") volumes.push("postgres_data:");
 	if (redis) volumes.push("redis_data:");
+	if (others.includes("S3")) volumes.push("minio_data:");
+
+	const services = [
+		dedent /* yaml */`bot:
+            container_name: ${projectName}-bot
+            restart: unless-stopped
+            build:
+                context: .
+                dockerfile: Dockerfile
+            environment:
+                - NODE_ENV=production`,
+		database === "PostgreSQL"
+			? dedent /* yaml */`postgres:
+            container_name: ${projectName}-postgres
+            image: postgres:latest
+            restart: unless-stopped
+            environment:
+                - POSTGRES_USER=${projectName}
+                - POSTGRES_PASSWORD=${meta.databasePassword}
+                - POSTGRES_DB=${projectName}
+            volumes:
+                - postgres_data:/var/lib/postgresql/data`
+			: "",
+		redis
+			? dedent /* yaml */`redis:
+            container_name: ${projectName}-redis
+            image: redis:latest
+            command: [ "redis-server", "--maxmemory-policy", "noeviction" ]
+            restart: unless-stopped
+            volumes:
+                - redis_data:/data`
+			: "",
+		others.includes("S3")
+			? dedent /* yaml */`minio:
+            container_name: ${projectName}-minio
+            image: minio/minio:latest
+            command: [ "minio", "server", "/data", "--console-address", ":9001" ]
+            restart: unless-stopped
+            environment:
+                - MINIO_ACCESS_KEY=${projectName}
+                - MINIO_SECRET_KEY=${meta.databasePassword}
+            ports:
+                - 9000:9000
+                - 9001:9001
+            volumes:
+                - minio_data:/data
+            healthcheck:
+                test: ["CMD", "mc", "ready", "local"]
+                interval: 5s
+                timeout: 5s
+                retries: 5`
+			: "",
+	];
 
 	return dedent /* yaml */`
 services:
-    bot:
-        container_name: ${projectName}-bot
-        restart: unless-stopped
-        build:
-            context: .
-            dockerfile: Dockerfile
-        environment:
-        - NODE_ENV=production
-    ${
-			database === "PostgreSQL"
-				? /* yaml */ `postgres:
-        container_name: ${projectName}-postgres
-        image: postgres:latest
-        restart: unless-stopped
-        environment:
-            - POSTGRES_USER=${projectName}
-            - POSTGRES_PASSWORD=${meta.databasePassword}
-            - POSTGRES_DB=${projectName}
-        volumes:
-            - postgres_data:/var/lib/postgresql/data`
-				: ""
-		}
-    ${
-			redis
-				? /* yaml */ `redis:
-        container_name: ${projectName}-redis
-        image: redis:latest
-        command: [ "redis-server", "--maxmemory-policy", "noeviction" ]
-        restart: unless-stopped
-        volumes:
-            - redis_data:/data`
-				: ""
-		}
+    ${services.filter(Boolean).join("\n")}
 volumes:
     ${volumes.join("\n")}
     
@@ -166,43 +188,62 @@ export function getDevelopmentDockerCompose({
 	redis,
 	projectName,
 	meta,
+	others,
 }: PreferencesType) {
 	const volumes: string[] = [];
 
 	if (database === "PostgreSQL") volumes.push("postgres_data:");
 	if (redis) volumes.push("redis_data:");
+	if (others.includes("S3")) volumes.push("minio_data:");
+
+	const services = [
+		database === "PostgreSQL"
+			? dedent /* yaml */`postgres:
+            container_name: ${projectName}-postgres
+            image: postgres:latest
+            restart: unless-stopped
+            environment:
+                - POSTGRES_USER=${projectName}
+                - POSTGRES_PASSWORD=${meta.databasePassword}
+                - POSTGRES_DB=${projectName}
+            ports:
+                - 5432:5432
+            volumes:
+                - postgres_data:/var/lib/postgresql/data`
+			: "",
+		redis
+			? dedent /* yaml */`redis:
+            container_name: ${projectName}-redis
+            image: redis:latest
+            command: [ "redis-server", "--maxmemory-policy", "noeviction" ]
+            restart: unless-stopped
+            ports:
+                - 6379:6379
+            volumes:
+                - redis_data:/data`
+			: "",
+		others.includes("S3")
+			? dedent /* yaml */`minio:
+            container_name: ${projectName}-minio
+            image: minio/minio:latest
+            command: [ "minio", "server", "/data", "--console-address", ":9001" ]
+            restart: unless-stopped
+            environment:
+                - MINIO_ACCESS_KEY=${projectName}
+                - MINIO_SECRET_KEY=${meta.databasePassword}
+            volumes:
+                - minio_data:/data
+            healthcheck:
+                test: ["CMD", "mc", "ready", "local"]
+                interval: 5s
+                timeout: 5s
+                retries: 5`
+			: "",
+	];
 
 	return dedent /* yaml */`
 services:
-    ${
-			database === "PostgreSQL"
-				? /* yaml */ `postgres:
-        container_name: ${projectName}-postgres
-        image: postgres:latest
-        restart: unless-stopped
-        environment:
-            - POSTGRES_USER=${projectName}
-            - POSTGRES_PASSWORD=${meta.databasePassword}
-            - POSTGRES_DB=${projectName}
-        ports:
-            - 5432:5432
-        volumes:
-            - postgres_data:/var/lib/postgresql/data`
-				: ""
-		}
-    ${
-			redis
-				? /* yaml */ `redis:
-        container_name: ${projectName}-redis
-        image: redis:latest
-        command: [ "redis-server", "--maxmemory-policy", "noeviction" ]
-        restart: unless-stopped
-        ports:
-            - 6379:6379
-        volumes:
-            - redis_data:/data`
-				: ""
-		}
+    ${services.filter(Boolean).join("\n")}
 volumes:
     ${volumes.join("\n")}
     

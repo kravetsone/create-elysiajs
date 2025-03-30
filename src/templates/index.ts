@@ -20,7 +20,8 @@ export function getIndex({ others, orm, driver }: PreferencesType) {
 		orm !== "None" &&
 		driver !== "Postgres.JS" &&
 		driver !== "MySQL 2" &&
-		driver !== "Bun SQLite";
+		driver !== "Bun SQLite" &&
+		driver !== "Bun.sql";
 
 	const gracefulShutdownTasks: string[] = [];
 	const imports: string[] = [

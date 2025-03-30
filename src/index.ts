@@ -27,6 +27,7 @@ import { getJobifyFile } from "./templates/services/jobify";
 import { getLocksFile } from "./templates/services/locks";
 import { getPosthogIndex } from "./templates/services/posthog";
 import { getRedisFile } from "./templates/services/redis";
+import { getS3ServiceFile } from "./templates/services/s3";
 import { getVSCodeExtensions, getVSCodeSettings } from "./templates/vscode";
 import {
 	Preferences,
@@ -189,9 +190,21 @@ createOrFindDir(projectDir)
 				type: "multiselect",
 				name: "others",
 				message: "Select others tools: (Space to select, Enter to continue)",
-				choices: ["Posthog", "Jobify", "Husky"],
+				choices: ["S3", "Posthog", "Jobify", "Husky"],
 			});
 			preferences.others = others;
+
+			if (others.includes("S3")) {
+				const { s3Client } = await prompt<{
+					s3Client: PreferencesType["s3Client"];
+				}>({
+					type: "select",
+					name: "s3Client",
+					message: "Select S3 client:",
+					choices: ["Bun.S3Client", "@aws-sdk/client-s3"],
+				});
+				preferences.s3Client = s3Client;
+			}
 
 			if (!others.includes("Husky")) {
 				const { git } = await prompt<{ git: boolean }>({
@@ -349,6 +362,12 @@ createOrFindDir(projectDir)
 				);
 			}
 
+			if (preferences.s3Client !== "None") {
+				await fs.writeFile(
+					`${projectDir}/src/services/s3.ts`,
+					getS3ServiceFile(preferences),
+				);
+			}
 			if (preferences.docker) {
 				await fs.writeFile(
 					`${projectDir}/Dockerfile`,

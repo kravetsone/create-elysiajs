@@ -34,13 +34,13 @@
 		"prepublishOnly": "bunx pkgroll"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^1.6.0",
-		"@types/bun": "^1.0.8",
+		"@biomejs/biome": "^1.9.4",
+		"@types/bun": "^1.2.5",
 		"@types/minimist": "^1.2.5",
-		"husky": "^9.0.11",
-		"pkgroll": "^2.4.2",
+		"husky": "^9.1.7",
+		"pkgroll": "^2.11.2",
 		"ts-dedent": "^2.2.0",
-		"typescript": "^5.4.2"
+		"typescript": "^5.8.2"
 	},
 	"dependencies": {
 		"enquirer": "^2.4.1",

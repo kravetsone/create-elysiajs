@@ -49,7 +49,7 @@ export class Preferences {
 		| "Bun SQLite"
 		| "None" = "None";
 	git = true;
-	others: ("Husky" | "Posthog" | "Jobify")[] = [];
+	others: ("S3" | "Husky" | "Posthog" | "Jobify")[] = [];
 	plugins: (
 		| "JWT"
 		| "CORS"
@@ -69,6 +69,7 @@ export class Preferences {
 	vscode = false;
 	redis = false;
 	locks = false;
+	s3Client: "Bun.S3Client" | "@aws-sdk/client-s3" | "None" = "None";
 	meta: {
 		databasePassword: string;
 	} = {
