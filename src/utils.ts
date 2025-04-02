@@ -77,6 +77,8 @@ export class Preferences {
 	};
 
 	noInstall = false;
+
+	mockWithPGLite = false;
 }
 
 export type PreferencesType = InstanceType<typeof Preferences>;

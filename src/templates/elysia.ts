@@ -51,6 +51,8 @@ export function getElysiaIndex({ orm, driver, plugins }: Preferences) {
 		elysiaPlugins.push(".use(autoload())");
 	}
 
+	elysiaPlugins.push(`.get("/", "Hello World")`);
+
 	return [
 		...elysiaImports,
 		"",

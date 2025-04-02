@@ -11,9 +11,14 @@ const links: Record<
 			"None"
 	  >
 	| "Jobify"
-	| "Docker",
+	| "Docker"
+	| "PGLite"
+	| "Bun"
+	| "Redis"
+	| "IoRedisMock",
 	string
 > = {
+	Bun: "[Bun](https://bun.sh/)",
 	ElysiaJS: "[ElysiaJS](https://elysiajs.com/)",
 	ESLint: "[ESLint](https://eslint.org/)",
 	Biome: "[Biome](https://biomejs.dev/)",
@@ -40,7 +45,14 @@ const links: Record<
 	Jobify: "[Jobify](https://github.com/kravetsone/jobify)",
 	Docker: "[Docker](https://www.docker.com/)",
 	Posthog: "[Posthog](https://posthog.com/docs/libraries/node)",
+	PGLite: "[PGLite](https://pglite.dev/)",
+	S3: "[Minio](https://github.com/minio/minio)",
+	Redis:
+		"[Redis](https://redis.io/) + [ioredis](https://github.com/redis/ioredis)",
+	IoRedisMock: "[ioredis-mock](https://www.npmjs.com/package/ioredis-mock)",
 };
+
+const TESTS_REPO_LINK = "[tests](tree/main/tests)";
 
 export function getReadme({
 	dir,
@@ -50,18 +62,32 @@ export function getReadme({
 	plugins,
 	others,
 	docker,
+	mockWithPGLite,
+	redis,
 }: Preferences) {
 	const stack = [];
 
 	stack.push(`- Web framework - ${links.ElysiaJS}`);
 	if (linter !== "None") stack.push(`- Linter - ${links[linter]}`);
-	if (orm !== "None") stack.push(`- ORM - ${links[orm]} (${links[database]})`);
+	if (orm !== "None")
+		stack.push(
+			`- ORM - ${links[orm]} (${links[database]})${
+				mockWithPGLite
+					? ` (mocked with ${links.PGLite} in ${TESTS_REPO_LINK})`
+					: ""
+			}`,
+		);
 	if (plugins.length)
 		stack.push(`- Elysia plugins - ${plugins.map((x) => links[x]).join(", ")}`);
 	if (others.length)
 		stack.push(
 			`- Others tools - ${[
 				docker ? links.Docker : undefined,
+				redis
+					? mockWithPGLite
+						? `${links.Redis} + ${links.IoRedisMock} in tests`
+						: links.Redis
+					: undefined,
 				...others.map((x) => links[x]),
 			]
 				.filter(Boolean)
@@ -111,6 +137,20 @@ export function getReadme({
 			"Apply migrations:\n",
 			"```bash",
 			"bunx prisma migrate deploy",
+			"```\n",
+		);
+	}
+
+	if (mockWithPGLite) {
+		instruction.push(
+			"## Tests\n\n",
+			`Tests are written with ${links.Bun}:test.\n\n`,
+			"Mocks:\n",
+			`- Postgres usage is mocked with ${links.PGLite}`,
+			`- Redis usage is mocked with ${links.IoRedisMock}`,
+			"\n\n",
+			"```bash",
+			"bun test",
 			"```\n",
 		);
 	}

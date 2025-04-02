@@ -4,6 +4,7 @@ import path from "node:path";
 import { prompt } from "enquirer";
 import minimist from "minimist";
 import task from "tasuku";
+import dedent from "ts-dedent";
 import {
 	generateEslintConfig,
 	getConfigFile,
@@ -28,6 +29,11 @@ import { getLocksFile } from "./templates/services/locks";
 import { getPosthogIndex } from "./templates/services/posthog";
 import { getRedisFile } from "./templates/services/redis";
 import { getS3ServiceFile } from "./templates/services/s3";
+import {
+	getPreloadFile,
+	getTestsAPIFile,
+	getTestsIndex,
+} from "./templates/tests";
 import { getVSCodeExtensions, getVSCodeSettings } from "./templates/vscode";
 import {
 	Preferences,
@@ -166,6 +172,19 @@ createOrFindDir(projectDir)
 				});
 				preferences.database = database;
 				preferences.driver = driver;
+
+				if (database === "PostgreSQL") {
+					const { mockWithPGLite } = await prompt<{
+						mockWithPGLite: PreferencesType["mockWithPGLite"];
+					}>({
+						type: "toggle",
+						name: "mockWithPGLite",
+						initial: "yes",
+						message:
+							"Do you want to mock database in tests with PGLite (Postgres in WASM)?",
+					});
+					preferences.mockWithPGLite = mockWithPGLite;
+				}
 			}
 		}
 		const { plugins } = await prompt<{
@@ -307,7 +326,6 @@ createOrFindDir(projectDir)
 
 			// if (plugins.includes("Autoload"))
 			await fs.mkdir(projectDir + "/src/routes");
-			await fs.mkdir(projectDir + "/src/plugins");
 
 			if (preferences.orm !== "None") {
 				await fs.mkdir(projectDir + "/src/db");
@@ -395,6 +413,30 @@ createOrFindDir(projectDir)
 				await fs.writeFile(
 					`${projectDir}/.vscode/extensions.json`,
 					getVSCodeExtensions(preferences),
+				);
+			}
+
+			if (preferences.mockWithPGLite) {
+				await fs.mkdir(projectDir + "/tests");
+				await fs.writeFile(
+					`${projectDir}/tests/preload.ts`,
+					getPreloadFile(preferences),
+				);
+				await fs.writeFile(
+					`${projectDir}/tests/api.ts`,
+					getTestsAPIFile(preferences),
+				);
+				await fs.mkdir(`${projectDir}/tests/e2e`);
+				await fs.writeFile(
+					`${projectDir}/tests/e2e/index.test.ts`,
+					getTestsIndex(preferences),
+				);
+
+				await fs.writeFile(
+					`${projectDir}/bunfig.toml`,
+					dedent /* toml */`[test]
+						preload = ["./tests/preload.ts"]
+					`,
 				);
 			}
 

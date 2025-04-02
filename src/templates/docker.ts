@@ -21,7 +21,7 @@ export function getDockerfile({ packageManager, orm }: Preferences) {
 		return dedent /* Dockerfile */`
 # use the official Bun image
 # see all versions at https://hub.docker.com/r/oven/bun/tags
-FROM oven/bun:${process.versions.bun ?? "1.2.2"} AS base
+FROM oven/bun:${process.versions.bun ?? "1.2.5"} AS base
 WORKDIR /usr/src/app
 
 # install dependencies into temp directory
@@ -121,7 +121,7 @@ export function getDockerCompose({
 	if (others.includes("S3")) volumes.push("minio_data:");
 
 	const services = [
-		dedent /* yaml */`bot:
+		/* yaml */ `bot:
             container_name: ${projectName}-bot
             restart: unless-stopped
             build:
@@ -130,7 +130,7 @@ export function getDockerCompose({
             environment:
                 - NODE_ENV=production`,
 		database === "PostgreSQL"
-			? dedent /* yaml */`postgres:
+			? /* yaml */ `postgres:
             container_name: ${projectName}-postgres
             image: postgres:latest
             restart: unless-stopped
@@ -142,7 +142,7 @@ export function getDockerCompose({
                 - postgres_data:/var/lib/postgresql/data`
 			: "",
 		redis
-			? dedent /* yaml */`redis:
+			? /* yaml */ `redis:
             container_name: ${projectName}-redis
             image: redis:latest
             command: [ "redis-server", "--maxmemory-policy", "noeviction" ]
@@ -151,7 +151,7 @@ export function getDockerCompose({
                 - redis_data:/data`
 			: "",
 		others.includes("S3")
-			? dedent /* yaml */`minio:
+			? /* yaml */ `minio:
             container_name: ${projectName}-minio
             image: minio/minio:latest
             command: [ "minio", "server", "/data", "--console-address", ":9001" ]
@@ -198,7 +198,7 @@ export function getDevelopmentDockerCompose({
 
 	const services = [
 		database === "PostgreSQL"
-			? dedent /* yaml */`postgres:
+			? /* yaml */ `postgres:
             container_name: ${projectName}-postgres
             image: postgres:latest
             restart: unless-stopped
@@ -212,7 +212,7 @@ export function getDevelopmentDockerCompose({
                 - postgres_data:/var/lib/postgresql/data`
 			: "",
 		redis
-			? dedent /* yaml */`redis:
+			? /* yaml */ `redis:
             container_name: ${projectName}-redis
             image: redis:latest
             command: [ "redis-server", "--maxmemory-policy", "noeviction" ]
@@ -223,7 +223,7 @@ export function getDevelopmentDockerCompose({
                 - redis_data:/data`
 			: "",
 		others.includes("S3")
-			? dedent /* yaml */`minio:
+			? /* yaml */ `minio:
             container_name: ${projectName}-minio
             image: minio/minio:latest
             command: [ "minio", "server", "/data", "--console-address", ":9001" ]

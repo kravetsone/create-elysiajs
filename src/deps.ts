@@ -35,4 +35,8 @@ export const dependencies = {
 
 	"@verrou/core": "^0.5.1",
 	"@aws-sdk/client-s3": "^3.772.0",
+
+	"@elysiajs/eden": "^1.2.0",
+	"ioredis-mock": "^8.9.0",
+	"@electric-sql/pglite": "^0.2.17",
 };

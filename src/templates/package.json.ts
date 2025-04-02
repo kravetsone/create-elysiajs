@@ -13,6 +13,7 @@ export function getPackageJson({
 	isMonorepo,
 	locks,
 	redis,
+	mockWithPGLite,
 }: Preferences) {
 	const sample = {
 		name: projectName,
@@ -115,7 +116,11 @@ export function getPackageJson({
 		sample.dependencies["elysia-oauth2"] = dependencies["elysia-oauth2"];
 	}
 
-	if (redis) sample.dependencies.ioredis = dependencies.ioredis;
+	if (redis) {
+		sample.dependencies.ioredis = dependencies.ioredis;
+		if (mockWithPGLite)
+			sample.devDependencies["ioredis-mock"] = dependencies["ioredis-mock"];
+	}
 
 	if (others.includes("Jobify")) {
 		sample.dependencies.jobify = dependencies.jobify;
@@ -134,7 +139,14 @@ export function getPackageJson({
 			dependencies["@gramio/init-data"];
 
 	if (others.includes("S3")) {
-		sample.dependencies["@aws-sdk/client-s3"] = dependencies["@aws-sdk/client-s3"];
+		sample.dependencies["@aws-sdk/client-s3"] =
+			dependencies["@aws-sdk/client-s3"];
+	}
+
+	if (mockWithPGLite) {
+		sample.devDependencies["@electric-sql/pglite"] =
+			dependencies["@electric-sql/pglite"];
+		sample.devDependencies["@elysiajs/eden"] = dependencies["@elysiajs/eden"];
 	}
 
 	return JSON.stringify(sample, null, 2);

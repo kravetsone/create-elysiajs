@@ -1,5 +1,22 @@
 import type { Preferences } from "../utils.js";
 
+export const driverNamesToDrizzle: Record<Preferences["driver"], string> = {
+	"node-postgres": "node-postgres",
+	"Bun.sql": "bun-sql",
+	"Postgres.JS": "postgres-js",
+	"MySQL 2": "mysql2",
+	"Bun SQLite": "bun-sqlite",
+	None: "",
+};
+
+export const driverNames: Record<Preferences["driver"], string> = {
+	"node-postgres": "pg",
+	"Bun.sql": "??",
+	"Postgres.JS": "postgres",
+	"MySQL 2": "mysql2",
+	"Bun SQLite": "bun:sqlite",
+	None: "",
+};
 export function getDBIndex({ orm, driver, packageManager }: Preferences) {
 	if (orm === "Prisma")
 		return [
