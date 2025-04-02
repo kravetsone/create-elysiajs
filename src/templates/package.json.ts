@@ -15,6 +15,7 @@ export function getPackageJson({
 	redis,
 	mockWithPGLite,
 	telegramRelated,
+	s3Client,
 }: Preferences) {
 	const sample = {
 		name: projectName,
@@ -139,7 +140,7 @@ export function getPackageJson({
 		sample.dependencies["@gramio/init-data"] =
 			dependencies["@gramio/init-data"];
 
-	if (others.includes("S3")) {
+	if (others.includes("S3") && s3Client === "@aws-sdk/client-s3") {
 		sample.dependencies["@aws-sdk/client-s3"] =
 			dependencies["@aws-sdk/client-s3"];
 	}
@@ -152,7 +153,7 @@ export function getPackageJson({
 
 	if (telegramRelated && !isMonorepo) {
 		sample.dependencies.gramio = dependencies.gramio;
-		sample.devDependencies["@gramio/init-data"] =
+		sample.dependencies["@gramio/init-data"] =
 			dependencies["@gramio/init-data"];
 	}
 

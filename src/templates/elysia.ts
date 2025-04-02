@@ -61,6 +61,7 @@ export function getElysiaIndex({
 
 	if (telegramRelated && !isMonorepo) {
 		elysiaImports.push(`import { bot } from "./bot.ts"`);
+		elysiaImports.push(`import { webhookHandler } from "./services/auth.ts"`);
 		elysiaPlugins.push(
 			`.post(\`/\${config.BOT_TOKEN}\`, webhookHandler(bot, "elysia"), {
 				detail: {
