@@ -2,10 +2,12 @@ import dedent from "ts-dedent";
 
 export function getAuthPlugin() {
 	return dedent /* ts */`
-    import { validateAndParseInitData } from "@gramio/init-data";
-    import { Elysia } from "elysia";
-    import { config } from "../../config.ts";
+    import { validateAndParseInitData, signInitData, getBotTokenSecretKey } from "@gramio/init-data";
+    import { Elysia, t } from "elysia";
+    import { config } from "../config.ts";
     
+    const secretKey = getBotTokenSecretKey(config.BOT_TOKEN);
+
     export const authElysia = new Elysia({
         name: "auth",
     })
@@ -33,7 +35,7 @@ export function getAuthPlugin() {
         .resolve(({ headers, error }) => {
             const result = validateAndParseInitData(
                 headers["x-init-data"],
-                config.BOT_TOKEN
+                secretKey
             );
             if (!result || !result.user)
                 return error("Unauthorized", "UNAUTHORIZED");
