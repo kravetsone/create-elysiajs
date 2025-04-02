@@ -15,7 +15,13 @@ const dbExportedMap = {
 	Drizzle: "client",
 };
 
-export function getIndex({ others, orm, driver }: PreferencesType) {
+export function getIndex({
+	others,
+	orm,
+	driver,
+	telegramRelated,
+	isMonorepo,
+}: PreferencesType) {
 	const isShouldConnectToDB =
 		orm !== "None" &&
 		driver !== "Postgres.JS" &&
@@ -51,15 +57,19 @@ export function getIndex({ others, orm, driver }: PreferencesType) {
 	startUpTasks.push(/*ts*/ `
     app.listen(config.PORT, () => console.log(\`🦊 Server started at \${app.server?.url.origin}\`))
     `);
-	// 	startUpTasks.push(dedent /* tss */`
-	//         if (config.NODE_ENV === "production")
-	//             await bot.start({
-	//                 webhook: {
-	//                     url: \`\${config.API_URL}/\${config.BOT_TOKEN}\`,
-	//                 },
-	//             });
-	//         else await bot.start();`);
-	// }
+
+	if (telegramRelated && !isMonorepo) {
+		imports.push(`import { bot } from "./bot.ts"`);
+		startUpTasks.push(dedent /* tss */`
+	        if (config.NODE_ENV === "production")
+	            await bot.start({
+	                webhook: {
+	                    url: \`\${config.API_URL}/\${config.BOT_TOKEN}\`,
+	                },
+	            });
+	        else await bot.start();`);
+	}
+
 	return dedent /* sts */`
     ${imports.join("\n")}
     const signals = ["SIGINT", "SIGTERM"];

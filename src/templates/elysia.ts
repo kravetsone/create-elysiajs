@@ -1,6 +1,12 @@
 import type { Preferences } from "../utils";
 
-export function getElysiaIndex({ orm, driver, plugins }: Preferences) {
+export function getElysiaIndex({
+	orm,
+	driver,
+	plugins,
+	telegramRelated,
+	isMonorepo,
+}: Preferences) {
 	const elysiaPlugins: string[] = [];
 	const elysiaImports: string[] = [
 		`import { Elysia } from "elysia"`,
@@ -52,6 +58,17 @@ export function getElysiaIndex({ orm, driver, plugins }: Preferences) {
 	}
 
 	elysiaPlugins.push(`.get("/", "Hello World")`);
+
+	if (telegramRelated && !isMonorepo) {
+		elysiaImports.push(`import { bot } from "./bot.ts"`);
+		elysiaPlugins.push(
+			`.post(\`/\${config.BOT_TOKEN}\`, webhookHandler(bot, "elysia"), {
+				detail: {
+					hide: true,
+				},
+			})`,
+		);
+	}
 
 	return [
 		...elysiaImports,

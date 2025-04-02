@@ -143,12 +143,12 @@ export function getReadme({
 
 	if (mockWithPGLite) {
 		instruction.push(
-			"## Tests\n\n",
-			`Tests are written with ${links.Bun}:test.\n\n`,
+			"## Tests\n",
+			`Tests are written with ${links.Bun}:test.\n`,
 			"Mocks:\n",
 			`- Postgres usage is mocked with ${links.PGLite}`,
 			`- Redis usage is mocked with ${links.IoRedisMock}`,
-			"\n\n",
+			"\n",
 			"```bash",
 			"bun test",
 			"```\n",

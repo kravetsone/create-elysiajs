@@ -30,7 +30,15 @@ const composeServiceNames: Record<
 };
 
 export function getEnvFile(
-	{ database, orm, plugins, projectName, redis, meta }: PreferencesType,
+	{
+		database,
+		orm,
+		plugins,
+		projectName,
+		redis,
+		meta,
+		telegramRelated,
+	}: PreferencesType,
 	isComposed = false,
 ) {
 	const envs = [];
@@ -48,6 +56,10 @@ export function getEnvFile(
 		envs.push(`DATABASE_URL="${url}"`);
 	}
 
+	if (telegramRelated) {
+		envs.push(`BOT_TOKEN=""`);
+	}
+
 	if (isComposed && redis) envs.push("REDIS_HOST=redis");
 
 	if (plugins.includes("JWT"))
@@ -63,6 +75,7 @@ export function getConfigFile({
 	others,
 	plugins,
 	locks,
+	telegramRelated,
 }: PreferencesType) {
 	const envs: string[] = [];
 
@@ -71,6 +84,10 @@ export function getConfigFile({
 	envs.push(
 		`API_URL: env.get("API_URL").default(\`https://\${env.get("PUBLIC_DOMAIN").asString()}\`).asString()`,
 	);
+
+	if (telegramRelated) {
+		envs.push(`BOT_TOKEN: env.get("BOT_TOKEN").required().asString()`);
+	}
 
 	if (orm !== "None")
 		envs.push(`DATABASE_URL: env.get("DATABASE_URL").required().asString()`);

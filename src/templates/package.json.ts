@@ -14,6 +14,7 @@ export function getPackageJson({
 	locks,
 	redis,
 	mockWithPGLite,
+	telegramRelated,
 }: Preferences) {
 	const sample = {
 		name: projectName,
@@ -147,6 +148,12 @@ export function getPackageJson({
 		sample.devDependencies["@electric-sql/pglite"] =
 			dependencies["@electric-sql/pglite"];
 		sample.devDependencies["@elysiajs/eden"] = dependencies["@elysiajs/eden"];
+	}
+
+	if (telegramRelated && !isMonorepo) {
+		sample.dependencies.gramio = dependencies.gramio;
+		sample.devDependencies["@gramio/init-data"] =
+			dependencies["@gramio/init-data"];
 	}
 
 	return JSON.stringify(sample, null, 2);

@@ -47,9 +47,8 @@ export function getTestsAPIFile({ redis, driver }: Preferences) {
 }
 
 export function getTestsIndex({ redis, driver }: Preferences) {
-	return dedent /* ts */`
-    import { describe, it, expect } from "bun:test";
-    import { api } from "./api.ts";
+	return dedent /* ts */`import { describe, it, expect } from "bun:test";
+    import { api } from "../api.ts";
 
     describe("API - /", () => {
         it("/ - should return hello world", async () => {
@@ -64,8 +63,7 @@ export function getTestsIndex({ redis, driver }: Preferences) {
 }
 
 export function getTestSharedFile() {
-	return dedent /* ts */`
-    import { signInitData } from "@gramio/init-data";
+	return dedent /* ts */`import { signInitData } from "@gramio/init-data";
 
     export const BOT_TOKEN = "1234567890:ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
