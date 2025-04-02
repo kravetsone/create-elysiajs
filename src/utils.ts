@@ -79,6 +79,8 @@ export class Preferences {
 	noInstall = false;
 
 	mockWithPGLite = false;
+
+	telegramRelated = false;
 }
 
 export type PreferencesType = InstanceType<typeof Preferences>;

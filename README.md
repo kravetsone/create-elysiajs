@@ -36,6 +36,9 @@ bun create elysiajs <dir>
 -   -   [Static](https://elysiajs.com/plugins/static.html)
 -   -   [Bearer](https://elysiajs.com/plugins/bearer.html)
 -   -   [Server Timing](https://elysiajs.com/plugins/server-timing.html)
+-   Test with bun:test and mocks for
+-   -   [PGLite](https://pglite.dev/) for Postgres
+-   -   [IoRedisMock](https://www.npmjs.com/package/ioredis-mock) for Redis
 -   Others
 -   -   [Dockerfile](https://www.docker.com/) + [docker-compose.yml](https://docs.docker.com/compose/)
 -   -   [Jobify](https://github.com/kravetsone/jobify) ([Bullmq](https://docs.bullmq.io/) wrapper)

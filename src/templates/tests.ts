@@ -62,3 +62,22 @@ export function getTestsIndex({ redis, driver }: Preferences) {
 
 `;
 }
+
+export function getTestSharedFile() {
+	return dedent /* ts */`
+    import { signInitData } from "@gramio/init-data";
+
+    export const BOT_TOKEN = "1234567890:ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+	export const INIT_DATA = signInitData(
+		{
+			user: {
+				id: 1,
+				first_name: "durov",
+				username: "durov",
+			},
+		},
+		BOT_TOKEN,
+	);
+	`;
+}

@@ -11,7 +11,6 @@ import {
 	getDBIndex,
 	getDrizzleConfig,
 	getElysiaIndex,
-	getElysiaMonorepo,
 	getEnvFile,
 	getIndex,
 	getInstallCommands,
@@ -24,6 +23,7 @@ import {
 	getDockerCompose,
 	getDockerfile,
 } from "./templates/docker";
+import { getAuthPlugin } from "./templates/services/auth";
 import { getJobifyFile } from "./templates/services/jobify";
 import { getLocksFile } from "./templates/services/locks";
 import { getPosthogIndex } from "./templates/services/posthog";
@@ -31,6 +31,7 @@ import { getRedisFile } from "./templates/services/redis";
 import { getS3ServiceFile } from "./templates/services/s3";
 import {
 	getPreloadFile,
+	getTestSharedFile,
 	getTestsAPIFile,
 	getTestsIndex,
 } from "./templates/tests";
@@ -109,6 +110,17 @@ createOrFindDir(projectDir)
 		}
 
 		if (!args.monorepo) {
+			const { telegramRelated } = await prompt<{
+				telegramRelated: PreferencesType["telegramRelated"];
+			}>({
+				type: "toggle",
+				name: "telegramRelated",
+				initial: "no",
+				message:
+					"Is your project related to Telegram (Did you wants to validate init data and etc)?",
+			});
+			preferences.telegramRelated = telegramRelated;
+
 			const { linter } = await prompt<{ linter: PreferencesType["linter"] }>({
 				type: "select",
 				name: "linter",
@@ -186,6 +198,8 @@ createOrFindDir(projectDir)
 					preferences.mockWithPGLite = mockWithPGLite;
 				}
 			}
+		} else {
+			preferences.telegramRelated = true;
 		}
 		const { plugins } = await prompt<{
 			plugins: PreferencesType["plugins"];
@@ -318,12 +332,6 @@ createOrFindDir(projectDir)
 				getConfigFile(preferences),
 			);
 
-			if (preferences.isMonorepo)
-				await fs.writeFile(
-					projectDir + "/src/services.ts",
-					getElysiaMonorepo(),
-				);
-
 			// if (plugins.includes("Autoload"))
 			await fs.mkdir(projectDir + "/src/routes");
 
@@ -389,6 +397,13 @@ createOrFindDir(projectDir)
 					getS3ServiceFile(preferences),
 				);
 			}
+
+			if (preferences.telegramRelated) {
+				await fs.writeFile(
+					`${projectDir}/src/services/auth.plugin.ts`,
+					getAuthPlugin(),
+				);
+			}
 			if (preferences.docker) {
 				await fs.writeFile(
 					`${projectDir}/Dockerfile`,
@@ -438,6 +453,12 @@ createOrFindDir(projectDir)
 						preload = ["./tests/preload.ts"]
 					`,
 				);
+
+				if (preferences.telegramRelated)
+					await fs.writeFile(
+						`${projectDir}/tests/shared.ts`,
+						getTestSharedFile(),
+					);
 			}
 
 			setTitle("Template generation is complete!");

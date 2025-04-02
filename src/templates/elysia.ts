@@ -61,26 +61,3 @@ export function getElysiaIndex({ orm, driver, plugins }: Preferences) {
 		plugins.includes("Autoload") ? "\nexport type ElysiaApp = typeof app" : "",
 	].join("\n");
 }
-
-export function getElysiaMonorepo() {
-	return `import { validateAndParseInitData } from "@gramio/init-data";
-import { Elysia } from "elysia";
-import { config } from "./config.ts";
-
-export const authElysia = new Elysia()
-    .derive(({ headers, error }) => {
-        const initData = headers["x-init-data"];
-        if (!initData) return error("Unauthorized");
-
-        const result = validateAndParseInitData(
-            initData,
-            config.BOT_TOKEN
-        );
-        if (!result || !result.user) return error("Unauthorized");
-
-        return {
-            user: result.user,
-        };
-    })
-    .as("plugin");`;
-}
