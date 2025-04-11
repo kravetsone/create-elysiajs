@@ -31,7 +31,7 @@ export const dependencies = {
 	"env-var": "^7.5.0",
 	"posthog-node": "^4.11.1",
 	jobify: "^0.1.6",
-	"ioredis": "^5.6.0",
+	"ioredis": "^5.6.1",
 
 	"@verrou/core": "^0.5.1",
 	"@aws-sdk/client-s3": "^3.779.0",
