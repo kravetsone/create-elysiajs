@@ -29,7 +29,7 @@ export const dependencies = {
 	"elysia-oauth2": "^2.0.0",
 	"arctic": "^3.6.0",
 	"env-var": "^7.5.0",
-	"posthog-node": "^4.11.1",
+	"posthog-node": "^4.17.1",
 	jobify: "^0.1.6",
 	"ioredis": "^5.6.0",
 
