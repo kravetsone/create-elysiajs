@@ -7,7 +7,7 @@ export const dependencies = {
 	"eslint-plugin-drizzle": "^0.2.3",
 	"prisma": "^6.7.0",
 	"@prisma/client": "^6.7.0",
-	"drizzle-orm": "^0.41.0",
+	"drizzle-orm": "^0.43.1",
 	"drizzle-kit": "^0.30.6",
 	"pg": "^8.16.0",
 	"@types/pg": "^8.15.1",
