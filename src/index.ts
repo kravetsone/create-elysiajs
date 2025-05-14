@@ -218,7 +218,7 @@ createOrFindDir(projectDir)
 				"JWT",
 				"Autoload",
 				"Oauth 2.0",
-				"Logger",
+				// "Logger",
 				"HTML/JSX",
 				"Static",
 				"Bearer",
