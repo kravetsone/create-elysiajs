@@ -34,7 +34,7 @@ export const dependencies = {
 	"ioredis": "^5.6.1",
 
 	"@verrou/core": "^0.5.1",
-	"@aws-sdk/client-s3": "^3.779.0",
+	"@aws-sdk/client-s3": "^3.810.0",
 
 	"@elysiajs/eden": "^1.3.2",
 	"ioredis-mock": "^8.9.0",
