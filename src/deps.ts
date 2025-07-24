@@ -24,7 +24,7 @@ export const dependencies = {
 	"@elysiajs/swagger": "^1.3.0",
 	"elysia-autoload": "^1.7.0",
 	"@bogeychan/elysia-logger": "^0.1.8",
-	"@antfu/eslint-config": "^4.13.0",
+	"@antfu/eslint-config": "^4.19.0",
 	"@gramio/init-data": "^0.0.3",
 	"elysia-oauth2": "^2.1.0",
 	"arctic": "^3.6.1",
