@@ -18,7 +18,7 @@ export const dependencies = {
 	"@elysiajs/cors": "^1.3.3",
 	"@elysiajs/html": "^1.3.0",
 	"@kitajs/ts-html-plugin": "^4.1.2",
-	"@elysiajs/jwt": "^1.3.0",
+	"@elysiajs/jwt": "^1.3.3",
 	"@elysiajs/server-timing": "^1.3.0",
 	"@elysiajs/static": "^1.3.0",
 	"@elysiajs/swagger": "^1.3.1",
