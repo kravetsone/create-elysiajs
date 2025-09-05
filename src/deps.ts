@@ -16,7 +16,7 @@ export const dependencies = {
 	husky: "^9.1.7",
 	"@elysiajs/bearer": "^1.3.0",
 	"@elysiajs/cors": "^1.3.3",
-	"@elysiajs/html": "^1.3.0",
+	"@elysiajs/html": "^1.3.1",
 	"@kitajs/ts-html-plugin": "^4.1.2",
 	"@elysiajs/jwt": "^1.3.3",
 	"@elysiajs/server-timing": "^1.3.0",
