@@ -27,7 +27,7 @@ export const dependencies = {
 	"@antfu/eslint-config": "^5.2.2",
 	"@gramio/init-data": "^0.0.3",
 	"elysia-oauth2": "^2.1.0",
-	"arctic": "^3.6.1",
+	"arctic": "^3.7.0",
 	"env-var": "^7.5.0",
 	"posthog-node": "^4.18.0",
 	jobify: "^0.1.6",
