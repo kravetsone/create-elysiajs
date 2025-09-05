@@ -1,43 +1,78 @@
 export const dependencies = {
 	"elysia": "^1.3.21",
+
 	"typescript": "^5.9.2",
+
 	"@types/bun": "^1.2.21",
+
 	"@biomejs/biome": "^2.2.3",
+
 	"eslint": "^9.35.0",
+
 	"eslint-plugin-drizzle": "^0.2.3",
+
 	"prisma": "^6.15.0",
+
 	"@prisma/client": "^6.15.0",
+
 	"drizzle-orm": "^0.44.5",
+
 	"drizzle-kit": "^0.31.4",
+	
 	"pg": "^8.16.3",
+
 	"@types/pg": "^8.15.5",
+
 	"postgres": "^3.4.7",
+
 	"mysql2": "^3.14.4",
+
 	husky: "^9.1.7",
+
 	"@elysiajs/bearer": "^1.3.0",
+
 	"@elysiajs/cors": "^1.3.3",
+
 	"@elysiajs/html": "^1.3.1",
+
 	"@kitajs/ts-html-plugin": "^4.1.2",
+
 	"@elysiajs/jwt": "^1.3.3",
+
 	"@elysiajs/server-timing": "^1.3.0",
+
 	"@elysiajs/static": "^1.3.0",
+
 	"@elysiajs/swagger": "^1.3.1",
+
 	"elysia-autoload": "^1.7.0",
+
 	"@bogeychan/elysia-logger": "^0.1.10",
+
 	"@antfu/eslint-config": "^5.2.2",
+
 	"@gramio/init-data": "^0.0.5",
+
 	"elysia-oauth2": "^2.1.0",
+
 	"arctic": "^3.7.0",
+
 	"env-var": "^7.5.0",
+
 	"posthog-node": "^5.8.2",
+
 	jobify: "^0.1.6",
+
 	"ioredis": "^5.7.0",
 
 	"@verrou/core": "^0.5.1",
+
 	"@aws-sdk/client-s3": "^3.882.0",
 
 	"@elysiajs/eden": "^1.3.3",
+
 	"ioredis-mock": "^8.9.0",
+	
 	"@electric-sql/pglite": "^0.3.7",
 
 	"gramio": "^0.4.10",
