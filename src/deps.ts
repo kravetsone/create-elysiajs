@@ -38,7 +38,7 @@ export const dependencies = {
 
 	"@elysiajs/eden": "^1.3.2",
 	"ioredis-mock": "^8.9.0",
-	"@electric-sql/pglite": "^0.3.1",
+	"@electric-sql/pglite": "^0.3.7",
 
 	"gramio": "^0.4.10",
 };
