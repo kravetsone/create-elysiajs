@@ -23,7 +23,7 @@ export const dependencies = {
 	"@elysiajs/static": "^1.3.0",
 	"@elysiajs/swagger": "^1.3.1",
 	"elysia-autoload": "^1.7.0",
-	"@bogeychan/elysia-logger": "^0.1.8",
+	"@bogeychan/elysia-logger": "^0.1.10",
 	"@antfu/eslint-config": "^5.2.2",
 	"@gramio/init-data": "^0.0.3",
 	"elysia-oauth2": "^2.1.0",
