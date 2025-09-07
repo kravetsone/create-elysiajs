@@ -75,5 +75,5 @@ export const dependencies = {
 	
 	"@electric-sql/pglite": "^0.3.7",
 
-	"gramio": "^0.4.10",
+	"gramio": "^0.4.11",
 };
