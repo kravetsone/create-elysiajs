@@ -31,7 +31,7 @@ export const dependencies = {
 
 	"@elysiajs/bearer": "^1.3.0",
 
-	"@elysiajs/cors": "^1.3.3",
+	"@elysiajs/cors": "^1.4.0",
 
 	"@elysiajs/html": "^1.3.1",
 
