@@ -28,18 +28,43 @@ export async function createOrFindDir(path: string) {
 	await fs.stat(path).catch(async () => fs.mkdir(path));
 }
 
-export const pluginDeps = {
-	Bearer: "@elysiajs/bearer",
-	CORS: "@elysiajs/cors",
-	"HTML/JSX": "@elysiajs/html",
-	JWT: "@elysiajs/jwt",
-	"Server Timing": "@elysiajs/server-timing",
-	Static: "@elysiajs/static",
-	Swagger: "@elysiajs/swagger",
-	Autoload: "elysia-autoload",
-	openAPI: "@elysiajs/openapi",
-} as const;
+export type PluginName =
+	| "Bearer"
+	| "CORS"
+	| "HTML/JSX"
+	| "JWT"
+	| "Server Timing"
+	| "Static"
+	| "Swagger"
+	| "Autoload"
+	| "openAPI"
+	| "Logger"
+	| "Oauth 2.0";
 
+export type PluginDependency = {
+	name: string;
+	type: 'runtime' | 'dev';
+};
+
+export const pluginDepsMap: Record<PluginName, PluginDependency[]> = {
+	Bearer: [{ name: "@elysiajs/bearer", type: "runtime" }],
+	CORS: [{ name: "@elysiajs/cors", type: "runtime" }],
+	"HTML/JSX": [
+		{ name: "@elysiajs/html", type: "runtime" },
+		{ name: "@kitajs/ts-html-plugin", type: "dev" },
+	],
+	JWT: [{ name: "@elysiajs/jwt", type: "runtime" }],
+	"Server Timing": [{ name: "@elysiajs/server-timing", type: "runtime" }],
+	Static: [{ name: "@elysiajs/static", type: "runtime" }],
+	Swagger: [{ name: "@elysiajs/swagger", type: "runtime" }],
+	Autoload: [{ name: "elysia-autoload", type: "runtime" }],
+	openAPI: [{ name: "@elysiajs/openapi", type: "runtime" }],
+	Logger: [{ name: "@bogeychan/elysia-logger", type: "runtime" }],
+	"Oauth 2.0": [
+		{ name: "arctic", type: "runtime" },
+		{ name: "elysia-oauth2", type: "runtime" },
+	],
+} as const;
 export class Preferences {
 	projectName = "";
 	dir = "";
@@ -63,7 +88,7 @@ export class Preferences {
 		| "None" = "None";
 	git = true;
 	others: ("S3" | "Husky" | "Posthog" | "Jobify")[] = [];
-	plugins: (keyof typeof pluginDeps)[] = [];
+	plugins: PluginName[] = [];
 	// integration with create-gramio
 	isMonorepo = false;
 
@@ -190,4 +215,120 @@ export function getMonorepoRootDepsAndScripts({
 	}
 
 	return { devDependencies, scripts };
+}
+
+export function getSingleAppDepsAndScripts(
+	plugins: PluginName[],
+	{
+		linter,
+		orm,
+		driver,
+		others,
+		redis,
+		mockWithPGLite,
+		telegramRelated,
+		s3Client,
+		packageManager,
+	}: {
+		linter: "ESLint" | "Biome" | "None";
+		orm: "Prisma" | "Drizzle" | "None";
+		driver: string;
+		others: string[];
+		redis?: boolean;
+		mockWithPGLite?: boolean;
+		telegramRelated?: boolean;
+		s3Client?: string;
+		packageManager: string;
+	},
+) {
+	const runtimeDeps: Record<string, string> = {};
+	const devDeps: Record<string, string> = {};
+	const scripts: Record<string, string> = {};
+
+	// Handle plugin dependencies with type classification
+	for (const plugin of plugins) {
+		const deps = pluginDepsMap[plugin];
+		if (deps) {
+			for (const { name, type } of deps) {
+				const version = dependencies[name]; // Get version from deps.ts
+				if (!version) continue; // Safety fallback
+
+				if (type === "runtime") {
+					runtimeDeps[name] = version;
+				} else {
+					devDeps[name] = version;
+				}
+			}
+		}
+	}
+
+	// --- Linter ---
+	if (linter === "Biome") {
+		scripts.lint = `${pmExecuteMap[packageManager]} @biomejs/biome check src`;
+		scripts["lint:fix"] = `${pmRunMap[packageManager]} lint --write`;
+		devDeps["@biomejs/biome"] = dependencies["@biomejs/biome"];
+	} else if (linter === "ESLint") {
+		scripts.lint = `${pmExecuteMap[packageManager]} eslint`;
+		scripts["lint:fix"] = `${pmExecuteMap[packageManager]} eslint --fix`;
+		devDeps.eslint = dependencies.eslint;
+		devDeps["@antfu/eslint-config"] = dependencies["@antfu/eslint-config"];
+		if (orm === "Drizzle")
+			devDeps["eslint-plugin-drizzle"] = dependencies["eslint-plugin-drizzle"];
+	}
+
+	// --- ORM ---
+	if (orm === "Prisma") {
+		devDeps.prisma = dependencies.prisma;
+		runtimeDeps["@prisma/client"] = dependencies["@prisma/client"];
+	} else if (orm === "Drizzle") {
+		runtimeDeps["drizzle-orm"] = dependencies["drizzle-orm"];
+		devDeps["drizzle-kit"] = dependencies["drizzle-kit"];
+		if (driver === "node-postgres") {
+			runtimeDeps.pg = dependencies.pg;
+			devDeps["@types/pg"] = dependencies["@types/pg"];
+		} else if (driver === "Postgres.JS") {
+			runtimeDeps.postgres = dependencies.postgres;
+		} else if (driver === "MySQL 2") {
+			runtimeDeps.mysql2 = dependencies.mysql2;
+		}
+		scripts.generate = `${pmExecuteMap[packageManager]} drizzle-kit generate`;
+		scripts.push = `${pmExecuteMap[packageManager]} drizzle-kit push`;
+		scripts.migrate = `${pmExecuteMap[packageManager]} drizzle-kit migrate`;
+		scripts.studio = `${pmExecuteMap[packageManager]} drizzle-kit studio`;
+	}
+
+	// --- Others ---
+	if (others.includes("Husky")) {
+		devDeps.husky = dependencies.husky;
+		scripts.prepare = "husky";
+	}
+	if (others.includes("Jobify")) {
+		runtimeDeps.jobify = dependencies.jobify;
+	}
+	if (others.includes("Posthog")) {
+		runtimeDeps["posthog-node"] = dependencies["posthog-node"];
+	}
+	if (others.includes("S3") && s3Client === "@aws-sdk/client-s3") {
+		runtimeDeps["@aws-sdk/client-s3"] = dependencies["@aws-sdk/client-s3"];
+	}
+
+	// --- Redis ---
+	if (redis) {
+		runtimeDeps.ioredis = dependencies.ioredis;
+		if (mockWithPGLite) devDeps["ioredis-mock"] = dependencies["ioredis-mock"];
+	}
+
+	// --- Telegram ---
+	if (telegramRelated) {
+		runtimeDeps.gramio = dependencies.gramio;
+		runtimeDeps["@gramio/init-data"] = dependencies["@gramio/init-data"];
+	}
+
+	// --- PGLite ---
+	if (mockWithPGLite) {
+		devDeps["@electric-sql/pglite"] = dependencies["@electric-sql/pglite"];
+		devDeps["@elysiajs/eden"] = dependencies["@elysiajs/eden"];
+	}
+
+	return { dependencies: runtimeDeps, devDependencies: devDeps, scripts };
 }

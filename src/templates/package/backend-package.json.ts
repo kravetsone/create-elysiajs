@@ -1,6 +1,6 @@
 import { dependencies } from "../../deps";
 import { ShareDeps } from "../../deps.share";
-import { type Preferences, pluginDeps, pmExecuteMap } from "../../utils";
+import { getSingleAppDepsAndScripts, type Preferences, pmExecuteMap } from "../../utils";
 
 export function getBackendPackageJson({
 	projectName,
@@ -14,6 +14,20 @@ export function getBackendPackageJson({
 	telegramRelated,
 	s3Client,
 }: Preferences) {
+	// Get plugin dependencies with proper type classification
+	const { dependencies: pluginDeps, devDependencies: pluginDevDeps, scripts: pluginScripts } =
+		getSingleAppDepsAndScripts(plugins, {
+			linter: "Biome", // Backend always uses Biome in monorepo
+			orm,
+			driver,
+			others,
+			redis,
+			mockWithPGLite,
+			telegramRelated,
+			s3Client,
+			packageManager,
+		});
+
 	const sample = {
 		name: `@${projectName}/backend`,
 		version: "0.0.1",
@@ -29,10 +43,12 @@ export function getBackendPackageJson({
 			lint: "biome check",
 			"lint:fix": "biome check --write",
 			start: "bun --env-file=.env --env-file=.env.production ./dist/index.js",
+			...pluginScripts, // Merge plugin-specific scripts
 		} as Record<string, string>,
 		dependencies: {
 			elysia: ShareDeps.elysia,
 			"env-var": dependencies["env-var"],
+			...pluginDeps, // Merge runtime dependencies from plugins
 		} as Record<string, string>,
 		devDependencies: {
 			"@repo/tsconfig": "workspace:*",
@@ -40,76 +56,10 @@ export function getBackendPackageJson({
 			typescript: ShareDeps.typescript,
 			rimraf: ShareDeps.rimraf,
 			"@biomejs/biome": dependencies["@biomejs/biome"],
+			"@elysiajs/eden": dependencies["@elysiajs/eden"], // Eden for frontend type support
+			...pluginDevDeps, // Merge dev dependencies from plugins
 		} as Record<string, string>,
 	};
-
-	// 添加插件依赖
-	for (const plugin of plugins) {
-		const depName = pluginDeps[plugin];
-		if (depName && dependencies[depName]) {
-			sample.dependencies[depName] = dependencies[depName];
-		}
-	}
-
-	// ORM 支持
-	if (orm === "Prisma") {
-		sample.devDependencies.prisma = dependencies.prisma;
-		sample.dependencies["@prisma/client"] = dependencies["@prisma/client"];
-		sample.scripts["db:generate"] =
-			`${pmExecuteMap[packageManager]} prisma generate`;
-		sample.scripts["db:push"] =
-			`${pmExecuteMap[packageManager]} prisma db push`;
-		sample.scripts["db:migrate"] =
-			`${pmExecuteMap[packageManager]} prisma migrate dev`;
-		sample.scripts["db:studio"] =
-			`${pmExecuteMap[packageManager]} prisma studio`;
-	}
-
-	if (orm === "Drizzle") {
-		sample.dependencies["drizzle-orm"] = dependencies["drizzle-orm"];
-		sample.devDependencies["drizzle-kit"] = dependencies["drizzle-kit"];
-		if (driver === "node-postgres") {
-			sample.dependencies.pg = dependencies.pg;
-			sample.devDependencies["@types/pg"] = dependencies["@types/pg"];
-		}
-		if (driver === "Postgres.JS") {
-			sample.dependencies.postgres = dependencies.postgres;
-		}
-		if (driver === "MySQL 2") {
-			sample.dependencies.mysql2 = dependencies.mysql2;
-		}
-		sample.scripts["db:generate"] =
-			`${pmExecuteMap[packageManager]} drizzle-kit generate`;
-		sample.scripts["db:push"] =
-			`${pmExecuteMap[packageManager]} drizzle-kit push`;
-		sample.scripts["db:migrate"] =
-			`${pmExecuteMap[packageManager]} drizzle-kit migrate`;
-		sample.scripts["db:studio"] =
-			`${pmExecuteMap[packageManager]} drizzle-kit studio`;
-	}
-
-	// Redis 支持
-	if (redis) {
-		sample.dependencies.ioredis = dependencies.ioredis;
-		if (mockWithPGLite)
-			sample.devDependencies["ioredis-mock"] = dependencies["ioredis-mock"];
-	}
-
-	// 其他工具
-	if (others.includes("S3") && s3Client === "@aws-sdk/client-s3") {
-		sample.dependencies["@aws-sdk/client-s3"] =
-			dependencies["@aws-sdk/client-s3"];
-		sample.dependencies["@aws-sdk/s3-request-presigner"] =
-			dependencies["@aws-sdk/s3-request-presigner"];
-	}
-
-	if (telegramRelated) {
-		sample.dependencies["@gramio/init-data"] =
-			dependencies["@gramio/init-data"];
-	}
-
-	// Eden 用于前端类型支持
-	sample.devDependencies["@elysiajs/eden"] = dependencies["@elysiajs/eden"];
 
 	return JSON.stringify(sample, null, 2);
 }
