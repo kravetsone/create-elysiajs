@@ -4,7 +4,6 @@ import {
 	getSingleAppDepsAndScripts,
 	type Preferences,
 	pmExecuteMap,
-	pmRunMap,
 } from "../../utils";
 
 export function getPackageJson({
@@ -16,7 +15,6 @@ export function getPackageJson({
 	others,
 	plugins,
 	isMonorepo,
-	locks,
 	redis,
 	mockWithPGLite,
 	telegramRelated,
@@ -64,18 +62,21 @@ export function getPackageJson({
 	}
 
 	// 单应用配置
-	const { dependencies: pluginDeps, devDependencies: pluginDevDeps, scripts: pluginScripts } =
-		getSingleAppDepsAndScripts(plugins, {
-			linter,
-			orm,
-			driver,
-			others,
-			redis,
-			mockWithPGLite,
-			telegramRelated,
-			s3Client,
-			packageManager,
-		});
+	const {
+		dependencies: pluginDeps,
+		devDependencies: pluginDevDeps,
+		scripts: pluginScripts,
+	} = getSingleAppDepsAndScripts(plugins, {
+		linter,
+		orm,
+		driver,
+		others,
+		redis,
+		mockWithPGLite,
+		telegramRelated,
+		s3Client,
+		packageManager,
+	});
 
 	const sample = {
 		name: projectName,

@@ -1,6 +1,6 @@
 import { dependencies } from "../../deps";
 import { ShareDeps } from "../../deps.share";
-import { getSingleAppDepsAndScripts, type Preferences, pmExecuteMap } from "../../utils";
+import { getSingleAppDepsAndScripts, type Preferences } from "../../utils";
 
 export function getBackendPackageJson({
 	projectName,
@@ -15,18 +15,21 @@ export function getBackendPackageJson({
 	s3Client,
 }: Preferences) {
 	// Get plugin dependencies with proper type classification
-	const { dependencies: pluginDeps, devDependencies: pluginDevDeps, scripts: pluginScripts } =
-		getSingleAppDepsAndScripts(plugins, {
-			linter: "Biome", // Backend always uses Biome in monorepo
-			orm,
-			driver,
-			others,
-			redis,
-			mockWithPGLite,
-			telegramRelated,
-			s3Client,
-			packageManager,
-		});
+	const {
+		dependencies: pluginDeps,
+		devDependencies: pluginDevDeps,
+		scripts: pluginScripts,
+	} = getSingleAppDepsAndScripts(plugins, {
+		linter: "Biome", // Backend always uses Biome in monorepo
+		orm,
+		driver,
+		others,
+		redis,
+		mockWithPGLite,
+		telegramRelated,
+		s3Client,
+		packageManager,
+	});
 
 	const sample = {
 		name: `@${projectName}/backend`,

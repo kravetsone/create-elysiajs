@@ -43,7 +43,7 @@ export type PluginName =
 
 export type PluginDependency = {
 	name: string;
-	type: 'runtime' | 'dev';
+	type: "runtime" | "dev";
 };
 
 export const pluginDepsMap: Record<PluginName, PluginDependency[]> = {
@@ -238,7 +238,7 @@ export function getSingleAppDepsAndScripts(
 		mockWithPGLite?: boolean;
 		telegramRelated?: boolean;
 		s3Client?: string;
-		packageManager: string;
+		packageManager: PackageManager;
 	},
 ) {
 	const runtimeDeps: Record<string, string> = {};
