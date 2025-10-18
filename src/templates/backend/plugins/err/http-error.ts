@@ -51,9 +51,8 @@ export class InternalServerError extends CustomError {
 }
 
 export class DatabaseError extends CustomError {
-  constructor(message: string = "Database operation failed", originalError?: any) {
+  constructor(message: string = "Database operation failed", originalError?: unknown) {
     super(message, 500, originalError);
   }
-}
-`;
+}`;
 }

@@ -32,7 +32,7 @@
   "scripts": {
     "watch": "bunx pkgroll -w",
     "lint": "bunx @biomejs/biome check src",
-    "lint:fix": "biome check --write",
+    "lint:fix": "bunx @biomejs/biome check --write",
     "prepublishOnly": "bunx pkgroll"
   },
   "devDependencies": {

@@ -30,8 +30,8 @@ export default defineConfig({
     port: 5000,
     fs: {
       allow: ['../backend/src'],
-     }
-   }
+    },
+  },
   resolve: {
     alias: {
       "@": resolve(__dirname, "./src"),
@@ -55,7 +55,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": resolve(__dirname, "src"),
-  },
+    },
   },
   server: {
     port: 5173,

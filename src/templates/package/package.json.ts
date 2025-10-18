@@ -179,7 +179,7 @@ export function getPackageJson({
 		sample.dependencies["@verrou/core"] = dependencies["@verrou/core"];
 	}
 
-	if (isMonorepo)
+	if (telegramRelated)
 		sample.dependencies["@gramio/init-data"] =
 			dependencies["@gramio/init-data"];
 

@@ -4,13 +4,11 @@ import { toast } from "vue-sonner";
 import client from "./useTreaty";
 
 export type Err =
-  | {
+  {
     message?: string;
     data?: null | Record<string, any> | string;
     status: number;
-  }
-  | any;
-
+  };
 /**
  * 使用Toast的简单API Hook - 保持类型推导
  */
@@ -19,14 +17,13 @@ export function useApiWithToast() {
 
   // 显示错误toast
   const showError = (message: string) => {
-    toast(message)
+    toast.error(message)
   };
 
   // 显示警告toast
   const showWarning = (message: string) => {
-    toast(message)
+    toast.warning(message)
   };
-
   // 获取友好的错误消息
   const getErrorMessage = (error: any): string => {
     if (error?.status === 400) return "Invalid request parameters";
@@ -78,10 +75,9 @@ export function useApiWithToast() {
 
   // 成功提示
   const showSuccess = (message: string) => {
-    toast(message)
-  };
-
-  // 创建操作（带成功提示）
+  const showSuccess = (message: string) => {
+    toast.success(message)
+  };  // 创建操作（带成功提示）
   const create = async <Data>(
     apiCall: () => Promise<{ data: Data; error: Err }>,
     successMessage: string = "创建成功",

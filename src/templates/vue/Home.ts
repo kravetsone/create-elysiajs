@@ -29,7 +29,7 @@ export function getHomeVue() {
 
       <div class="api-test">
         <h2>API Test</h2>
-        <input type="text" v-model="inputValue"></input>
+        <input type="text" v-model="inputValue" />
         <button @click="testApi" :disabled="loading">
           {{ loading ? 'Requesting...' : 'Test Backend API' }}
         </button>

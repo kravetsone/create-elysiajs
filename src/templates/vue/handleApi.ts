@@ -3,11 +3,10 @@ export function getHandleApi() {
 import { useApiWithToast } from "./useApiWithToast";
 
 /**
- * 使用Toast的简化版API
+ * Example API wrapper - customize the methods below for your API routes
  */
 export const useApi = () => {
   const api = useApiWithToast();
-
   return {
     // 合作伙伴
     partners: {

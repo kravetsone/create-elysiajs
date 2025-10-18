@@ -1,5 +1,5 @@
 export function getUsersModel() {
-	return `import { relations } from "drizzle-orm";
+  return `import { relations } from "drizzle-orm";
 import {
 	index,
 	integer,
@@ -26,12 +26,12 @@ export const usersTable = pgTable(
 	{
 		id,
 		username: varchar("username", { length: 50 }).notNull().unique(),
-		password: varchar("password", { length: 255 }).notNull(), // 存储加密后的密码
-		email: varchar("email", { length: 100 }).unique().notNull(), // @typebox { format: 'email' }
+		password: varchar("password", { length: 255 }).notNull(), 
+		email: varchar("email", { length: 100 }).unique().notNull(), 
 		role: varchar("role", { length: 50 }).notNull().default("user"),
 		nickname: varchar("nickname", { length: 50 }).notNull(),
 		avatar: varchar("avatar", { length: 255 }),
-		isActive: pgBoolean("isActive").notNull().default(true), // true: 正常, false: 禁用
+		isActive: pgBoolean("isActive").notNull().default(true), 
 		createdAt,
 		updatedAt,
 	},
@@ -45,10 +45,10 @@ export const tokenTable = pgTable(
 	"tokens",
 	{
 		id,
-		ownerId: integer("owner_id")
-			.notNull()
-			.references(() => usersTable.id),
-		accessToken: text("access_token").notNull(),
+    ownerId: integer("owner_id")
+    .notNull()
+    .references(() => usersTable.id, { onDelete: "cascade" }),	
+    accessToken: text("access_token").notNull(),
 		refreshToken: text("refresh_token").notNull(),
 		createdAt,
 	},
@@ -108,7 +108,8 @@ export namespace UsersModel {
 		newPassword: t.String({ minLength: 6 }),
 	});
 
-	// 前端展示类型（VO - View Object）
+	// front need type ( VO - View Object)
+	// WARNING: Always exclude password field when querying users for this VO
 	export const ViewObject = t.Object({
 		id: t.Integer(),
 		username: t.String(),
@@ -119,13 +120,7 @@ export namespace UsersModel {
 		isActive: t.Boolean(),
 		createdAt: t.Date(),
 		updatedAt: t.Date(),
-	});
-}
+	});}
 
-// 向后兼容的导出
-export const UserStatus = UsersModel.UserStatus;
-export const insertUsersSchema = UsersModel.Insert;
-export const selectUsersSchema = UsersModel.Select;
-export const updateUsersSchema = UsersModel.Update;
 `;
 }
