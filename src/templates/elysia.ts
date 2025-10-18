@@ -1,8 +1,6 @@
 import type { Preferences } from "../utils";
 
 export function getElysiaIndex({
-	orm,
-	driver,
 	plugins,
 	telegramRelated,
 	isMonorepo,

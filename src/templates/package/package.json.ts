@@ -1,8 +1,12 @@
-import { dependencies } from "../deps";
-import { type Preferences, pmExecuteMap, pmRunMap } from "../utils";
+import { dependencies } from "../../deps";
+import {
+	getMonorepoRootDepsAndScripts,
+	type Preferences,
+	pmExecuteMap,
+	pmRunMap,
+} from "../../utils";
 
 export function getPackageJson({
-	dir,
 	projectName,
 	linter,
 	packageManager,
@@ -17,6 +21,45 @@ export function getPackageJson({
 	telegramRelated,
 	s3Client,
 }: Preferences) {
+	if (isMonorepo) {
+		const { devDependencies: extraDeps, scripts: extraScripts } =
+			getMonorepoRootDepsAndScripts({
+				linter,
+				orm,
+				others,
+				packageManager,
+				mockWithPGLite,
+			});
+
+		const rootPackage = {
+			name: projectName,
+			private: true,
+			type: "module",
+			packageManager: `${packageManager}@latest`,
+			workspaces: ["packages/*", "apps/*"],
+			scripts: {
+				build: "turbo run build",
+				dev: "turbo run dev",
+				start: "turbo run start",
+				"check-types": "turbo run check-types",
+				clean: "turbo run clean",
+				preclean: "rimraf node_modules dist bun.lockb .turbo",
+				...extraScripts, // 👈 把动态脚本合并进来！
+			},
+			engines: { bun: ">=1.3.0" },
+			dependencies: {}, // monorepo 根一般没有运行时依赖！
+			devDependencies: {
+				turbo: dependencies.turbo,
+				rimraf: dependencies.rimraf,
+				"@types/bun": dependencies["@types/bun"],
+				...extraDeps, // 👈 把动态依赖合并进来！
+			},
+		};
+
+		return JSON.stringify(rootPackage, null, 2);
+	}
+
+	// 单应用配置
 	const sample = {
 		name: projectName,
 		type: "module",

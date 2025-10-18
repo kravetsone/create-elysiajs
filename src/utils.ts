@@ -2,6 +2,7 @@ import child_process from "node:child_process";
 import { randomBytes } from "node:crypto";
 import fs from "node:fs/promises";
 import { promisify } from "node:util";
+import { dependencies } from "./deps";
 
 export type PackageManager = "bun" | "npm" | "yarn" | "pnpm";
 
@@ -54,6 +55,7 @@ export class Preferences {
 		| "JWT"
 		| "CORS"
 		| "Swagger"
+		| "openAPI"
 		| "Autoload"
 		| "Oauth 2.0"
 		| "Logger"
@@ -64,6 +66,10 @@ export class Preferences {
 	)[] = [];
 	// integration with create-gramio
 	isMonorepo = false;
+
+	frontend: "None" | "Vue" | "React" | "Solid" | "Svelte" = "None";
+	frontendDir = "";
+	backendDir = "";
 
 	docker = false;
 	vscode = false;
@@ -129,3 +135,59 @@ export const pmInstallFrozenLockfileProduction: Record<PackageManager, string> =
 		yarn: "yarn install --frozen-lockfile --production",
 		pnpm: "pnpm install --frozen-lockfile --prod",
 	};
+
+export function getMonorepoRootDepsAndScripts({
+	linter,
+	orm,
+	others,
+	packageManager,
+	mockWithPGLite,
+}: Pick<
+	Preferences,
+	"linter" | "orm" | "others" | "packageManager" | "mockWithPGLite"
+>) {
+	const devDependencies: Record<string, string> = {};
+	const scripts: Record<string, string> = {};
+
+	// handle Linter
+	if (linter === "Biome") {
+		devDependencies["@biomejs/biome"] = dependencies["@biomejs/biome"];
+		scripts.lint = `${pmExecuteMap[packageManager]} @biomejs/biome check .`;
+		scripts["lint:fix"] = `${pmRunMap[packageManager]} lint --write`;
+	}
+	if (linter === "ESLint") {
+		devDependencies.eslint = dependencies.eslint;
+		devDependencies["@antfu/eslint-config"] =
+			dependencies["@antfu/eslint-config"];
+		scripts.lint = `${pmExecuteMap[packageManager]} eslint .`;
+		scripts["lint:fix"] = `${pmExecuteMap[packageManager]} eslint --fix .`;
+	}
+
+	// handle ORM
+	if (orm === "Drizzle") {
+		devDependencies["drizzle-kit"] = dependencies["drizzle-kit"];
+		scripts["db:generate"] =
+			`${pmExecuteMap[packageManager]} drizzle-kit generate`;
+		scripts["db:push"] = `${pmExecuteMap[packageManager]} drizzle-kit push`;
+		scripts["db:studio"] = `${pmExecuteMap[packageManager]} drizzle-kit studio`;
+	}
+	if (orm === "Prisma") {
+		devDependencies.prisma = dependencies.prisma;
+		scripts["db:generate"] = `${pmExecuteMap[packageManager]} prisma generate`;
+		scripts["db:push"] = `${pmExecuteMap[packageManager]} prisma db push`;
+		scripts["db:studio"] = `${pmExecuteMap[packageManager]} prisma studio`;
+	}
+
+	// handle other tools
+	if (others.includes("Husky")) {
+		devDependencies.husky = dependencies.husky;
+		scripts.prepare = "husky";
+	}
+
+	if (mockWithPGLite) {
+		devDependencies["@electric-sql/pglite"] =
+			dependencies["@electric-sql/pglite"];
+	}
+
+	return { devDependencies, scripts };
+}

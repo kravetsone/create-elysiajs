@@ -1,0 +1,7 @@
+{
+	"permissions": {
+		"allow": ["Read(//d/Users/boer/Desktop/gina/**)"],
+		"deny": [],
+		"ask": []
+	}
+}
