@@ -1,5 +1,4 @@
 import fs from "node:fs/promises";
-import { prompt } from "enquirer";
 import {
   getConfigFile,
   getDBIndex,
@@ -62,6 +61,11 @@ import {
   generateBackendDirectories,
   generateCommonBackendFiles,
 } from "./utils/backend-helpers";
+import {
+  collectTelegramPreferences,
+  collectFrontendPreferences,
+  collectCommonBackendPreferences,
+} from "./utils/preference-collectors";
 
 export async function generateMonorepo(
   projectDir: string,
@@ -85,109 +89,24 @@ export async function generateMonorepo(
 }
 
 export async function collectMonorepoPreferences(preferences: PreferencesType) {
-  // 询问是否启用 telegram 相关功能
-  const { telegramRelated } = await prompt<{
-    telegramRelated: boolean;
-  }>({
-    type: "toggle",
-    name: "telegramRelated",
+  // Collect Telegram preference
+  await collectTelegramPreferences(preferences, {
     initial: "yes",
     message: "Do you want to include Telegram bot support?",
   });
-  preferences.telegramRelated = telegramRelated;
 
-  // 在 monorepo 模式下询问前端框架
-  const { frontend } = await prompt<{
-    frontend: PreferencesType["frontend"];
-  }>({
-    type: "select",
-    name: "frontend",
-    message: "Select frontend framework: (currently only Vue supported)",
+  // Collect frontend preference (monorepo-specific)
+  await collectFrontendPreferences(preferences, {
     choices: ["None", "Vue"],
+    message: "Select frontend framework: (currently only Vue supported)",
   });
-  preferences.frontend = frontend;
 
-
-  // 收集其他偏好（简化版本，专注于核心功能）
-  const { linter } = await prompt<{ linter: PreferencesType["linter"] }>({
-    type: "select",
-    name: "linter",
-    message: "Select linters/formatters:",
-    choices: ["None", "Biome"],
+  // Collect common backend preferences with monorepo-specific options
+  await collectCommonBackendPreferences(preferences, {
+    linterChoices: ["None", "Biome"], // Monorepo prefers Biome
+    ormChoices: ["None", "Drizzle"], // Monorepo focuses on Drizzle
+    includePrismaDatabases: false, // Monorepo doesn't include Prisma options
   });
-  preferences.linter = linter;
-
-  const { orm } = await prompt<{ orm: PreferencesType["orm"] }>({
-    type: "select",
-    name: "orm",
-    message: "Select ORM/Query Builder:",
-    choices: ["None", "Drizzle"],
-  });
-  preferences.orm = orm;
-
-  if (orm === "Drizzle") {
-    const { database } = await prompt<{
-      database: "PostgreSQL";
-    }>({
-      type: "select",
-      name: "database",
-      message: "Select DataBase for Drizzle:",
-      choices: ["PostgreSQL"],
-    });
-
-    const driversMap: Record<typeof database, PreferencesType["driver"][]> = {
-      PostgreSQL: (
-        [
-          preferences.runtime === "Bun" ? "Bun.sql" : undefined,
-          "node-postgres",
-          "Postgres.JS",
-        ] as const
-      ).filter((x) => x !== undefined),
-    };
-
-    const { driver } = await prompt<{ driver: PreferencesType["driver"] }>({
-      type: "select",
-      name: "driver",
-      message: `Select driver for ${database}:`,
-      choices: driversMap[database],
-    });
-    preferences.database = database;
-    preferences.driver = driver;
-
-    if (database === "PostgreSQL") {
-      const { mockWithPGLite } = await prompt<{
-        mockWithPGLite: PreferencesType["mockWithPGLite"];
-      }>({
-        type: "toggle",
-        name: "mockWithPGLite",
-        initial: "yes",
-        message:
-          "Do you want to mock database in tests with PGLite (Postgres in WASM)?",
-      });
-      preferences.mockWithPGLite = mockWithPGLite;
-    }
-  }
-
-  const { plugins } = await prompt<{
-    plugins: PreferencesType["plugins"];
-  }>({
-    type: "multiselect",
-    name: "plugins",
-    message: "Select Elysia plugins: (Space to select, Enter to continue)",
-    choices: [
-      "CORS",
-      "Swagger",
-      "openAPI",
-      "JWT",
-      "Autoload",
-      "Oauth 2.0",
-      "HTML/JSX",
-      "Static",
-      "Bearer",
-      "Server Timing",
-    ] as PreferencesType["plugins"],
-  });
-  preferences.plugins = plugins;
 }
 
 async function generateMonorepoStructure(

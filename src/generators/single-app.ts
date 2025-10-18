@@ -1,5 +1,4 @@
 import fs from "node:fs/promises";
-import { prompt } from "enquirer";
 import dedent from "ts-dedent";
 import {
   generateEslintConfig,
@@ -39,6 +38,11 @@ import {
   generateBackendDirectories,
   generateCommonBackendFiles,
 } from "./utils/backend-helpers";
+import {
+  collectTelegramPreferences,
+  collectCommonBackendPreferences,
+  collectOtherToolsPreferences,
+} from "./utils/preference-collectors";
 
 export async function generateSingleApp(
   projectDir: string,
@@ -53,185 +57,30 @@ export async function generateSingleApp(
 }
 
 export async function collectPreferences(preferences: PreferencesType) {
-  const { telegramRelated } = await prompt<{
-    telegramRelated: PreferencesType["telegramRelated"];
-  }>({
-    type: "toggle",
-    name: "telegramRelated",
+  // Collect Telegram preference with single-app default
+  await collectTelegramPreferences(preferences, {
     initial: "no",
-    message:
-      "Is your project related to Telegram (Did you wants to validate init data and etc)?",
+    message: "Is your project related to Telegram (Did you want to validate init data and etc)?",
   });
-  preferences.telegramRelated = telegramRelated;
 
-  const { linter } = await prompt<{ linter: PreferencesType["linter"] }>({
-    type: "select",
-    name: "linter",
-    message: "Select linters/formatters:",
-    choices: ["None", "ESLint", "Biome"],
+  // Collect common backend preferences with single-app options
+  await collectCommonBackendPreferences(preferences, {
+    linterChoices: ["None", "ESLint", "Biome"], // Single app supports all linters
+    ormChoices: ["None", "Prisma", "Drizzle"], // Single app supports all ORMs
+    includePrismaDatabases: true, // Single app includes Prisma options
   });
-  preferences.linter = linter;
 
-  const { orm } = await prompt<{ orm: PreferencesType["orm"] }>({
-    type: "select",
-    name: "orm",
-    message: "Select ORM/Query Builder:",
-    choices: ["None", "Prisma", "Drizzle"],
+  // Collect other tools preferences
+  await collectOtherToolsPreferences(preferences, {
+    includeS3: true,
+    includePosthog: true,
+    includeJobify: true,
+    includeHusky: true,
+    includeLocks: true,
+    includeRedis: true,
+    includeDocker: true,
+    includeVSCode: true,
   });
-  preferences.orm = orm;
-
-  if (orm === "Prisma") {
-    const { database } = await prompt<{
-      database: PreferencesType["database"];
-    }>({
-      type: "select",
-      name: "database",
-      message: "Select DataBase for Prisma:",
-      choices: [
-        "PostgreSQL",
-        "MySQL",
-        "MongoDB",
-        "SQLite",
-        "SQLServer",
-        "CockroachDB",
-      ],
-    });
-    preferences.database = database;
-  }
-
-  if (orm === "Drizzle") {
-    const { database } = await prompt<{
-      database: "PostgreSQL" | "MySQL" | "SQLite";
-    }>({
-      type: "select",
-      name: "database",
-      message: "Select DataBase for Drizzle:",
-      choices: ["PostgreSQL", "MySQL", "SQLite"],
-    });
-
-    const driversMap: Record<typeof database, PreferencesType["driver"][]> = {
-      PostgreSQL: (
-        [
-          preferences.runtime === "Bun" ? "Bun.sql" : undefined,
-          "node-postgres",
-          "Postgres.JS",
-        ] as const
-      ).filter((x) => x !== undefined),
-      MySQL: ["MySQL 2"],
-      SQLite: ["Bun SQLite"],
-    };
-
-    const { driver } = await prompt<{ driver: PreferencesType["driver"] }>({
-      type: "select",
-      name: "driver",
-      message: `Select driver for ${database}:`,
-      choices: driversMap[database],
-    });
-    preferences.database = database;
-    preferences.driver = driver;
-
-    if (database === "PostgreSQL") {
-      const { mockWithPGLite } = await prompt<{
-        mockWithPGLite: PreferencesType["mockWithPGLite"];
-      }>({
-        type: "toggle",
-        name: "mockWithPGLite",
-        initial: "yes",
-        message:
-          "Do you want to mock database in tests with PGLite (Postgres in WASM)?",
-      });
-      preferences.mockWithPGLite = mockWithPGLite;
-    }
-  }
-
-  const { plugins } = await prompt<{
-    plugins: PreferencesType["plugins"];
-  }>({
-    type: "multiselect",
-    name: "plugins",
-    message: "Select Elysia plugins: (Space to select, Enter to continue)",
-    choices: [
-      "CORS",
-      "Swagger",
-      "JWT",
-      "Autoload",
-      "Oauth 2.0",
-      "HTML/JSX",
-      "Static",
-      "Bearer",
-      "Server Timing",
-    ] as PreferencesType["plugins"],
-  });
-  preferences.plugins = plugins;
-
-  const { others } = await prompt<{ others: PreferencesType["others"] }>({
-    type: "multiselect",
-    name: "others",
-    message: "Select others tools: (Space to select, Enter to continue)",
-    choices: ["S3", "Posthog", "Jobify", "Husky"],
-  });
-  preferences.others = others;
-
-  if (others.includes("S3")) {
-    const { s3Client } = await prompt<{
-      s3Client: PreferencesType["s3Client"];
-    }>({
-      type: "select",
-      name: "s3Client",
-      message: "Select S3 client:",
-      choices: ["Bun.S3Client", "@aws-sdk/client-s3"],
-    });
-    preferences.s3Client = s3Client;
-  }
-
-  if (!others.includes("Husky")) {
-    const { git } = await prompt<{ git: boolean }>({
-      type: "toggle",
-      name: "git",
-      initial: "yes",
-      message: "Create an empty Git repository?",
-    });
-    preferences.git = git;
-  } else {
-    preferences.git = true;
-  }
-
-  const { locks } = await prompt<{ locks: boolean }>({
-    type: "toggle",
-    name: "locks",
-    initial: "yes",
-    message: "Do you want to use Locks to prevent race conditions?",
-  });
-  preferences.locks = locks;
-
-  if (others.includes("Jobify")) {
-    preferences.redis = true;
-  } else {
-    const { redis } = await prompt<{ redis: boolean }>({
-      type: "toggle",
-      name: "redis",
-      initial: "yes",
-      message: "Do you want to use Redis?",
-    });
-    preferences.redis = redis;
-  }
-
-  const { docker } = await prompt<{ docker: boolean }>({
-    type: "toggle",
-    name: "docker",
-    initial: "yes",
-    message: "Create Dockerfile + docker.compose.yml?",
-  });
-  preferences.docker = docker;
-
-  const { vscode } = await prompt<{ vscode: boolean }>({
-    type: "toggle",
-    name: "vscode",
-    initial: "yes",
-    message:
-      "Create .vscode folder with VSCode extensions recommendations and settings?",
-  });
-  preferences.vscode = vscode;
 }
 
 async function generateFiles(projectDir: string, preferences: PreferencesType) {
