@@ -1,5 +1,5 @@
 export function getRes() {
-  return `// Elysia + Drizzle Unified Response Format Utility
+	return `// Elysia + Drizzle Unified Response Format Utility
 
 import { t } from "elysia";
 
@@ -34,16 +34,16 @@ export function commonRes<T>(
 }
 
 /**
- * Pagination query parameters Zod type definition
+ *  Pagination query parameters Elysia type definition
  */
 export const PaginationQuery = t.Object({
-  page: t.Optional(t.Number()),
-  limit: t.Optional(t.Number()),
+  page: t.Optional(t.Number({ minimum: 1 })),
+  limit: t.Optional(t.Number({ minimum: 1, maximum: 100 })),
 });
 
 export type PaginationQueryType = typeof PaginationQuery.static;
 /**
- * Pagination metadata Zod type definition
+ * Pagination metadata Elysia type definition
  */
 export const PageMeta = t.Object({
   total: t.Number(),

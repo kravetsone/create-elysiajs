@@ -14,9 +14,9 @@ export async function performHealthCheck() {
          try {
          const u = new URL(url);
          const safe = \`\${u.protocol}//\${u.hostname}\${u.port ? ":" : ""}\${u.port}\${u.pathname}\`;
-         console.log("数据库连接目标", safe);
+         console.log("Database connection target", safe);
          } catch {
-         console.log("数据库连接字符串已配置");
+         console.log("Database connection string configured");
          }
       }
     // Use drizzle's query method instead of execute(sql\`\`)

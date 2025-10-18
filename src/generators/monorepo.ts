@@ -39,6 +39,7 @@ import {
 	getNodeTSConfig,
 	getTypeScriptConfigPackageJson,
 } from "../templates/tsconfig";
+import { getAppTSConfig } from "../templates/tsconfig/app";
 import {
 	getAppVue,
 	getEnvDTs,
@@ -55,7 +56,6 @@ import { getRouter } from "../templates/vue/router";
 import { getUseApiWithToast } from "../templates/vue/useApiWithToast";
 import { getUseTreaty } from "../templates/vue/useTreaty";
 import type { PreferencesType } from "../utils";
-import { getAppTSConfig } from "../templates/tsconfig/app";
 
 export async function generateMonorepo(
 	projectDir: string,
@@ -378,7 +378,10 @@ async function generateFrontendApp(
 	await fs.mkdir(frontendDir);
 
 	// 创建前端 .env 文件
-	await fs.writeFile(`${frontendDir}/.env`, getEnvFile(preferences));
+	await fs.writeFile(
+		`${frontendDir}/.env`,
+		`VITE_API_URL=http://localhost:5000`,
+	);
 	await fs.writeFile(
 		`${frontendDir}/.env.production`,
 		getEnvFile(preferences, true),

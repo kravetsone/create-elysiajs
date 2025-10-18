@@ -19,22 +19,22 @@ export function useApiWithToast() {
 
   // 显示错误toast
   const showError = (message: string) => {
-    toast("message")
+    toast(message)
   };
 
   // 显示警告toast
   const showWarning = (message: string) => {
-    toast("message")
+    toast(message)
   };
 
   // 获取友好的错误消息
   const getErrorMessage = (error: any): string => {
-    if (error?.status === 400) return "请求参数有误";
-    if (error?.status === 401) return "登录已过期，请重新登录";
-    if (error?.status === 403) return "没有权限进行此操作";
-    if (error?.status === 404) return "请求的资源不存在";
-    if (error?.status === 500) return "服务器内部错误，请稍后再试";
-    return error?.message || "操作失败，请稍后再试";
+    if (error?.status === 400) return "Invalid request parameters";
+    if (error?.status === 401) return "Login expired, please login again";
+    if (error?.status === 403) return "Insufficient permissions";
+    if (error?.status === 404) return "Requested resource not found";
+    if (error?.status === 500) return "Internal server error, please try again later";
+    return error?.message || "Operation failed, please try again later";
   };
 
   // 基础API调用 - 保持原始类型推导

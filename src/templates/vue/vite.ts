@@ -20,10 +20,10 @@ export default defineConfig({
     Components({
       resolvers: [],
       dts: true, // 生成组件类型声明文件
-      dirs: ["src/components"], // 自动导入的组件目录
-      extensions: ["vue"], // 组件文件扩展名
-      deep: true, // 深度搜索子目录
-      include: [/\\.vue$/, /\\.vue\\?vue/], // 包含的文件类型
+      dirs: ["src/components"], // Directory for auto-imported components
+      extensions: ["vue"], // Component file extensions
+      deep: true, // Deep search subdirectories
+      include: [/\\.vue$/, /\\.vue\\?vue/], // Included file types
     }),
   ],
   server: {
@@ -55,7 +55,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": resolve(__dirname, "src"),
-    },
+  },
   },
   server: {
     port: 5173,
@@ -63,7 +63,7 @@ export default defineConfig({
       "/api": {
         target: "http://localhost:3000",
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^/api/, ""),
+        rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },
   },

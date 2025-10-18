@@ -49,10 +49,10 @@ export function getFrontendPackageJson({
 		sample.dependencies.vue = dependencies.vue;
 		sample.dependencies["@vueuse/core"] = dependencies["@vueuse/core"];
 		sample.dependencies["vue-router"] = dependencies["vue-router"];
-		sample.dependencies["vue-sonner"] = dependencies["vue-sonner"] || "^2.0.9";
+		sample.dependencies["vue-sonner"] = dependencies["vue-sonner"];
 		sample.dependencies["@elysiajs/eden"] = dependencies["@elysiajs/eden"];
-		sample.dependencies["@tailwindcss/vite"] = dependencies["@tailwindcss/vite"] || "^4.1.14";
-		sample.dependencies.tailwindcss = dependencies.tailwindcss || "^4.1.14";
+		sample.dependencies["@tailwindcss/vite"] = dependencies["@tailwindcss/vite"];
+		sample.dependencies.tailwindcss = dependencies.tailwindcss;
 
 		// 添加对后端包的依赖
 		sample.dependencies[`@${projectName}/backend`] = `workspace:*`;
@@ -61,9 +61,9 @@ export function getFrontendPackageJson({
 			dependencies["@vitejs/plugin-vue"];
 		sample.devDependencies["@vue/tsconfig"] = dependencies["@vue/tsconfig"];
 		sample.devDependencies["vue-tsc"] = dependencies["vue-tsc"];
-		sample.devDependencies["@egoist/tailwindcss-icons"] = dependencies["@egoist/tailwindcss-icons"] || "^1.9.0";
-		sample.devDependencies["unplugin-auto-import"] = dependencies["unplugin-auto-import"] || "^20.1.0";
-		sample.devDependencies["unplugin-vue-components"] = dependencies["unplugin-vue-components"] || "^29.0.0";
+		sample.devDependencies["@egoist/tailwindcss-icons"] = dependencies["@egoist/tailwindcss-icons"];
+		sample.devDependencies["unplugin-auto-import"] = dependencies["unplugin-auto-import"];
+		sample.devDependencies["unplugin-vue-components"] = dependencies["unplugin-vue-components"];
 		sample.devDependencies["@repo/tsconfig"] = "workspace:*";
 	}
 
