@@ -1,11 +1,11 @@
 export function getRes() {
-  return `// Elysia + Drizzle 统一响应格式工具文件
+  return `// Elysia + Drizzle Unified Response Format Utility
 
 import { t } from "elysia";
 
 /**
- * 前端用的响应类型定义
- * 错误也使用这个
+ * Frontend response type definition
+ * Errors also use this type
  */
 export type CommonRes<T> = {
   code: number;
@@ -14,17 +14,17 @@ export type CommonRes<T> = {
 };
 
 /**
- * // 成功响应函数
- * 错误也使用这个响应函数
- * @param data 数据
- * @param code
- * @param message
- * @returns
+ * Success response function
+ * Errors also use this response function
+ * @param data Response data
+ * @param code Response code
+ * @param message Response message
+ * @returns Unified response object
  */
 export function commonRes<T>(
   data: T,
   code = 200,
-  message = "操作成功",
+  message = "Success",
 ): CommonRes<T> {
   return {
     code,
@@ -34,7 +34,7 @@ export function commonRes<T>(
 }
 
 /**
- * 分页查询参数的 Zod 类型定义
+ * Pagination query parameters Zod type definition
  */
 export const PaginationQuery = t.Object({
   page: t.Optional(t.Number()),
@@ -43,7 +43,7 @@ export const PaginationQuery = t.Object({
 
 export type PaginationQueryType = typeof PaginationQuery.static;
 /**
- * 分页元数据 Zod 类型定义
+ * Pagination metadata Zod type definition
  */
 export const PageMeta = t.Object({
   total: t.Number(),
@@ -53,36 +53,36 @@ export const PageMeta = t.Object({
 });
 export type PageMeta = typeof PageMeta.static;
 export interface PageData<T> {
-  items: T[]; // 当前页数据
+  items: T[]; // Current page data
   meta: PageMeta;
 }
 
 /**
- * 前端用的分页响应类型定义
+ * Frontend pagination response type definition
  */
 export type PageRes<T> = {
   code: number;
   message: string;
   data: PageData<T>;
 };
-// ==================== 响应函数 ====================
+// ==================== Response Functions ====================
 
 /**
- * 创建符合项目规范的分页响应
- * 复用 pageRes 函数
- * @param data 数据数组
- * @param total 总数
- * @param page 当前页码
- * @param limit 每页大小
- * @param message 响应消息
- * @returns 符合项目规范的分页响应
+ * Create paginated response following project standards
+ * Reuses pageRes function
+ * @param data Data array
+ * @param total Total count
+ * @param page Current page number
+ * @param limit Page size
+ * @param message Response message
+ * @returns Paginated response following project standards
  */
 export function pageRes<T>(
   data: T[],
   total: number,
   page = 1,
   limit = 10,
-  message = "获取成功",
+  message = "Data retrieved successfully",
 ) {
   return commonRes(
     {

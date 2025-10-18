@@ -11,54 +11,54 @@ import {
 } from "./http-error";
 
 /**
- * 将底层数据库错误（如 Drizzle/PostgreSQL 抛出的）映射为语义化自定义错误
+ * Maps low-level database errors (like those thrown by Drizzle/PostgreSQL) to semantic custom errors
  */
 export function mapDatabaseError(
   error: any,
 ): DatabaseError | DuplicateError | ValidationError | ServiceUnavailableError {
   const code = String(error?.code);
-  const detail = error?.detail || error?.message || "数据库操作失败";
+  const detail = error?.detail || error?.message || "Database operation failed";
 
   switch (code) {
     case "23505": // unique_violation
       return new DuplicateError(detail, error);
     case "23503": // foreign_key_violation
-      return new ValidationError("关联数据不存在，请检查数据完整性", error);
+      return new ValidationError("Related data does not exist, please check data integrity", error);
     case "23502": // not_null_violation
-      return new ValidationError("必填字段不能为空", error);
+      return new ValidationError("Required field cannot be empty", error);
     case "23514": // check_violation
-      return new ValidationError("数据格式不正确", error);
+      return new ValidationError("Data format is incorrect", error);
     case "08006": // connection_failure
-      return new ServiceUnavailableError("数据库连接失败，请稍后重试", error);
+      return new ServiceUnavailableError("Database connection failed, please try again later", error);
     case "28P01": // invalid_password
-      return new DatabaseError("数据库认证失败", error);
+      return new DatabaseError("Database authentication failed", error);
     case "40P01": // deadlock_detected
-      return new DatabaseError("数据库死锁，请重试", error);
+      return new DatabaseError("Database deadlock, please retry", error);
     case "57014": // query_canceled
-      return new DatabaseError("数据库操作超时", error);
+      return new DatabaseError("Database operation timed out", error);
     default:
       return new DatabaseError(detail, error);
   }
 }
 
 /**
- * 处理数据库错误的便捷函数
- * 如果错误已经是自定义错误，直接抛出
- * 否则使用 mapDatabaseError 转换后抛出
+ * Convenience function for handling database errors
+ * If the error is already a custom error, throw it directly
+ * Otherwise, convert it using mapDatabaseError and throw
  */
 export function handleDatabaseError(error: any): never {
-  // 如果已经是自定义错误，直接抛出
+  // If already a custom error, throw it directly
   if (error instanceof CustomError) {
     throw error;
   }
 
-  // 如果是数据库错误，进行映射
+  // If it's a database error, map it
   if (isDatabaseError(error)) {
     throw mapDatabaseError(error);
   }
 
-  // 其他未知错误，包装为 DatabaseError
-  throw new DatabaseError("数据库操作失败", error);
+  // Other unknown errors, wrap as DatabaseError
+  throw new DatabaseError("Database operation failed", error);
 }
 `;
 }

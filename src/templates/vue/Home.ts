@@ -2,45 +2,45 @@ export function getHomeVue() {
 	return `<template>
   <div class="home">
     <div class="hero">
-      <h1>欢迎使用 Elysia + Vue</h1>
-      <p class="subtitle">一个现代化的全栈 TypeScript 开发框架</p>
+      <h1>Welcome to Elysia + Vue</h1>
+      <p class="subtitle">A modern full-stack TypeScript development framework</p>
 
       <div class="features">
         <div class="feature-card">
-          <h3>🚀 Elysia 后端</h3>
-          <p>高性能、类型安全的 Web 框架</p>
+          <h3>🚀 Elysia Backend</h3>
+          <p>High-performance, type-safe web framework</p>
         </div>
 
         <div class="feature-card">
-          <h3>⚡ Vue 3 前端</h3>
-          <p>现代化、响应式的用户界面</p>
+          <h3>⚡ Vue 3 Frontend</h3>
+          <p>Modern, responsive user interface</p>
         </div>
 
         <div class="feature-card">
           <h3>📦 Monorepo</h3>
-          <p>统一的代码仓库和依赖管理</p>
+          <p>Unified code repository and dependency management</p>
         </div>
 
         <div class="feature-card">
           <h3>🔧 TypeScript</h3>
-          <p>端到端的类型安全保障</p>
+          <p>End-to-end type safety guarantee</p>
         </div>
       </div>
 
       <div class="api-test">
-        <h2>API 测试</h2>
+        <h2>API Test</h2>
         <input type="text" v-model="inputValue"></input>
         <button @click="testApi" :disabled="loading">
-          {{ loading ? '请求中...' : '测试后端 API' }}
+          {{ loading ? 'Requesting...' : 'Test Backend API' }}
         </button>
 
         <div v-if="result" class="result">
-          <h3>响应结果:</h3>
+          <h3>Response Result:</h3>
           <pre>{{ result }}</pre>
         </div>
 
         <div v-if="error" class="error">
-          <h3>错误信息:</h3>
+          <h3>Error Message:</h3>
           <pre>{{ error }}</pre>
         </div>
       </div>
@@ -64,9 +64,9 @@ const testApi = async () => {
 
   try {
     const res = await api.partners.list(inputValue.value)
-    result.value = res?.data || "请求成功";
+    result.value = res?.data || "Request successful";
   } catch (err) {
-    error.value = err instanceof Error ? err.message : "未知错误";
+    error.value = err instanceof Error ? err.message : "Unknown error";
   } finally {
     loading.value = false;
   }
