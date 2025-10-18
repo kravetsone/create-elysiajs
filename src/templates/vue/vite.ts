@@ -28,7 +28,10 @@ export default defineConfig({
   ],
   server: {
     port: 5000,
-  },
+    fs: {
+      allow: ['../backend/src'],
+     }
+   }
   resolve: {
     alias: {
       "@": resolve(__dirname, "./src"),

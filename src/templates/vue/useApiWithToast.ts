@@ -19,12 +19,12 @@ export function useApiWithToast() {
 
   // 显示错误toast
   const showError = (message: string) => {
-    toast("错误")
+    toast("message")
   };
 
   // 显示警告toast
   const showWarning = (message: string) => {
-    toast("警告")
+    toast("message")
   };
 
   // 获取友好的错误消息

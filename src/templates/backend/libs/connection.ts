@@ -1,5 +1,5 @@
 export function getConnection() {
-  return `import { drizzle } from "drizzle-orm/node-postgres";
+	return `import { drizzle } from "drizzle-orm/node-postgres";
 import * as schema from "./schema";
 import { config } from "../configs/config";
 

@@ -1,5 +1,5 @@
 export function getMainCSS() {
-  return `@import "tailwindcss";
+	return `@import "tailwindcss";
 
 /* pass options to the plugin */
 @plugin '@egoist/tailwindcss-icons' {

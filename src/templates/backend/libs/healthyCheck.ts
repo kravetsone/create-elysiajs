@@ -9,7 +9,16 @@ import { db } from "./connection";
 export async function performHealthCheck() {
   try {
     // Print database connection information
-    console.log("Database connection info", process.env.DATABASE_URL);
+       const url = process.env.DATABASE_URL;
+       if (url) {
+         try {
+         const u = new URL(url);
+         const safe = \`\${u.protocol}//\${u.hostname}\${u.port ? ":" : ""}\${u.port}\${u.pathname}\`;
+         console.log("数据库连接目标", safe);
+         } catch {
+         console.log("数据库连接字符串已配置");
+         }
+      }
     // Use drizzle's query method instead of execute(sql\`\`)
     const result = await db.execute(sql\`SELECT 1 + 1 AS solution\`);
 

@@ -10,7 +10,7 @@ yarn-error.log*
 lerna-debug.log*
 .pnpm-debug.log*
 
-# Caches 
+# Caches
 
 .cache
 
@@ -174,3 +174,6 @@ dist
 # Finder (MacOS) folder config
 .DS_Store
 test
+
+# Local Claude settings
+.claude/settings.local.json
