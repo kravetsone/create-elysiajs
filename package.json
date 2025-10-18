@@ -33,7 +33,8 @@
     "watch": "bunx pkgroll -w",
     "lint": "bunx @biomejs/biome check src",
     "lint:fix": "bunx @biomejs/biome check --write",
-    "prepublishOnly": "bunx pkgroll"
+    "prepublishOnly": "bunx pkgroll",
+    "test": "bun run ./dist/index.js --pm bun test"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.5",

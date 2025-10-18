@@ -26,54 +26,54 @@ export * from "./vue";
 export * from "./vue/eden-client";
 
 const dbExportedMap = {
-  Prisma: "prisma",
-  Drizzle: "client",
+	Prisma: "prisma",
+	Drizzle: "client",
 };
 
 export function getIndex({
-  others,
-  orm,
-  driver,
-  telegramRelated,
-  isMonorepo,
+	others,
+	orm,
+	driver,
+	telegramRelated,
+	isMonorepo,
 }: PreferencesType) {
-  const isShouldConnectToDB =
-    orm !== "None" &&
-    driver !== "Postgres.JS" &&
-    driver !== "MySQL 2" &&
-    driver !== "Bun SQLite" &&
-    driver !== "Bun.sql";
+	const isShouldConnectToDB =
+		orm !== "None" &&
+		driver !== "Postgres.JS" &&
+		driver !== "MySQL 2" &&
+		driver !== "Bun SQLite" &&
+		driver !== "Bun.sql";
 
-  const gracefulShutdownTasks: string[] = [];
-  const imports: string[] = [
-    // `import { bot } from "./bot.ts"`,
-    `import { config } from "./config.ts"`,
-  ];
-  const startUpTasks: string[] = [];
+	const gracefulShutdownTasks: string[] = [];
+	const imports: string[] = [
+		// `import { bot } from "./bot.ts"`,
+		`import { config } from "./config.ts"`,
+	];
+	const startUpTasks: string[] = [];
 
-  imports.push(`import { app } from "./server.ts"`);
-  imports.push(`import packageJson from "../package.json"`);
-  imports.push(`import { startupHealthCheck } from "./libs/healthyCheck";`);
-  gracefulShutdownTasks.push("await app.stop()");
+	imports.push(`import { app } from "./server.ts"`);
+	imports.push(`import packageJson from "../package.json"`);
+	imports.push(`import { startupHealthCheck } from "./libs/healthyCheck";`);
+	gracefulShutdownTasks.push("await app.stop()");
 
-  // TODO: GramIO integration
-  // gracefulShutdownTasks.push("await bot.stop()");
+	// TODO: GramIO integration
+	// gracefulShutdownTasks.push("await bot.stop()");
 
-  if (others.includes("Posthog")) {
-    imports.push(`import { posthog } from "./services/posthog.ts"`);
-    gracefulShutdownTasks.push("await posthog.shutdown()");
-  }
+	if (others.includes("Posthog")) {
+		imports.push(`import { posthog } from "./services/posthog.ts"`);
+		gracefulShutdownTasks.push("await posthog.shutdown()");
+	}
 
-  if (isShouldConnectToDB) {
-    imports.push(`import { ${dbExportedMap[orm]} } from "./db/index.ts"`);
-    startUpTasks.push(dedent /* ts */`
+	if (isShouldConnectToDB) {
+		imports.push(`import { ${dbExportedMap[orm]} } from "./db/index.ts"`);
+		startUpTasks.push(dedent /* ts */`
             ${orm === "Prisma" ? "await prisma.$connect()" : "await client.connect()"}
             console.log("🗄️ Database was connected!")`);
-  }
+	}
 
-  if (telegramRelated && !isMonorepo) {
-    imports.push(`import { bot } from "./bot.ts"`);
-    startUpTasks.push(dedent /* tss */`
+	if (telegramRelated && !isMonorepo) {
+		imports.push(`import { bot } from "./bot.ts"`);
+		startUpTasks.push(dedent /* tss */`
 	        if (config.NODE_ENV === "production")
 	            await bot.start({
 	                webhook: {
@@ -81,9 +81,9 @@ export function getIndex({
 	                },
 	            });
 	        else await bot.start();`);
-  }
+	}
 
-  return dedent /* sts */`
+	return dedent /* sts */`
     ${imports.join("\n")}
     const signals = ["SIGINT", "SIGTERM"];
 

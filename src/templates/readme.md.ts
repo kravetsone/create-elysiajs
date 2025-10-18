@@ -31,6 +31,7 @@ const links: Record<
 	"Oauth 2.0": "[Oauth 2.0](https://github.com/kravetsone/elysia-oauth2)",
 	Logger: "[Logger](https://github.com/bogeychan/elysia-logger)",
 	"HTML/JSX": "[HTML/JSX](https://elysiajs.com/plugins/html.html)",
+	openAPI: "[OpenAPI](https://elysiajs.com/plugins/openapi.html)",
 	Static: "[Static](https://elysiajs.com/plugins/static.html)",
 	Bearer: "[Bearer](https://elysiajs.com/plugins/bearer.html)",
 	"Server Timing":

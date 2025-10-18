@@ -250,7 +250,7 @@ export function getSingleAppDepsAndScripts(
 		const deps = pluginDepsMap[plugin];
 		if (deps) {
 			for (const { name, type } of deps) {
-				const version = dependencies[name]; // Get version from deps.ts
+				const version = dependencies[name as keyof typeof dependencies];
 				if (!version) continue; // Safety fallback
 
 				if (type === "runtime") {
