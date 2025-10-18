@@ -84,6 +84,9 @@ export function pageRes<T>(
   limit = 10,
   message = "Data retrieved successfully",
 ) {
+  if (limit <= 0) {
+    throw new Error("limit must be greater than 0");
+  }
   return commonRes(
     {
       items: data,
@@ -97,6 +100,5 @@ export function pageRes<T>(
     200,
     message,
   );
-}
-`;
+}`;
 }

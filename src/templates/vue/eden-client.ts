@@ -1,18 +1,18 @@
 export function getEdenClient(projectName: string) {
-	return `import { edenClient } from '@elysiajs/eden';
+  return `import { edenClient } from '@elysiajs/eden';
 import type { ApiResponseRoutes, ApiResponse, PaginatedResponse, User, Partner } from '@${projectName}/backend';
 
-// 创建类型安全的 API 客户端
-export const api = edenClient<ApiResponseRoutes>('http://localhost:3000');
+// Create type-safe API client
+export const api = edenClient<ApiResponseRoutes>(import.meta.env.VITE_API_URL || 'http://localhost:3000');
 
-// 便捷的 API 调用封装
+//  Convenient API call wrappers
 export const apiClient = {
-  // 健康检查
+  // Health check
   async health() {
     return await api.health.get();
   },
 
-  // 用户管理
+
   async getUsers(page = 1, pageSize = 10) {
     return await api.api.users.get({
       query: { page, pageSize }
@@ -44,7 +44,7 @@ export const apiClient = {
     });
   },
 
-  // 合作伙伴管理
+  
   async getPartners(page = 1, pageSize = 10, search?: string) {
     return await api.api.partners.get({
       query: { page, pageSize, ...(search && { search }) }
@@ -77,7 +77,6 @@ export const apiClient = {
   }
 };
 
-// 错误处理
 export class ApiError extends Error {
   constructor(
     message: string,
@@ -89,7 +88,6 @@ export class ApiError extends Error {
   }
 }
 
-// 类型安全的响应处理
 export const handleApiResponse = async <T>(
   apiCall: Promise<ApiResponse<T> | any>
 ): Promise<T> => {

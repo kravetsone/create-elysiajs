@@ -56,6 +56,12 @@ import { getRouter } from "../templates/vue/router";
 import { getUseApiWithToast } from "../templates/vue/useApiWithToast";
 import { getUseTreaty } from "../templates/vue/useTreaty";
 import type { PreferencesType } from "../utils";
+import {
+  getDatabaseSchemaImport,
+  generateDatabaseFiles,
+  generateBackendDirectories,
+  generateCommonBackendFiles,
+} from "./utils/backend-helpers";
 
 export async function generateMonorepo(
   projectDir: string,
@@ -242,95 +248,59 @@ async function generateBackendApp(
     `${backendDir}/tsconfig.json`,
     getBackendTSConfig(preferences.plugins),
   );
-  await fs.writeFile(`${backendDir}/.env`, getEnvFile(preferences));
-  await fs.writeFile(
-    `${backendDir}/.env.production`,
-    getEnvFile(preferences, true),
-  );
-  await fs.mkdir(`${backendDir}/src`);
-  await fs.writeFile(`${backendDir}/src/index.ts`, getIndex(preferences));
-  await fs.writeFile(
-    `${backendDir}/src/server.ts`,
-    getElysiaIndex(preferences),
+
+  // 使用共享工具生成通用后端文件
+  const { baseDir, srcDir } = await generateCommonBackendFiles(
+    projectDir,
+    preferences,
+    true, // isMonorepo
   );
 
-  // 创建 configs 目录
-  await fs.mkdir(`${backendDir}/src/configs`);
-
-  await fs.writeFile(
-    `${backendDir}/src/configs/config.ts`,
-    getConfigFile(preferences),
-  );
-  // 创建模块文件
-  await fs.mkdir(`${backendDir}/src/modules`);
+  // 生成后端目录结构
+  await generateBackendDirectories(projectDir, true); // isMonorepo
 
   // 创建用户模块示例
-  await fs.mkdir(`${backendDir}/src/modules/user`);
   await fs.writeFile(
-    `${backendDir}/src/modules/user/index.ts`,
+    `${srcDir}/modules/user/index.ts`,
     getUserModuleIndex(),
   );
   await fs.writeFile(
-    `${backendDir}/src/modules/user/users.model.ts`,
+    `${srcDir}/modules/user/users.model.ts`,
     getUsersModel(),
   );
   await fs.writeFile(
-    `${backendDir}/src/modules/user/users.service.ts`,
+    `${srcDir}/modules/user/users.service.ts`,
     getUsersService(),
   );
   await fs.writeFile(
-    `${backendDir}/src/modules/user/users.controller.ts`,
+    `${srcDir}/modules/user/users.controller.ts`,
     getUsersController(),
   );
 
   // 生成数据库相关文件
   if (preferences.orm !== "None") {
-    await fs.mkdir(`${backendDir}/src/libs`);
     await fs.writeFile(
-      `${backendDir}/src/libs/index.ts`,
+      `${srcDir}/libs/index.ts`,
       getDBIndex(preferences),
     );
 
     // 生成 libs 辅助文件
     await fs.writeFile(
-      `${backendDir}/src/libs/schemaHelper.ts`,
+      `${srcDir}/libs/schemaHelper.ts`,
       getSchemaHelper(),
     );
     await fs.writeFile(
-      `${backendDir}/src/libs/common-schemas.ts`,
+      `${srcDir}/libs/common-schemas.ts`,
       getCommonSchemas(),
     );
-    await fs.writeFile(`${backendDir}/src/libs/connection.ts`, getConnection());
+    await fs.writeFile(`${srcDir}/libs/connection.ts`, getConnection());
     await fs.writeFile(
-      `${backendDir}/src/libs/healthyCheck.ts`,
+      `${srcDir}/libs/healthyCheck.ts`,
       getHealthyCheck(),
     );
 
-    const getDatabaseSchemaImport = (database: string) => {
-      switch (database) {
-        case "PostgreSQL":
-          return `// import { pgTable } from "drizzle-orm/pg-core"`;
-        case "MySQL":
-          return `// import { mysqlTable } from "drizzle-orm/mysql-core"`;
-        case "SQLite":
-          return `// import { sqliteTable } from "drizzle-orm/sqlite-core"`;
-        default:
-          return `// import { pgTable } from "drizzle-orm/pg-core"`;
-      }
-    };
-
-    if (preferences.orm === "Drizzle") {
-      await fs.writeFile(
-        `${backendDir}/drizzle.config.ts`,
-        getDrizzleConfig(preferences),
-      );
-      await fs.writeFile(
-        `${backendDir}/src/libs/schema.ts`,
-        getDatabaseSchemaImport(preferences.database || "PostgreSQL"),
-      );
-      if (preferences.database === "SQLite")
-        await fs.writeFile(`${backendDir}/sqlite.db`, "");
-    }
+    // 使用共享工具生成数据库文件
+    await generateDatabaseFiles(projectDir, preferences, true); // isMonorepo
   }
 
   // 创建 plugins 目录（完整生成）

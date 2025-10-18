@@ -31,9 +31,8 @@ export const errorHandler = new Elysia()
 
     // 2. 数据库错误（未被包装的原始错误）
     if (Errors.isDatabaseError(error)) {
-      console.log("DBError:", error);
       const mapped = Errors.mapDatabaseError(error);
-      console.log(\\\`[DBError \\\${error.code}] \\\${path}:\\\`, error);
+     console.log(\`[DBError \${error.code}] \${path}:\`, error);
       return Response.json(
         { status: mapped.status, message: mapped.message, data: null },
         { status: mapped.status },

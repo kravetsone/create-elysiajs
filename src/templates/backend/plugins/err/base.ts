@@ -9,7 +9,7 @@ export class CustomError extends Error {
     this.status = status;
     this.originalError = originalError;
 
-    // 修复 TypeScript 原型链问题
+  // Fix TypeScript prototype chain issue.
     Object.setPrototypeOf(this, new.target.prototype);
   }
 }

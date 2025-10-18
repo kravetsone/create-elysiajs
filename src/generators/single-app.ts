@@ -33,6 +33,12 @@ import {
 } from "../templates/tests";
 import { getVSCodeExtensions, getVSCodeSettings } from "../templates/vscode";
 import type { PreferencesType } from "../utils";
+import {
+  getDatabaseSchemaImport,
+  generateDatabaseFiles,
+  generateBackendDirectories,
+  generateCommonBackendFiles,
+} from "./utils/backend-helpers";
 
 export async function generateSingleApp(
   projectDir: string,
@@ -240,93 +246,61 @@ async function generateFiles(projectDir: string, preferences: PreferencesType) {
 
   await fs.writeFile(`${projectDir}/package.json`, getPackageJson(preferences));
   await fs.writeFile(`${projectDir}/tsconfig.json`, getTSConfig(preferences));
-  await fs.writeFile(`${projectDir}/.env`, getEnvFile(preferences));
-  await fs.writeFile(
-    `${projectDir}/.env.production`,
-    getEnvFile(preferences, true),
-  );
   await fs.writeFile(`${projectDir}/README.md`, getReadme(preferences));
   await fs.writeFile(
     `${projectDir}/.gitignore`,
     ["dist", "node_modules", ".env", ".env.production"].join("\n"),
   );
-  await fs.mkdir(`${projectDir}/src`);
-  await fs.writeFile(
-    `${projectDir}/src/server.ts`,
-    getElysiaIndex(preferences),
-  );
-  await fs.writeFile(`${projectDir}/src/index.ts`, getIndex(preferences));
-  await fs.writeFile(`${projectDir}/src/config.ts`, getConfigFile(preferences));
 
-  await fs.mkdir(`${projectDir}/src/routes`);
+  // 使用共享工具生成通用后端文件和目录
+  await generateCommonBackendFiles(projectDir, preferences, false); // not isMonorepo
+  const { srcDir } = await generateBackendDirectories(projectDir, false); // not isMonorepo
 
+  // 生成数据库相关文件
   if (preferences.orm !== "None") {
-    await fs.mkdir(`${projectDir}/src/db`);
     await fs.writeFile(
-      `${projectDir}/src/db/index.ts`,
+      `${srcDir}/db/index.ts`,
       getDBIndex(preferences),
     );
-    const getDatabaseSchemaImport = (database: string) => {
-      switch (database) {
-        case "PostgreSQL":
-          return `// import { pgTable } from "drizzle-orm/pg-core"`;
-        case "MySQL":
-          return `// import { mysqlTable } from "drizzle-orm/mysql-core"`;
-        case "SQLite":
-          return `// import { sqliteTable } from "drizzle-orm/sqlite-core"`;
-        default:
-          return `// import { pgTable } from "drizzle-orm/pg-core"`;
-      }
-    };
-    if (preferences.orm === "Drizzle") {
-      await fs.writeFile(
-        `${projectDir}/drizzle.config.ts`,
-        getDrizzleConfig(preferences),
-      );
-      await fs.writeFile(
-        `${projectDir}/src/db/schema.ts`,
-        getDatabaseSchemaImport(preferences.database),
-      );
-      if (preferences.database === "SQLite")
-        await fs.writeFile(`${projectDir}/sqlite.db`, "");
-    }
+    // 使用共享工具生成数据库文件
+    await generateDatabaseFiles(projectDir, preferences, false); // not isMonorepo
   }
 
-  await fs.mkdir(`${projectDir}/src/services`);
+  await fs.mkdir(`${srcDir}/services`);
 
   if (preferences.others.includes("Posthog")) {
     await fs.writeFile(
-      `${projectDir}/src/services/posthog.ts`,
+      `${srcDir}/services/posthog.ts`,
       getPosthogIndex(),
     );
   }
 
   if (preferences.others.includes("Jobify")) {
-    await fs.writeFile(`${projectDir}/src/services/jobify.ts`, getJobifyFile());
-    await fs.mkdir(`${projectDir}/src/jobs`);
+    await fs.writeFile(`${srcDir}/services/jobify.ts`, getJobifyFile());
+    await fs.mkdir(`${srcDir}/jobs`);
   }
 
   if (preferences.redis) {
-    await fs.writeFile(`${projectDir}/src/services/redis.ts`, getRedisFile());
+    await fs.writeFile(`${srcDir}/services/redis.ts`, getRedisFile());
   }
 
   if (preferences.locks) {
     await fs.writeFile(
-      `${projectDir}/src/services/locks.ts`,
+      `${srcDir}/services/locks.ts`,
       getLocksFile(preferences),
     );
   }
 
   if (preferences.s3Client !== "None") {
     await fs.writeFile(
-      `${projectDir}/src/services/s3.ts`,
+      `${srcDir}/services/s3.ts`,
       getS3ServiceFile(preferences),
     );
   }
 
   if (preferences.telegramRelated) {
     await fs.writeFile(
-      `${projectDir}/src/services/auth.plugin.ts`,
+      `${srcDir}/services/auth.plugin.ts`,
       getAuthPlugin(),
     );
   }
@@ -380,6 +354,6 @@ async function generateFiles(projectDir: string, preferences: PreferencesType) {
   }
 
   if (preferences.telegramRelated) {
-    await fs.writeFile(`${projectDir}/src/bot.ts`, getBotFile());
+    await fs.writeFile(`${srcDir}/bot.ts`, getBotFile());
   }
 }

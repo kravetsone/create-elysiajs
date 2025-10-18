@@ -15,8 +15,7 @@ export const usersController = new Elysia({
     return commonRes("pong");
   }, {
     detail: {
-      summary: "healthyCheck ",
-    }
+      summary: "healthyCheck",    }
   });
 `;
 }

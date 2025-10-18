@@ -1,7 +1,8 @@
 import type { PreferencesType } from "../../utils";
 
-// 导出所有类型相关的模板函数
-export * from "./package.json";
+// Export all type-related template functions.
+// Note: package.json.ts file doesn't exist yet, commenting out for now
+// export * from "./package.json";
 export * from "./tsconfig.json";
 
 export function getTypesIndex(preferences: PreferencesType) {

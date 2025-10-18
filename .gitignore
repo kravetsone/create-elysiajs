@@ -173,7 +173,7 @@ dist
 
 # Finder (MacOS) folder config
 .DS_Store
-test
+**/test/
 
 # Local Claude settings
 .claude/settings.local.json
