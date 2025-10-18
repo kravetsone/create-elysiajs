@@ -1,5 +1,5 @@
 export function getSchemaHelper() {
-  return `import { serial, timestamp, uuid } from "drizzle-orm/pg-core";
+  return `import { serial, timestamp } from "drizzle-orm/pg-core";
 
 export const id = serial("id").primaryKey();
 

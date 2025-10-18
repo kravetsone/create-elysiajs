@@ -1,6 +1,6 @@
-export function getIndexHTML(projectName: string) {
-	return `<!DOCTYPE html>
-<html lang="zh-CN">
+export function getIndexHTML(projectName: string, lang = 'en') {
+  return `<!DOCTYPE html>
+<html lang="${lang}">
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/vite.svg" />

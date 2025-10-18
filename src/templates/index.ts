@@ -113,7 +113,7 @@ export function getIndex({
 
     // 启动日志
     (() => {
-      if (import.meta.env.NODE_ENV === "production") {
+      if (config.NODE_ENV === "production") {
       console.log(\`当前环境：生产环境\${config.APP_URL ? ': ' + config.APP_URL : ''}\`);
         console.log("版本号:", packageJson.version);
       } else {

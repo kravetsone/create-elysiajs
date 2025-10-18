@@ -186,7 +186,9 @@ export async function collectPreferences(preferences: PreferencesType) {
       message: "Create an empty Git repository?",
     });
     preferences.git = git;
-  } else preferences.git = true;
+  } else {
+    preferences.git = true;
+  }
 
   const { locks } = await prompt<{ locks: boolean }>({
     type: "toggle",
@@ -264,7 +266,18 @@ async function generateFiles(projectDir: string, preferences: PreferencesType) {
       `${projectDir}/src/db/index.ts`,
       getDBIndex(preferences),
     );
-
+    const getDatabaseSchemaImport = (database: string) => {
+      switch (database) {
+        case "PostgreSQL":
+          return `// import { pgTable } from "drizzle-orm/pg-core"`;
+        case "MySQL":
+          return `// import { mysqlTable } from "drizzle-orm/mysql-core"`;
+        case "SQLite":
+          return `// import { sqliteTable } from "drizzle-orm/sqlite-core"`;
+        default:
+          return `// import { pgTable } from "drizzle-orm/pg-core"`;
+      }
+    };
     if (preferences.orm === "Drizzle") {
       await fs.writeFile(
         `${projectDir}/drizzle.config.ts`,
@@ -272,11 +285,7 @@ async function generateFiles(projectDir: string, preferences: PreferencesType) {
       );
       await fs.writeFile(
         `${projectDir}/src/db/schema.ts`,
-        preferences.database === "PostgreSQL"
-          ? `// import { pgTable } from "drizzle-orm/pg-core"`
-          : preferences.database === "MySQL"
-            ? `// import { mysqlTable } from "drizzle-orm/mysql-core"`
-            : `// import { sqliteTable } from "drizzle-orm/sqlite-core"`,
+        getDatabaseSchemaImport(preferences.database),
       );
       if (preferences.database === "SQLite")
         await fs.writeFile(`${projectDir}/sqlite.db`, "");

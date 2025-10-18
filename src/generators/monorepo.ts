@@ -99,7 +99,8 @@ export async function collectMonorepoPreferences(preferences: PreferencesType) {
     message: "Select frontend framework: (currently only Vue supported)",
     choices: ["None", "Vue"],
   });
-  preferences.frontend = frontend === "None" ? "None" : "Vue"; // 目前只支持 Vue
+  preferences.frontend = frontend;
+
 
   // 收集其他偏好（简化版本，专注于核心功能）
   const { linter } = await prompt<{ linter: PreferencesType["linter"] }>({
@@ -305,6 +306,19 @@ async function generateBackendApp(
       getHealthyCheck(),
     );
 
+    const getDatabaseSchemaImport = (database: string) => {
+      switch (database) {
+        case "PostgreSQL":
+          return `// import { pgTable } from "drizzle-orm/pg-core"`;
+        case "MySQL":
+          return `// import { mysqlTable } from "drizzle-orm/mysql-core"`;
+        case "SQLite":
+          return `// import { sqliteTable } from "drizzle-orm/sqlite-core"`;
+        default:
+          return `// import { pgTable } from "drizzle-orm/pg-core"`;
+      }
+    };
+
     if (preferences.orm === "Drizzle") {
       await fs.writeFile(
         `${backendDir}/drizzle.config.ts`,
@@ -312,11 +326,7 @@ async function generateBackendApp(
       );
       await fs.writeFile(
         `${backendDir}/src/libs/schema.ts`,
-        preferences.database === "PostgreSQL"
-          ? `// import { pgTable } from "drizzle-orm/pg-core"`
-          : preferences.database === "MySQL"
-            ? `// import { mysqlTable } from "drizzle-orm/mysql-core"`
-            : `// import { sqliteTable } from "drizzle-orm/sqlite-core"`,
+        getDatabaseSchemaImport(preferences.database || "PostgreSQL"),
       );
       if (preferences.database === "SQLite")
         await fs.writeFile(`${backendDir}/sqlite.db`, "");

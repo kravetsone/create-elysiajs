@@ -10,21 +10,21 @@ export type Err =
     status: number;
   };
 /**
- * 使用Toast的简单API Hook - 保持类型推导
+ * Simple API Hook with Toast notifications - maintains type inference
  */
 export function useApiWithToast() {
 
-
-  // 显示错误toast
+  // Error toast notification
   const showError = (message: string) => {
     toast.error(message)
   };
 
-  // 显示警告toast
+  // Warning toast notification
   const showWarning = (message: string) => {
     toast.warning(message)
   };
-  // 获取友好的错误消息
+
+  // Get user-friendly error messages
   const getErrorMessage = (error: any): string => {
     if (error?.status === 400) return "Invalid request parameters";
     if (error?.status === 401) return "Login expired, please login again";
@@ -34,7 +34,7 @@ export function useApiWithToast() {
     return error?.message || "Operation failed, please try again later";
   };
 
-  // 基础API调用 - 保持原始类型推导
+  // Basic API call - maintains original type inference
   const call = async <Data>(
     apiCall: () => Promise<{ data: Data; error: Err }>,
   ): Promise<Data | null> => {
@@ -51,7 +51,7 @@ export function useApiWithToast() {
     }
   };
 
-  // 带默认值的API调用
+  // API call with default value
   const callWithDefault = async <Data>(
     apiCall: () => Promise<{ data: Data; error: Err }>,
     defaultValue: Data,
@@ -60,7 +60,7 @@ export function useApiWithToast() {
     return result !== null ? result : defaultValue;
   };
 
-  // 分页API调用
+  // Paginated API call
   const callPaginated = async <Data>(
     apiCall: () => Promise<{ data: Data; error: Err }>,
     defaultValue?: any,
@@ -73,14 +73,15 @@ export function useApiWithToast() {
     return result;
   };
 
-  // 成功提示
-  const showSuccess = (message: string) => {
+  // Success notification
   const showSuccess = (message: string) => {
     toast.success(message)
-  };  // 创建操作（带成功提示）
+  };
+
+  // Create operation (with success notification)
   const create = async <Data>(
     apiCall: () => Promise<{ data: Data; error: Err }>,
-    successMessage: string = "创建成功",
+    successMessage: string = "Created successfully",
   ): Promise<Data | null> => {
     const result = await call(apiCall);
     if (result !== null) {
@@ -89,10 +90,10 @@ export function useApiWithToast() {
     return result;
   };
 
-  // 更新操作（带成功提示）
+  // Update operation (with success notification)
   const update = async <Data>(
     apiCall: () => Promise<{ data: Data; error: Err }>,
-    successMessage: string = "更新成功",
+    successMessage: string = "Updated successfully",
   ): Promise<Data | null> => {
     const result = await call(apiCall);
     if (result !== null) {
@@ -101,10 +102,10 @@ export function useApiWithToast() {
     return result;
   };
 
-  // 删除操作（带成功提示）
+  // Delete operation (with success notification)
   const remove = async <Data>(
     apiCall: () => Promise<{ data: Data; error: Err }>,
-    successMessage: string = "删除成功",
+    successMessage: string = "Deleted successfully",
   ): Promise<Data | null> => {
     const result = await call(apiCall);
     if (result !== null) {
@@ -114,22 +115,22 @@ export function useApiWithToast() {
   };
 
   return {
-    // 基础调用
+    // Basic calls
     call,
     callWithDefault,
     callPaginated,
 
-    // CRUD操作
+    // CRUD operations
     create,
     update,
     remove,
 
-    // Toast方法
+    // Toast methods
     showError,
     showWarning,
     showSuccess,
 
-    // 直接访问client
+    // Direct client access
     client,
   };
 }

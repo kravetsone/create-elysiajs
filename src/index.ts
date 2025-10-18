@@ -63,10 +63,10 @@ createOrFindDir(projectDir)
     preferences.packageManager = packageManager;
     preferences.runtime = packageManager === "bun" ? "Bun" : "Node.js";
 
-    // biome-ignore lint/complexity/noExtraBooleanCast: <no>
+    // biome-ignore lint/complexity/noExtraBooleanCast: < explicit conversion for clarity>
     preferences.noInstall = !Boolean(args.install ?? true);
 
-    // 询问是否需要创建 monorepo
+    // Ask whether to create a monorepo project
     const { isMonorepo } = await prompt<{ isMonorepo: boolean }>({
       type: "toggle",
       name: "isMonorepo",
@@ -84,7 +84,7 @@ createOrFindDir(projectDir)
       await collectPreferences(preferences);
     }
 
-    // 然后执行生成任务（task 内部只做文件生成，不包含交互）
+    // Then execute generation task (task only performs file generation, no interaction)
     await task("Generating template...", async ({ setTitle }) => {
       if (preferences.isMonorepo) {
         setTitle("Setting up monorepo structure...");
