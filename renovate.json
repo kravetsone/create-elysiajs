@@ -1,20 +1,20 @@
 {
-    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-    "automergeSchedule": [
-        "before 4am"
-    ],
-    "automerge": true,
-    "extends": ["config:recommended", ":dependencyDashboard"],
-    "lockFileMaintenance": {
-        "enabled": true,
-        "automerge": true
-    },
-    "bumpVersion": "patch",
-    "labels": ["bump"],
-    "customManagers": [{
-        "fileMatch": ["deps.ts$"],
-        "datasourceTemplate": "npm",
-        "matchStrings": ["\t\"?(?<depName>.*?)\"?: \"\\^?(?<currentValue>.*?)\""],
-        "autoReplaceStringTemplate": "\t\"{{{depName}}}\": \"^{{{newValue}}}\""
-    }]
-  }
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "automergeSchedule": ["before 4am"],
+  "automerge": true,
+  "extends": ["config:recommended", ":dependencyDashboard"],
+  "lockFileMaintenance": {
+    "enabled": true,
+    "automerge": true
+  },
+  "bumpVersion": "patch",
+  "labels": ["bump"],
+  "customManagers": [
+    {
+      "fileMatch": ["deps.ts$"],
+      "datasourceTemplate": "npm",
+      "matchStrings": ["\t\"?(?<depName>.*?)\"?: \"\\^?(?<currentValue>.*?)\""],
+      "autoReplaceStringTemplate": "\t\"{{{depName}}}\": \"^{{{newValue}}}\""
+    }
+  ]
+}

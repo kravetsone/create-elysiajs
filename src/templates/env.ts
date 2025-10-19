@@ -133,13 +133,13 @@ export function getConfigFile({
 
 	return dedent /* ts */`
 	import env from "env-var";
-	
+
 	export const config = {
 		NODE_ENV: env
 		.get("NODE_ENV")
 		.default("development")
 		.asEnum(["production", "test", "development"]),
-		
+
 
 		${envs.join(",\n")}
 	}`;

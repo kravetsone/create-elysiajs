@@ -112,9 +112,7 @@ export function getDBIndex({ orm, driver, packageManager }: Preferences) {
 export function getDrizzleConfig({ database }: Preferences) {
 	return [
 		`import type { Config } from "drizzle-kit"`,
-		`import env from "env-var"`,
-		"",
-		'const DATABASE_URL = env.get("DATABASE_URL").required().asString()',
+		`import { config } from "./src/configs/config"`,
 		"",
 		"export default {",
 		`  schema: "./src/db/schema.ts",`,
@@ -122,7 +120,7 @@ export function getDrizzleConfig({ database }: Preferences) {
 		`  dialect: "${database.toLowerCase()}",`,
 		`  casing: "snake_case",`,
 		"  dbCredentials: {",
-		"    url: DATABASE_URL",
+		"    url: config.DATABASE_URL",
 		"  }",
 		"} satisfies Config",
 	].join("\n");

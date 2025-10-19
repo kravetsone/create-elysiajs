@@ -1,7 +1,6 @@
 import dedent from "ts-dedent";
 import type { Preferences } from "../utils";
-import { driverNames } from "./db";
-import { driverNamesToDrizzle } from "./db";
+import { driverNames, driverNamesToDrizzle } from "./db";
 
 export function getPreloadFile({ redis, driver }: Preferences) {
 	const imports: string[] = [];
@@ -39,14 +38,14 @@ console.timeEnd("PGLite init");
 `;
 }
 
-export function getTestsAPIFile({ redis, driver }: Preferences) {
+export function getTestsAPIFile() {
 	return dedent /* ts */`import { treaty } from "@elysiajs/eden";
     import { app } from "../src/server.ts";
-    
+
     export const api = treaty(app);`;
 }
 
-export function getTestsIndex({ redis, driver }: Preferences) {
+export function getTestsIndex() {
 	return dedent /* ts */`import { describe, it, expect } from "bun:test";
     import { api } from "../api.ts";
 
