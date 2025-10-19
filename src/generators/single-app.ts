@@ -49,7 +49,7 @@ export async function generateSingleApp(
   preferences: PreferencesType,
 ) {
   try {
-    // 生成文件结构
+    // Generate file structure
     await generateFiles(projectDir, preferences);
   } catch (error) {
     throw new Error(`Failed to generate single app: ${error instanceof Error ? error.message : String(error)}`);
@@ -101,17 +101,17 @@ async function generateFiles(projectDir: string, preferences: PreferencesType) {
     ["dist", "node_modules", ".env", ".env.production"].join("\n"),
   );
 
-  // 使用共享工具生成通用后端文件和目录
+  // Use shared tools to generate common backend files and directories
   await generateCommonBackendFiles(projectDir, preferences, false); // not isMonorepo
   const { srcDir } = await generateBackendDirectories(projectDir, false); // not isMonorepo
 
-  // 生成数据库相关文件
+  // Generate database related files
   if (preferences.orm !== "None") {
     await fs.writeFile(
       `${srcDir}/db/index.ts`,
       getDBIndex(preferences),
     );
-    // 使用共享工具生成数据库文件
+    // Use shared tools to generate database files
     await generateDatabaseFiles(projectDir, preferences, false); // not isMonorepo
   }
 

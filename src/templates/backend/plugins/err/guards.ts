@@ -3,7 +3,7 @@ export function getErrorGuards() {
 import { CustomError } from "./base";
 
 /**
- * 判断是否为 PostgreSQL/Drizzle 风格的数据库错误
+ * Check if it's a PostgreSQL/Drizzle style database error
  */
 export function isDatabaseError(
   error: unknown,
@@ -17,7 +17,7 @@ export function isDatabaseError(
 }
 
 /**
- * 判断是否为自定义错误（可选，通常用 code in Errors 更简单）
+ * Check if it's a custom error (optional, usually using code in Errors is simpler)
  */
 // export function isCustomError(error: unknown): error is CustomError {
 //   return error instanceof CustomError;

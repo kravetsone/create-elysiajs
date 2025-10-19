@@ -76,7 +76,7 @@ export const dependencies = {
 	"@elysiajs/cors": "^1.4.0",
 	"@elysiajs/html": "^1.4.0",
 
-	// 前端依赖
+	// Frontend dependencies
 	vue: "^3.5.21",
 
 	"@vueuse/core": "^13.9.0",

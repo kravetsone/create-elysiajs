@@ -103,22 +103,22 @@ export function getIndex({
         console.error(error);
     })
 
-    // 启动 HTTP 服务器
+    // Start HTTP server
     const elysia = app.listen(config.PORT, () => {
       console.log(\`🦊 Server started at \${app.server?.url.origin}\`);
     });
 
-    // 健康检查（可选，异步不阻塞）
+    // Health check (optional, async non-blocking)
     startupHealthCheck().catch(console.error);
 
-    // 启动日志
+    // Startup logs
     (() => {
       if (config.NODE_ENV === "production") {
-      console.log(\`当前环境：生产环境\${config.APP_URL ? ': ' + config.APP_URL : ''}\`);
-        console.log("版本号:", packageJson.version);
+      console.log(\`Current environment: Production\${config.APP_URL ? ': ' + config.APP_URL : ''}\`);
+        console.log("Version:", packageJson.version);
       } else {
-        console.log("当前环境：开发环境");
-        console.log("版本号:", packageJson.version);
+        console.log("Current environment: Development");
+        console.log("Version:", packageJson.version);
       }
     })();
 

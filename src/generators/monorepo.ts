@@ -66,13 +66,13 @@ export async function generateMonorepo(
 	preferences: PreferencesType,
 ) {
 	try {
-		// 生成 monorepo 结构
+		// Generate monorepo structure
 		await generateMonorepoStructure(projectDir, preferences);
 
-		// 生成后端应用（重用单应用逻辑）
+		// Generate backend application (reuse single app logic)
 		await generateBackendApp(projectDir, preferences);
 
-		// 生成前端应用（如果需要）
+		// Generate frontend application (if needed)
 		if (preferences.frontend !== "None") {
 			await generateFrontendApp(projectDir, preferences);
 		}
@@ -109,7 +109,7 @@ async function generateMonorepoStructure(
 	projectDir: string,
 	preferences: PreferencesType,
 ) {
-	// 根目录文件
+	// Root directory files
 	await fs.writeFile(`${projectDir}/package.json`, getPackageJson(preferences));
 	await fs.writeFile(`${projectDir}/turbo.json`, getTurboJson());
 	await fs.writeFile(
@@ -117,10 +117,10 @@ async function generateMonorepoStructure(
 		["dist", "node_modules", ".env", ".env.production", ".turbo"].join("\n"),
 	);
 	await fs.writeFile(`${projectDir}/README.md`, getReadme(preferences));
-	// 创建 packages 目录
+	// Create packages directory
 	await fs.mkdir(`${projectDir}/packages`);
 
-	// 创建 tsconfig 包
+	// Create tsconfig package
 	await fs.mkdir(`${projectDir}/packages/tsconfig`);
 	await fs.writeFile(
 		`${projectDir}/packages/tsconfig/package.json`,
@@ -143,7 +143,7 @@ async function generateMonorepoStructure(
 		getNodeTSConfig(),
 	);
 
-	// 创建 apps 目录
+	// Create apps directory
 	await fs.mkdir(`${projectDir}/apps`);
 }
 
@@ -153,7 +153,7 @@ async function generateBackendApp(
 ) {
 	const backendDir = `${projectDir}/apps/backend`;
 
-	// 创建后端应用目录和文件
+	// Create backend application directory and files
 	await fs.mkdir(backendDir);
 	await fs.writeFile(
 		`${backendDir}/package.json`,
@@ -164,20 +164,20 @@ async function generateBackendApp(
 		getBackendTSConfig(preferences.plugins),
 	);
 
-	// 生成后端目录结构
+	// Generate backend directory structure
 	const { baseDir, srcDir } = await generateBackendDirectories(
 		projectDir,
 		true,
 	); // isMonorepo
 
-	// 使用共享工具生成通用后端文件
+	// Use shared utilities to generate common backend files
 	await generateCommonBackendFiles(
 		projectDir,
 		preferences,
 		true, // isMonorepo
 	);
 
-	// 创建用户模块示例
+	// Create user module example
 	await fs.writeFile(`${srcDir}/modules/user/index.ts`, getUserModuleIndex());
 	await fs.writeFile(`${srcDir}/modules/user/users.model.ts`, getUsersModel());
 	await fs.writeFile(
@@ -189,27 +189,27 @@ async function generateBackendApp(
 		getUsersController(),
 	);
 
-	// 生成数据库相关文件
+	// Generate database related files
 	if (preferences.orm !== "None") {
 		await fs.writeFile(`${srcDir}/libs/index.ts`, getDBIndex(preferences));
 
-		// 生成 libs 辅助文件
+		// Generate libs auxiliary files
 		await fs.writeFile(`${srcDir}/libs/schemaHelper.ts`, getSchemaHelper());
 		await fs.writeFile(`${srcDir}/libs/common-schemas.ts`, getCommonSchemas());
 		await fs.writeFile(`${srcDir}/libs/connection.ts`, getConnection());
 		await fs.writeFile(`${srcDir}/libs/healthyCheck.ts`, getHealthyCheck());
 
-		// 使用共享工具生成数据库文件
+		// Use shared utilities to generate database files
 		await generateDatabaseFiles(projectDir, preferences, true); // isMonorepo
 	}
 
-	// plugins 目录已在 generateBackendDirectories 中创建
+	// plugins directory already created in generateBackendDirectories
 
-	// 创建 logger 插件
+	// Create logger plugin
 	await fs.writeFile(`${backendDir}/src/plugins/logger.ts`, getLoggerPlugin());
 
-	// 创建错误处理插件目录和文件
-	// plugins/err 目录已在 generateBackendDirectories 中创建
+	// Create error handling plugin directory and files
+	// plugins/err directory already created in generateBackendDirectories
 	await fs.writeFile(`${backendDir}/src/plugins/err/base.ts`, getErrorBase());
 	await fs.writeFile(
 		`${backendDir}/src/plugins/err/http-error.ts`,
@@ -236,16 +236,16 @@ async function generateBackendApp(
 		);
 	}
 
-	// utils 和 types 目录已在 generateBackendDirectories 中创建
+	// utils and types directories already created in generateBackendDirectories
 	await fs.writeFile(`${backendDir}/src/utils/Res.ts`, getRes());
 
-	// 生成类型定义文件
+	// Generate type definition files
 	await fs.writeFile(
 		`${backendDir}/src/types/index.ts`,
 		getBackendTypes(preferences),
 	);
 
-	// 生成 bot 文件
+	// Generate bot file
 	if (preferences.telegramRelated) {
 		await fs.writeFile(`${backendDir}/src/bot.ts`, getBotFile());
 	}
@@ -259,7 +259,7 @@ async function generateFrontendApp(
 
 	await fs.mkdir(frontendDir);
 
-	// 创建前端 .env 文件
+	// Create frontend .env file
 	await fs.writeFile(
 		`${frontendDir}/.env`,
 		`VITE_API_URL=http://localhost:5000`,
@@ -275,7 +275,7 @@ async function generateFrontendApp(
 	);
 
 	if (preferences.frontend === "Vue") {
-		// 先创建必要的目录结构
+		// First create necessary directory structure
 		await fs.mkdir(`${frontendDir}/src`);
 		await fs.mkdir(`${frontendDir}/src/pages`);
 		await fs.mkdir(`${frontendDir}/src/components`);
@@ -286,7 +286,7 @@ async function generateFrontendApp(
 		await fs.mkdir(`${frontendDir}/src/router`);
 		await fs.mkdir(`${frontendDir}/public`);
 
-		// 配置文件
+		// Configuration files
 		await fs.writeFile(
 			`${frontendDir}/tsconfig.json`,
 			getFrontendTSConfig(preferences.frontend),
@@ -303,7 +303,7 @@ async function generateFrontendApp(
 			getIndexHTML(preferences.projectName),
 		);
 
-		// 主要文件
+		// Main files
 		await fs.writeFile(`${frontendDir}/src/main.ts`, getVueMain());
 		await fs.writeFile(
 			`${frontendDir}/src/App.vue`,
@@ -312,16 +312,16 @@ async function generateFrontendApp(
 		await fs.writeFile(`${frontendDir}/src/pages/Home.vue`, getHomeVue());
 		await fs.writeFile(`${frontendDir}/src/env.d.ts`, getEnvDTs());
 
-		// 样式文件
+		// Style files
 		await fs.writeFile(
 			`${frontendDir}/src/assets/styles/main.css`,
 			getMainCSS(),
 		);
 
-		// 路由文件
+		// Router files
 		await fs.writeFile(`${frontendDir}/src/router/index.ts`, getRouter());
 
-		// API 工具文件
+		// API utility files
 		await fs.writeFile(
 			`${frontendDir}/src/utils/api/useTreaty.ts`,
 			getUseTreaty(),

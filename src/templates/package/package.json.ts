@@ -46,22 +46,22 @@ export function getPackageJson({
 				"check-types": "turbo run check-types",
 				clean: "turbo run clean",
 				preclean: "rimraf node_modules dist bun.lockb .turbo",
-				...extraScripts, // 👈 把动态脚本合并进来！
+				...extraScripts, // Merge dynamic scripts!
 			},
 			engines: { bun: ">=1.3.0" },
-			dependencies: {}, // monorepo 根一般没有运行时依赖！
+			dependencies: {}, // monorepo root generally has no runtime dependencies!
 			devDependencies: {
 				turbo: dependencies.turbo,
 				rimraf: dependencies.rimraf,
 				"@types/bun": dependencies["@types/bun"],
-				...extraDeps, // 👈 把动态依赖合并进来！
+				...extraDeps, // Merge dynamic dependencies!
 			},
 		};
 
 		return JSON.stringify(rootPackage, null, 2);
 	}
 
-	// 单应用配置
+	// Single application configuration
 	const {
 		dependencies: pluginDeps,
 		devDependencies: pluginDevDeps,

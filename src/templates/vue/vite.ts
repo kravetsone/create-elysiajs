@@ -14,12 +14,12 @@ export default defineConfig({
     tailwindcss(),
     AutoImport({
       imports: ["vue", "vue-router", "@vueuse/core"],
-      dts: true, // 生成类型声明文件
+      dts: true, // Generate type declaration files
     }),
-    // 自动导入组件
+    // Auto-import components
     Components({
       resolvers: [],
-      dts: true, // 生成组件类型声明文件
+      dts: true, // Generate component type declaration files
       dirs: ["src/components"], // Directory for auto-imported components
       extensions: ["vue"], // Component file extensions
       deep: true, // Deep search subdirectories
@@ -74,6 +74,6 @@ export default defineConfig({
 });`;
 	}
 
-	// 默认 Vue 配置
+	// Default Vue configuration
 	return getViteConfig("Vue");
 }

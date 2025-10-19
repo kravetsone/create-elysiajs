@@ -18,8 +18,8 @@ import { createdAt, id, updatedAt } from "../../libs/schemaHelper";
 import { PageQuerySchema } from "../../libs/common-schemas";
 
 /**
- * 1. Drizzle 表定义
- * 用户表 - 存储用户基本信息
+ * 1. Drizzle table definition
+ * User table - stores basic user information
  */
 export const usersTable = pgTable(
 	"users",
@@ -39,7 +39,7 @@ export const usersTable = pgTable(
 );
 
 /**
- * Token 表定义
+ * Token table definition
  */
 export const tokenTable = pgTable(
 	"tokens",
@@ -56,7 +56,7 @@ export const tokenTable = pgTable(
 );
 
 /**
- * 关系定义
+ * Relationship definition
  */
 export const tokenRelations = relations(tokenTable, ({ one }) => ({
 	owner: one(usersTable, {
@@ -66,11 +66,11 @@ export const tokenRelations = relations(tokenTable, ({ one }) => ({
 }));
 
 /**
- * 用户模型命名空间
- * 包含所有用户相关的 Schema、类型定义和业务逻辑
+ * User model namespace
+ * Contains all user-related schemas, type definitions and business logic
  */
 export namespace UsersModel {
-	// 用户状态枚举
+	// User status enum
 	export enum UserStatus {
 		ACTIVE = "active",
 		DISABLED = "disabled",
@@ -78,16 +78,16 @@ export namespace UsersModel {
 		SUSPENDED = "suspended",
 	}
 
-	// 基础 TypeBox Schema（基于 Drizzle 表生成）
+	// Basic TypeBox schemas (generated from Drizzle tables)
 	export const Insert = createInsertSchema(usersTable, {});
 	export const Update = createUpdateSchema(usersTable);
 	export const Select = createSelectSchema(usersTable);
 
-	// 业务 DTO Schemas
+	// Business DTO schemas
 	export const Create = t.Omit(Insert, ["id", "createdAt", "updatedAt"]);
 	export const Patch = t.Omit(Update, ["id", "createdAt", "updatedAt", "password"]);
 
-	// 查询 Schemas
+	// Query schemas
 	export const ListQuery = t.Composite([
 		PageQuerySchema,
 		t.Object({
@@ -97,7 +97,7 @@ export namespace UsersModel {
 		}),
 	]);
 
-	// 操作 Schemas
+	// Operation schemas
 	export const Login = t.Object({
 		username: t.String({ minLength: 1 }),
 		password: t.String({ minLength: 1 }),
@@ -108,7 +108,7 @@ export namespace UsersModel {
 		newPassword: t.String({ minLength: 6 }),
 	});
 
-	// front need type ( VO - View Object)
+	// Frontend needed type (VO - View Object)
 	// WARNING: Always exclude password field when querying users for this VO
 	export const ViewObject = t.Object({
 		id: t.Integer(),

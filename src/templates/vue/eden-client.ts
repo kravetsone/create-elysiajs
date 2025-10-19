@@ -5,7 +5,7 @@ import type { ApiResponseRoutes, ApiResponse, PaginatedResponse, User, Partner }
 // Create type-safe API client
 export const api = edenClient<ApiResponseRoutes>(import.meta.env.VITE_API_URL || 'http://localhost:3000');
 
-//  Convenient API call wrappers
+// Convenient API call wrappers
 export const apiClient = {
   // Health check
   async health() {
@@ -94,7 +94,7 @@ export const handleApiResponse = async <T>(
   try {
     const response = await apiCall;
 
-    // 处理 Eden 的响应格式
+    // Handle Eden response format
     const data = response.data || response;
 
     if (data && typeof data === 'object' && 'success' in data) {
@@ -108,14 +108,14 @@ export const handleApiResponse = async <T>(
       return data.data as T;
     }
 
-    // 处理直接返回的数据
+    // Handle directly returned data
     return data as T;
   } catch (error) {
     if (error instanceof ApiError) {
       throw error;
     }
 
-    // 处理网络错误等
+    // Handle network errors, etc.
     throw new ApiError(
       error instanceof Error ? error.message : 'Unknown error',
       0,
@@ -124,7 +124,7 @@ export const handleApiResponse = async <T>(
   }
 };
 
-// 分页数据类型安全的处理
+// Type-safe handling of paginated data
 export const handlePaginatedResponse = async <T>(
   apiCall: Promise<PaginatedResponse<T> | any>
 ): Promise<{ data: T[]; pagination: NonNullable<PaginatedResponse<T>['pagination']> }> => {
@@ -140,7 +140,7 @@ export const handlePaginatedResponse = async <T>(
   };
 };
 
-// 具体类型的 API 调用函数
+// Specific typed API call functions
 export const userApi = {
   getUsers: (page = 1, pageSize = 10) =>
     handlePaginatedResponse<User>(apiClient.getUsers(page, pageSize)),

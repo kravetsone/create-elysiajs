@@ -44,7 +44,7 @@ export function getFrontendPackageJson({
 		],
 	};
 
-	// 根据前端框架添加依赖
+	// Add dependencies based on frontend framework
 	if (frontend === "Vue") {
 		sample.dependencies.vue = dependencies.vue;
 		sample.dependencies["@vueuse/core"] = dependencies["@vueuse/core"];
@@ -54,7 +54,7 @@ export function getFrontendPackageJson({
 		sample.dependencies["@tailwindcss/vite"] = dependencies["@tailwindcss/vite"];
 		sample.dependencies.tailwindcss = dependencies.tailwindcss;
 
-		// 添加对后端包的依赖
+		// Add dependency on backend package
 		sample.dependencies[`@${projectName}/backend`] = `workspace:*`;
 
 		sample.devDependencies["@vitejs/plugin-vue"] =

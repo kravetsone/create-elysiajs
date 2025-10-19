@@ -8,7 +8,7 @@ import { useApiWithToast } from "./useApiWithToast";
 export const useApi = () => {
   const api = useApiWithToast();
   return {
-    // 合作伙伴
+    // Partners
     partners: {
 
       list: (query: string) =>
@@ -16,7 +16,7 @@ export const useApi = () => {
           api.client.api.partners.ping.get({ query: { str: query } })
         ),
     },
-    // 原始toast方法（如果需要自定义提示）
+    // Raw toast methods (if custom notifications are needed)
     toast: {
       error: api.showError,
       success: api.showSuccess,

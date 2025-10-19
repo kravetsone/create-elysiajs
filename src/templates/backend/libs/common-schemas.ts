@@ -2,7 +2,7 @@ export function getCommonSchemas() {
   return `import { t } from "elysia";
 
 /**
- * 通用分页查询 Schema
+ * Common pagination query Schema
  */
 export const PageQuerySchema = t.Object({
   page: t.Integer({ minimum: 1, default: 1 }),
@@ -10,7 +10,7 @@ export const PageQuerySchema = t.Object({
 });
 
 /**
- * 通用分页响应 Schema
+ * Common pagination response Schema
  */
 export const PageResponseSchema = t.Object({
   data: t.Array(t.Any()),
