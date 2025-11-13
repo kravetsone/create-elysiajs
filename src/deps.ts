@@ -33,7 +33,7 @@ export const dependencies = {
 
 	"@elysiajs/cors": "^1.4.0",
 
-	"@elysiajs/html": "^1.3.1",
+	"@elysiajs/html": "^1.4.0",
 
 	"@kitajs/ts-html-plugin": "^4.1.3",
 
