@@ -7,7 +7,7 @@ export const dependencies = {
 
 	"@biomejs/biome": "^2.2.3",
 
-	"eslint": "^9.35.0",
+	"eslint": "^9.39.1",
 
 	"eslint-plugin-drizzle": "^0.2.3",
 
