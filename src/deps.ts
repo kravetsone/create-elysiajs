@@ -73,7 +73,7 @@ export const dependencies = {
 
 	"ioredis-mock": "^8.9.0",
 	
-	"@electric-sql/pglite": "^0.3.7",
+	"@electric-sql/pglite": "^0.3.14",
 
 	"gramio": "^0.4.11",
 };
