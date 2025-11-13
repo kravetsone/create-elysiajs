@@ -35,7 +35,7 @@ export const dependencies = {
 
 	"@elysiajs/html": "^1.3.1",
 
-	"@kitajs/ts-html-plugin": "^4.1.2",
+	"@kitajs/ts-html-plugin": "^4.1.3",
 
 	"@elysiajs/jwt": "^1.3.3",
 
