@@ -1,7 +1,7 @@
 {
 	"name": "create-elysiajs",
 	"type": "commonjs",
-	"version": "1.6.0",
+	"version": "1.7.0",
 	"description": "Scaffolding your Elysia project with the environment with easy!",
 	"author": "kravetsone",
 	"repository": {
