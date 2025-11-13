@@ -37,7 +37,7 @@ export const dependencies = {
 
 	"@kitajs/ts-html-plugin": "^4.1.3",
 
-	"@elysiajs/jwt": "^1.3.3",
+	"@elysiajs/jwt": "^1.4.0",
 
 	"@elysiajs/server-timing": "^1.3.0",
 
