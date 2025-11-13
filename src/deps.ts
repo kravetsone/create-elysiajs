@@ -21,7 +21,7 @@ export const dependencies = {
 	
 	"pg": "^8.16.3",
 
-	"@types/pg": "^8.15.5",
+	"@types/pg": "^8.15.6",
 
 	"postgres": "^3.4.7",
 
