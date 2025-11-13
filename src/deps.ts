@@ -39,7 +39,7 @@ export const dependencies = {
 
 	"@elysiajs/jwt": "^1.3.3",
 
-	"@elysiajs/server-timing": "^1.3.0",
+	"@elysiajs/server-timing": "^1.4.0",
 
 	"@elysiajs/static": "^1.3.0",
 
