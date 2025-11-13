@@ -63,7 +63,7 @@ export const dependencies = {
 
 	jobify: "^0.1.6",
 
-	"ioredis": "^5.7.0",
+	"ioredis": "^5.8.2",
 
 	"@verrou/core": "^0.5.1",
 
