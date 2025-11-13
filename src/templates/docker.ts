@@ -21,7 +21,7 @@ export function getDockerfile({ packageManager, orm }: Preferences) {
 		return dedent /* Dockerfile */`
 # use the official Bun image
 # see all versions at https://hub.docker.com/r/oven/bun/tags
-FROM oven/bun:${process.versions.bun ?? "1.2.5"} AS base
+FROM oven/bun:${process.versions.bun ?? "1.3.2"} AS base
 WORKDIR /usr/src/app
 
 # install dependencies into temp directory
@@ -48,8 +48,6 @@ RUN ${pmExecuteMap[packageManager]} tsc --noEmit
 # copy production dependencies and source code into final image
 FROM base AS release
 COPY --from=install /temp/prod/node_modules node_modules
-COPY --from=prerelease /usr/src/app/.env .
-COPY --from=prerelease /usr/src/app/.env.production .
 COPY --from=prerelease /usr/src/app/${pmLockFilesMap[packageManager]} .
 RUN mkdir -p /usr/src/app/src
 COPY --from=prerelease /usr/src/app/src ./src
@@ -93,8 +91,6 @@ RUN ${pmExecuteMap[packageManager]} tsc --noEmit
 # Copy production dependencies and source code into final image
 FROM base AS release
 COPY --from=install /temp/prod/node_modules node_modules
-COPY --from=prerelease /usr/src/app/.env .
-COPY --from=prerelease /usr/src/app/.env.production .
 RUN mkdir -p /usr/src/app/src
 COPY --from=prerelease /usr/src/app/src ./src
 COPY --from=prerelease /usr/src/app/${pmLockFilesMap[packageManager]} .
