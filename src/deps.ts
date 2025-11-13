@@ -69,7 +69,7 @@ export const dependencies = {
 
 	"@aws-sdk/client-s3": "^3.930.0",
 
-	"@elysiajs/eden": "^1.3.3",
+	"@elysiajs/eden": "^1.4.5",
 
 	"ioredis-mock": "^8.13.1",
 	
