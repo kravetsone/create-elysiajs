@@ -20,6 +20,7 @@ export const driverNames: Record<Preferences["driver"], string> = {
 export function getDBIndex({ orm, driver, packageManager }: Preferences) {
 	if (orm === "Prisma")
 		return [
+			`import "dotenv/config""`,
 			`import { PrismaClient } from "@prisma/client"`,
 			"",
 			"export const prisma = new PrismaClient()",
