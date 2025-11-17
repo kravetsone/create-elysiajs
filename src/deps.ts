@@ -41,7 +41,7 @@ export const dependencies = {
 
 	"@elysiajs/server-timing": "^1.4.0",
 
-	"@elysiajs/static": "^1.4.6",
+	"@elysiajs/static": "^1.4.7",
 
 	"@elysiajs/swagger": "^1.3.1",
 
