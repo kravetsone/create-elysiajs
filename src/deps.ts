@@ -3,7 +3,7 @@ export const dependencies = {
 
 	"typescript": "^5.9.3",
 
-	"@types/bun": "^1.3.2",
+	"@types/bun": "^1.3.3",
 
 	"@biomejs/biome": "^2.3.5",
 
