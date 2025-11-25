@@ -67,7 +67,7 @@ export const dependencies = {
 
 	"@verrou/core": "^0.5.1",
 
-	"@aws-sdk/client-s3": "^3.930.0",
+	"@aws-sdk/client-s3": "^3.940.0",
 
 	"@elysiajs/eden": "^1.4.5",
 
