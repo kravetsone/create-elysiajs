@@ -5,7 +5,7 @@ export const dependencies = {
 
 	"@types/bun": "^1.3.2",
 
-	"@biomejs/biome": "^2.3.5",
+	"@biomejs/biome": "^2.3.8",
 
 	"eslint": "^9.39.1",
 
