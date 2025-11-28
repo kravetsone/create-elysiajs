@@ -59,7 +59,7 @@ export const dependencies = {
 
 	"env-var": "^7.5.0",
 
-	"posthog-node": "^5.11.2",
+	"posthog-node": "^5.14.1",
 
 	jobify: "^0.1.6",
 
