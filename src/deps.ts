@@ -49,7 +49,7 @@ export const dependencies = {
 
 	"@bogeychan/elysia-logger": "^0.1.10",
 
-	"@antfu/eslint-config": "^6.2.0",
+	"@antfu/eslint-config": "^6.7.3",
 
 	"@gramio/init-data": "^0.0.5",
 
