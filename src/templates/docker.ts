@@ -135,7 +135,7 @@ export function getDockerCompose({
                 - POSTGRES_PASSWORD=${meta.databasePassword}
                 - POSTGRES_DB=${projectName}
             volumes:
-                - postgres_data:/var/lib/postgresql/data`
+                - postgres_data:/var/lib/postgresql`
 			: "",
 		redis
 			? /* yaml */ `redis:
@@ -205,7 +205,7 @@ export function getDevelopmentDockerCompose({
             ports:
                 - 5432:5432
             volumes:
-                - postgres_data:/var/lib/postgresql/data`
+                - postgres_data:/var/lib/postgresql`
 			: "",
 		redis
 			? /* yaml */ `redis:
