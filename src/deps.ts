@@ -17,7 +17,7 @@ export const dependencies = {
 
 	"drizzle-orm": "^0.44.7",
 
-	"drizzle-kit": "^0.31.7",
+	"drizzle-kit": "^0.31.10",
 	
 	"pg": "^8.16.3",
 
