@@ -13,7 +13,7 @@ export const dependencies = {
 
 	"prisma": "^6.19.0",
 
-	"@prisma/client": "^6.19.0",
+	"@prisma/client": "^7.10.0",
 
 	"drizzle-orm": "^0.44.7",
 
