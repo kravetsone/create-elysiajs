@@ -29,7 +29,7 @@ export const dependencies = {
 
 	husky: "^9.1.7",
 
-	"@elysiajs/bearer": "^1.4.1",
+	"@elysiajs/bearer": "^1.4.4",
 
 	"@elysiajs/cors": "^1.4.0",
 
